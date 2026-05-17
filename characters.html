@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Characters — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e8001a;
+    --gold: #f0b400;
+    --cyan: #00d4ff;
+    --dark: #080b10;
+    --panel: #0d1220;
+    --panel2: #111827;
+    --border: #1e2d45;
+    --text: #c8d8ea;
+    --muted: #5a7090;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: rgba(8,11,16,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    display: block;
+    padding: .4rem 1.1rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 1px solid var(--border);
+    transition: color .2s, background .2s;
+  }
+  .nav-links a:last-child { border-right: 1px solid var(--border); }
+  .nav-links a:hover { color: var(--cyan); background: rgba(0,212,255,.05); }
+  .nav-links a.active { color: var(--cyan); }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 3.5rem 2rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .page-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: .6rem;
+  }
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1;
+  }
+  .page-desc {
+    margin-top: .6rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 500px;
+  }
+
+  /* CONTROLS */
+  .controls {
+    max-width: 1200px;
+    margin: 2.5rem auto 0;
+    padding: 0 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem;
+    letter-spacing: 1px;
+    padding: .6rem 1rem .6rem 2.4rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus { border-color: var(--cyan); }
+  .search-icon {
+    position: absolute;
+    left: .8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: .8rem;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: .3rem;
+  }
+
+  .filter-btn {
+    padding: .4rem .9rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--text); }
+  .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .filter-btn.active.cyan-active { background: var(--cyan); border-color: var(--cyan); color: var(--dark); }
+  .filter-btn.active.gold-active { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+
+  .divider-v {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+    align-self: center;
+  }
+
+  /* RESULTS COUNT */
+  .results-bar {
+    max-width: 1200px;
+    margin: 1.2rem auto 0;
+    padding: 0 2rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .results-bar span { color: var(--cyan); }
+
+  /* GRID */
+  .char-grid {
+    max-width: 1200px;
+    margin: 1.5rem auto 0;
+    padding: 0 2rem 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  /* CARD */
+  .char-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .2s, transform .2s;
+    cursor: pointer;
+  }
+  .char-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+
+  /* STAR STRIP */
+  .card-stars {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    font-size: .65rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+    z-index: 2;
+    text-shadow: 0 0 8px rgba(0,0,0,.8);
+  }
+
+  /* PHOTO AREA */
+  .card-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--panel2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* PLACEHOLDER SILHOUETTE */
+  .placeholder-silhouette {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #0d1220 0%, #111827 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .placeholder-silhouette::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 10px,
+      rgba(255,255,255,.015) 10px, rgba(255,255,255,.015) 11px
+    );
+  }
+  .silhouette-icon {
+    font-size: 4rem;
+    opacity: .15;
+    position: relative;
+    z-index: 1;
+  }
+  .silhouette-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    opacity: .5;
+    margin-top: .4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PHOTO GRADIENT */
+  .card-photo::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(transparent, var(--panel));
+    pointer-events: none;
+  }
+
+  /* CARD INFO */
+  .card-info {
+    padding: .8rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    flex: 1;
+  }
+
+  .card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin-top: .2rem;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: .1rem .5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .tag-attacker { color: var(--red);  border-color: #8a0010; background: rgba(232,0,26,.1); }
+  .tag-defender { color: #4d9fff;     border-color: #1a4080; background: rgba(0,80,200,.1); }
+  .tag-support  { color: #40d080;     border-color: #0a5030; background: rgba(0,180,80,.1); }
+  .tag-slash    { color: #c8a0ff;     border-color: #5a3080; background: rgba(160,64,240,.1); }
+  .tag-shot     { color: var(--gold); border-color: #806000; background: rgba(240,180,0,.1); }
+  .tag-piercing { color: var(--cyan); border-color: #006080; background: rgba(0,212,255,.1); }
+
+  /* NO RESULTS */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    display: none;
+  }
+  .no-results.show { display: block; }
+  .no-results p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--cyan); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">K8<span>GUIDE</span></a>
+  <ul class="nav-links">
+    <a href="characters.html" class="active">Characters</a>
+    <a href="beginner.html">Beginner</a>
+    <a href="gameguide.html">Game Guide</a>
+    <a href="combat.html">Combat</a>
+    <a href="socials.html">Socials</a>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <p class="page-label">Roster</p>
+  <h1 class="page-title">Characters</h1>
+  <p class="page-desc">Browse all officers. Filter by class, attack type, or star rarity to find your next squad member.</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Search character name...">
+  </div>
+
+  <div class="filters">
+    <!-- CLASS -->
+    <div class="filter-group" id="filter-class">
+      <button class="filter-btn active" data-filter="class" data-value="all">All</button>
+      <button class="filter-btn" data-filter="class" data-value="attacker">Attacker</button>
+      <button class="filter-btn" data-filter="class" data-value="defender">Defender</button>
+      <button class="filter-btn" data-filter="class" data-value="support">Support</button>
+    </div>
+
+    <div class="divider-v"></div>
+
+    <!-- ATTACK TYPE -->
+    <div class="filter-group" id="filter-type">
+      <button class="filter-btn active" data-filter="type" data-value="all">All</button>
+      <button class="filter-btn" data-filter="type" data-value="slash">Slash</button>
+      <button class="filter-btn" data-filter="type" data-value="shot">Shot</button>
+      <button class="filter-btn" data-filter="type" data-value="piercing">Piercing</button>
+    </div>
+
+    <div class="divider-v"></div>
+
+    <!-- STARS -->
+    <div class="filter-group" id="filter-stars">
+      <button class="filter-btn active" data-filter="stars" data-value="all">All</button>
+      <button class="filter-btn" data-filter="stars" data-value="5">★★★★★</button>
+      <button class="filter-btn" data-filter="stars" data-value="4">★★★★</button>
+      <button class="filter-btn" data-filter="stars" data-value="3">★★★</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-bar">
+  Showing <span id="count">0</span> characters
+</div>
+
+<!-- GRID -->
+<div class="char-grid" id="char-grid">
+
+  <!-- CARDS ARE INJECTED BY JS -->
+  <div class="no-results" id="no-results">
+    <p>// NO CHARACTERS MATCH YOUR FILTERS</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+const characters = [
+  { id: "kaiju-no8",        name: "Kaiju No. 8",      stars: 5, class: "attacker", types: ["slash","piercing"], img: null },
+  { id: "kikoru-shinomiya", name: "Kikoru Shinomiya",  stars: 5, class: "attacker", types: ["slash"],           img: null },
+  { id: "soshiro-hoshina",  name: "Soshiro Hoshina",   stars: 5, class: "attacker", types: ["slash"],           img: null },
+  { id: "mina-ashiro",      name: "Mina Ashiro",       stars: 5, class: "attacker", types: ["shot"],            img: null },
+  { id: "gen-narumi",       name: "Gen Narumi",        stars: 5, class: "attacker", types: ["slash","shot"],    img: null },
+  { id: "zoee-wanderfalke", name: "Zoee Wanderfalke",  stars: 5, class: "attacker", types: ["slash","shot"],    img: null },
+  { id: "akari-minase",     name: "Akari Minase",      stars: 5, class: "defender", types: ["slash","shot"],    img: null },
+  { id: "kafka-hibino",     name: "Kafka Hibino",      stars: 5, class: "support",  types: ["piercing"],        img: null },
+  { id: "reno-ichikawa",    name: "Reno Ichikawa",     stars: 4, class: "support",  types: ["slash"],           img: null },
+  { id: "haruichi-izumo",   name: "Haruichi Izumo",    stars: 4, class: "support",  types: ["shot"],            img: null },
+  { id: "aoi-kaguragi",     name: "Aoi Kaguragi",      stars: 4, class: "defender", types: ["slash"],           img: null },
+];
+
+const starStr = n => "★".repeat(n) + "☆".repeat(5 - n);
+
+function buildCard(c) {
+  const typeTagsHTML = c.types.map(t =>
+    `<span class="tag tag-${t}">${t}</span>`
+  ).join('');
+
+  const photoHTML = c.img
+    ? `<img src="${c.img}" alt="${c.name}">`
+    : `<div class="placeholder-silhouette">
+        <div class="silhouette-icon">👤</div>
+        <div class="silhouette-label">PHOTO COMING</div>
+       </div>`;
+
+  return `
+    <a class="char-card" href="char-${c.id}.html"
+       data-name="${c.name.toLowerCase()}"
+       data-class="${c.class}"
+       data-types="${c.types.join(',')}"
+       data-stars="${c.stars}">
+      <div class="card-stars">${starStr(c.stars)}</div>
+      <div class="card-photo">${photoHTML}</div>
+      <div class="card-info">
+        <div class="card-name">${c.name}</div>
+        <div class="card-tags">
+          <span class="tag tag-${c.class}">${c.class}</span>
+          ${typeTagsHTML}
+        </div>
+      </div>
+    </a>`;
+}
+
+// Render all cards
+const grid = document.getElementById('char-grid');
+const noResults = document.getElementById('no-results');
+characters.forEach(c => {
+  grid.insertAdjacentHTML('beforeend', buildCard(c));
+});
+
+// Filter state
+let activeFilters = { class: 'all', type: 'all', stars: 'all' };
+let searchQuery = '';
+
+function applyFilters() {
+  const cards = grid.querySelectorAll('.char-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const name    = card.dataset.name;
+    const cls     = card.dataset.class;
+    const types   = card.dataset.types.split(',');
+    const stars   = card.dataset.stars;
+
+    const matchSearch = searchQuery === '' || name.includes(searchQuery);
+    const matchClass  = activeFilters.class === 'all' || cls === activeFilters.class;
+    const matchType   = activeFilters.type  === 'all' || types.includes(activeFilters.type);
+    const matchStars  = activeFilters.stars === 'all' || stars === activeFilters.stars;
+
+    const show = matchSearch && matchClass && matchType && matchStars;
+    card.style.display = show ? 'flex' : 'none';
+    if (show) visible++;
+  });
+
+  document.getElementById('count').textContent = visible;
+  noResults.classList.toggle('show', visible === 0);
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filterType = btn.dataset.filter;
+    const value = btn.dataset.value;
+
+    // Deactivate siblings
+    btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    activeFilters[filterType] = value;
+    applyFilters();
+  });
+});
+
+// Search
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  applyFilters();
+});
+
+// Initial render count
+applyFilters();
+</script>
+
+</body>
+</html>
