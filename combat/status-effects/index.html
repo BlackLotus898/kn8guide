@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Effects — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .status-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); margin-bottom: 1rem; }
+  .status-row { display: grid; grid-template-columns: 180px 1fr; border-bottom: 1px solid var(--border); transition: background .2s; }
+  .status-row:last-child { border-bottom: none; }
+  .status-row:hover { background: rgba(0,212,255,.03); }
+  .status-name { padding: .8rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); }
+  .status-name.ailment { color: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-name.debuff { color: #ff9060; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-name.special { color: var(--cyan); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-desc { padding: .8rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
+  .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .mechanic-box { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; }
+  .mechanic-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin-bottom: .6rem; }
+  .mechanic-box p, .mechanic-box li { font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .mechanic-box ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; padding-left: .5rem; }
+  .mechanic-box ul li { position: relative; padding-left: 1rem; }
+  .mechanic-box ul li::before { content: '›'; position: absolute; left: 0; color: var(--red); }
+  .mechanic-box ul li strong { color: var(--text); }
+  .uniparts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .unipart-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
+  .unipart-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .unipart-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .unipart-effect { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: .6rem; }
+  .unipart-users-label { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: .4rem; }
+  .unipart-users { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .unipart-user-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .15rem .5rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: color .2s, border-color .2s; }
+  .unipart-user-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+  @media (max-width: 600px) { .status-row { grid-template-columns: 140px 1fr; } .two-col-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Combat</p>
+  <h1 class="page-title">Status Effects</h1>
+  <p class="page-desc">All ailments, debuffs, and special status effects in the game.</p>
+</div>
+<div class="page">
+  <div class="section-nav">
+    <a href="../">Combat Overview</a>
+    <a href="../mechanics/">Core Mechanics</a>
+    <a href="../status-effects/">Status Effects</a>
+    <a href="../elements/">Elements & Damage Types</a>
+    <a href="../uniparts/">Uniparts & Set Effects</a>
+  </div>
+<div class="guide-section open" id="ailments">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">☠️</span>
+      <span class="guide-section-title">Ailments</span>
+      <span class="guide-section-tag">// Status Conditions</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Ailments are negative status effects applied to Kaiju. Most ailments deal Damage-over-Time (DoT) at the start of each action. Characters with high <strong>Effect Hit Rate</strong> apply ailments more reliably.</p>
+
+      <div class="status-grid">
+        <div class="status-row">
+          <div class="status-name ailment">Burn</div>
+          <div class="status-desc">Inflicts Fire Damage-over-Time at the start of the action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Freeze</div>
+          <div class="status-desc">Inflicts Ice Damage-over-Time at the start of the action. Also delays the affected target's next action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Poison</div>
+          <div class="status-desc">Inflicts DoT based on the target's Max HP at the start of the action. Maximum Poison damage is capped based on the applier's ATK.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Shock</div>
+          <div class="status-desc">Inflicts Lightning Damage-over-Time at the start of the action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Soaked</div>
+          <div class="status-desc">Increases damage taken from Damage-over-Time.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Stun</div>
+          <div class="status-desc">Prevents the target from acting for a set number of turns. Also increases CRIT DMG taken when hit while stunned.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Taunt</div>
+          <div class="status-desc">The taunted target cannot choose targets other than the unit that applied Taunt.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Windbite</div>
+          <div class="status-desc">Inflicts Wind Damage-over-Time at the start of the action.</div>
+        </div>
+      </div>
+<div class="guide-section open" id="debuffs">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⬇️</span>
+      <span class="guide-section-title">Debuffs</span>
+      <span class="guide-section-tag">// Enemy Weakening</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Debuffs weaken Kaiju or create conditions that allies can exploit for increased damage. Unlike ailments, debuffs do not deal direct damage but amplify the damage output of the squad.</p>
+
+      <div class="status-grid">
+        <div class="status-row">
+          <div class="status-name debuff">Fear</div>
+          <div class="status-desc">After an ally attacks a Kaiju in Fear state, deals Slash Additional DMG based on the applier's ATK × the stack count of Fear.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Gunshot Wound</div>
+          <div class="status-desc">After the applier activates Combat Skill or Ultimate against a Kaiju in Gunshot Wound state, deals Shot Additional DMG.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Ice Crystal</div>
+          <div class="status-desc">After an ally attacks a Kaiju in Ice Crystal state, deals Ice Additional DMG corresponding to the applier's ATK.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Mark</div>
+          <div class="status-desc">Increases DMG taken from Follow-Up Skill and Extra Attack.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Opening</div>
+          <div class="status-desc">Activates escalating effects based on the number of stacks applied to the Kaiju. Used by Soshiro Hoshina (New Possibilities).</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Seen Through</div>
+          <div class="status-desc">After allies attack 5 times, removes Seen Through and randomly destroys 3 PLT. Attacks on a Core Exposed Kaiju do not count.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Shock Wire</div>
+          <div class="status-desc">Increases DMG taken from Damage-over-Time. After turn arrives, takes Lightning Damage-over-Time.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Tremble</div>
+          <div class="status-desc">Increases DMG taken from Additional DMG.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Wound</div>
+          <div class="status-desc">Increases DMG taken by the target. If the target is Core Exposed, increases DMG taken further.</div>
+        </div>
+      </div>
+<div class="guide-section open" id="special-status">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">✨</span>
+      <span class="guide-section-title">Special Status</span>
+      <span class="guide-section-tag">// Buffs & States</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Special Status effects are buffs and unique states applied to allies. These are often tied to specific characters' kits and synergies.</p>
+
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name special">Acceleration</div><div class="status-desc">Increases this unit's DMG dealt and SPD. After activating Combat Skill against a Core Exposed Kaiju, SP +1. Normal Attack, Combat Skill, and Follow-Up Skill cannot recover Ultimate Gauge.</div></div>
+        <div class="status-row"><div class="status-name special">Afterburn</div><div class="status-desc">Triggers 1 additional instance of DoT equal to a fixed percentage of the DoT the target is currently receiving from status changes.</div></div>
+        <div class="status-row"><div class="status-name special">Ardor</div><div class="status-desc">After an ally activates Ultimate, increases the activator's DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Assistance</div><div class="status-desc">Increases battle buddy's All-Attribute DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Berserk</div><div class="status-desc">Increases CRIT Rate and Shot DMG dealt. Combat Skill changes to Enhanced form. Can only activate Enhanced Combat Skill, Ultimate, and Follow-Up Skill.</div></div>
+        <div class="status-row"><div class="status-name special">Blaze</div><div class="status-desc">Decreases this unit's DMG dealt. Normal Attack changes into Enhanced Normal Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Bold</div><div class="status-desc">After activating Combat Skill or Extra Attack, deals Slash Additional DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Care Package</div><div class="status-desc">After an ally consumes 2 SP, recovers 2 SP and removes Care Package. Automatically removed when applied to another ally.</div></div>
+        <div class="status-row"><div class="status-name special">Chips</div><div class="status-desc">If at 1+ stacks, after activating Normal Attack, Combat Skill, or after an ally uses Combat Skill, Ultimate, Extra Attack, or Counter — activates Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Clarity</div><div class="status-desc">Increases this unit's CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Combined Forces</div><div class="status-desc">After Bakko performs an action, activates Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Engrossed</div><div class="status-desc">Before activating Normal Attack or Combat Skill, recovers the activator's HP. After activating, if HP is 50%+, increases the activator's ATK.</div></div>
+        <div class="status-row"><div class="status-name special">Field Ops</div><div class="status-desc">After attacking, deals Shot Additional DMG corresponding to the attacker's ATK.</div></div>
+        <div class="status-row"><div class="status-name special">Fierce</div><div class="status-desc">Increases this unit's CRIT Rate and CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Fighting Spirit</div><div class="status-desc">Increases this unit's DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Flare-Up</div><div class="status-desc">After an ally attacks a Kaiju in Flare-Up state, triggers a fixed percentage of the DoT the target is currently receiving from each status change. Max 7 activations.</div></div>
+        <div class="status-row"><div class="status-name special">Focus</div><div class="status-desc">Increases this unit's CRIT Rate after reaching max stacks.</div></div>
+        <div class="status-row"><div class="status-name special">Gift</div><div class="status-desc">Increases the target's ATK based on this unit's ATK upon application. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Hot-Blooded</div><div class="status-desc">Increases DMG dealt, ATK, and SPD.</div></div>
+        <div class="status-row"><div class="status-name special">Hyped</div><div class="status-desc">Increases this unit's ATK and CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Inheritance</div><div class="status-desc">Increases this unit's Ultimate Gauge Charge Rate. After Normal Attack, has a chance to apply DEF Down. After Combat Skill, has a chance to apply DEF Down.</div></div>
+        <div class="status-row"><div class="status-name special">Inner Flame</div><div class="status-desc">Increases this unit's DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Kaiju</div><div class="status-desc">Increases this unit's HP and SPD. Equipped weapons are unequipped and skills change. Lasts until end of battle.</div></div>
+        <div class="status-row"><div class="status-name special">Mark</div><div class="status-desc">Increases DMG taken from Follow-Up Skill and Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Morale</div><div class="status-desc">Increases this unit's DMG dealt and Combat Skill DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Opening</div><div class="status-desc">Activates effects based on the number of stacks applied to the Kaiju.</div></div>
+        <div class="status-row"><div class="status-name special">Patience</div><div class="status-desc">After turn arrives, recovers target's HP.</div></div>
+        <div class="status-row"><div class="status-name special">Progress</div><div class="status-desc">Increases this unit's CRIT Rate and CRIT DMG after reaching max stacks.</div></div>
+        <div class="status-row"><div class="status-name special">Resolve</div><div class="status-desc">Increases this unit's Blunt DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Resonance</div><div class="status-desc">This unit's Combat Skill is enhanced.</div></div>
+        <div class="status-row"><div class="status-name special">Seen Through</div><div class="status-desc">After allies attack 5 times, removes state and randomly destroys 3 PLT. Attacks on Core Exposed Kaiju do not count.</div></div>
+        <div class="status-row"><div class="status-name special">Stealth</div><div class="status-desc">Will not be targeted by Kaiju attacks. Becomes a selectable target if all allies are in Stealth state.</div></div>
+        <div class="status-row"><div class="status-name special">Surveillance</div><div class="status-desc">After attacking, if the attacker's HP is 50% or less, recovers the attacker's HP.</div></div>
+        <div class="status-row"><div class="status-name special">True Potential</div><div class="status-desc">Increases the target's CRIT DMG based on the applier's CRIT DMG upon application. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Valor</div><div class="status-desc">When at max stacks, after activating Combat Skill or Ultimate, deals Blunt Additional DMG to the target.</div></div>
+        <div class="status-row"><div class="status-name special">Wit and Courage</div><div class="status-desc">Increases ATK for all other allies. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Wrath</div><div class="status-desc">If at 3+ stacks, after attacking, consumes 3 stacks and activates Extra Attack.</div></div>
+      </div>
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+// Mark active nav link
+document.querySelectorAll('.section-nav a').forEach(a => {
+  if (a.href === window.location.href || window.location.pathname.startsWith(new URL(a.href).pathname)) {
+    a.classList.add('active');
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Mechanics — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .status-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); margin-bottom: 1rem; }
+  .status-row { display: grid; grid-template-columns: 180px 1fr; border-bottom: 1px solid var(--border); transition: background .2s; }
+  .status-row:last-child { border-bottom: none; }
+  .status-row:hover { background: rgba(0,212,255,.03); }
+  .status-name { padding: .8rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); }
+  .status-name.ailment { color: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-name.debuff { color: #ff9060; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-name.special { color: var(--cyan); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .status-desc { padding: .8rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
+  .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .mechanic-box { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; }
+  .mechanic-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin-bottom: .6rem; }
+  .mechanic-box p, .mechanic-box li { font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .mechanic-box ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; padding-left: .5rem; }
+  .mechanic-box ul li { position: relative; padding-left: 1rem; }
+  .mechanic-box ul li::before { content: '›'; position: absolute; left: 0; color: var(--red); }
+  .mechanic-box ul li strong { color: var(--text); }
+  .uniparts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .unipart-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
+  .unipart-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .unipart-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .unipart-effect { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: .6rem; }
+  .unipart-users-label { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: .4rem; }
+  .unipart-users { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .unipart-user-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .15rem .5rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: color .2s, border-color .2s; }
+  .unipart-user-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+  @media (max-width: 600px) { .status-row { grid-template-columns: 140px 1fr; } .two-col-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Combat</p>
+  <h1 class="page-title">Core Mechanics</h1>
+  <p class="page-desc">How combat works — Core Exposure, SP, PLT, Ultimate Gauge, Action Order, and Damage Types.</p>
+</div>
+<div class="page">
+  <div class="section-nav">
+    <a href="../">Combat Overview</a>
+    <a href="../mechanics/">Core Mechanics</a>
+    <a href="../status-effects/">Status Effects</a>
+    <a href="../elements/">Elements & Damage Types</a>
+    <a href="../uniparts/">Uniparts & Set Effects</a>
+  </div>
+<div class="guide-section open" id="core-mechanics">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚔️</span>
+      <span class="guide-section-title">Core Mechanics</span>
+      <span class="guide-section-tag">// How Combat Works</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+
+      <div class="two-col-grid">
+        <div class="mechanic-box">
+          <h3>Core Exposure</h3>
+          <ul>
+            <li>Every Kaiju has a hidden core that must be exposed before Ultimates deal full damage.</li>
+            <li>Use skills matching the Kaiju's <strong>weakness attribute</strong> to chip away at PLT and expose the core.</li>
+            <li>Once exposed, the core is vulnerable for a limited window — coordinate your squad's turn order to maximize damage.</li>
+            <li>Attacks on a Core Exposed Kaiju do not count toward Seen Through activation count.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>SP (Skill Points)</h3>
+          <ul>
+            <li>SP is a shared resource spent on Combat Skills across the whole squad.</li>
+            <li><strong>Normal Attacks</strong> are free. <strong>Combat Skills</strong> cost 1–2 SP.</li>
+            <li>Some characters generate SP through passives or Ascension nodes — check individual character pages.</li>
+            <li>Don't burn SP early if you need it for a key window later in the fight.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>PLT (Plates)</h3>
+          <ul>
+            <li>Kaiju have PLT that must be destroyed to expose the core.</li>
+            <li>Certain attack types (Slash, Shot, Blunt, Piercing) are more effective against specific PLT.</li>
+            <li>Destroying PLT charges your Ultimate Gauge — Normal Attacks on PLT are never wasted.</li>
+            <li>Some skills and passives trigger effects specifically when PLT is destroyed.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Ultimate Gauge</h3>
+          <ul>
+            <li>Each character has an <strong>Ultimate Gauge</strong> that fills as they attack and take hits.</li>
+            <li>When full (default limit: 300), the character can activate their Ultimate attack.</li>
+            <li>Some characters modify their gauge limit or charge rate through skills and ascension.</li>
+            <li>Always save Ultimates for when the Kaiju's core is exposed for maximum impact.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Action Order</h3>
+          <ul>
+            <li>Turn order is determined by each character's and Kaiju's <strong>SPD stat</strong>.</li>
+            <li>Some skills advance or delay Action Order — use these to chain Ultimates efficiently.</li>
+            <li><strong>Freeze</strong> and <strong>Stun</strong> can delay or prevent enemy actions.</li>
+            <li>SPD buffs from Supporter characters can give your squad more frequent turns.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Damage Types</h3>
+          <ul>
+            <li><strong>ST (Single Target)</strong> — Hits one Kaiju for full damage.</li>
+            <li><strong>Blast</strong> — Hits primary target and adjacent Kaiju (reduced damage to adjacent).</li>
+            <li><strong>AoE (Area of Effect)</strong> — Hits all Kaiju on the field.</li>
+            <li><strong>Additional DMG</strong> — Bonus hits triggered by passives, separate from the main attack.</li>
+            <li><strong>DoT (Damage over Time)</strong> — Damage dealt at the start of a turn via ailments.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <strong>Elements:</strong> Fire, Ice, Wind, and Lightning are elemental damage types applied by certain characters. These deal bonus damage to Kaiju with matching weaknesses and enable elemental ailments (Burn, Freeze, Windbite, Shock). See the <strong>Elements & Users</strong> and <strong>Damage Types</strong> sections below for the full breakdown.
+      </div>
+
+    </div>
+  </div>
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+// Mark active nav link
+document.querySelectorAll('.section-nav a').forEach(a => {
+  if (a.href === window.location.href || window.location.pathname.startsWith(new URL(a.href).pathname)) {
+    a.classList.add('active');
+  }
+});
+</script>
+</body>
+</html>

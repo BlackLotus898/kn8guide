@@ -54,8 +54,16 @@
       <li><a href="${base}limited/">Limited Characters</a></li>
     </ul>
   </li>
-  <a href="${base}combat/">Combat</a>
-  <a href="${base}socials/">Socials</a>
+  <li class="nav-dropdown">
+    <a href="${base}combat/">Combat ▾</a>
+    <ul class="dropdown-menu">
+      <li><a href="${base}combat/">Combat Overview</a></li>
+      <li><a href="${base}combat/mechanics/">Core Mechanics</a></li>
+      <li><a href="${base}combat/status-effects/">Status Effects</a></li>
+      <li><a href="${base}combat/elements/">Elements &amp; Damage Types</a></li>
+      <li><a href="${base}combat/uniparts/">Uniparts &amp; Set Effects</a></li>
+    </ul>
+  </li>
 </ul>`;
 
   // Inject nav
