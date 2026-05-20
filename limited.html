@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limited Characters — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1200px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+
+  /* ALERT BOX */
+  .alert-box {
+    max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem;
+  }
+  .alert-inner {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    padding: 1rem 1.4rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: .93rem; color: var(--muted); line-height: 1.5;
+  }
+  .alert-inner strong { color: var(--red); }
+  .alert-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* STATS BAR */
+  .stats-bar {
+    max-width: 1200px; margin: 1.5rem auto 0; padding: 0 2rem;
+    display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border);
+  }
+  .stat-cell {
+    flex: 1; background: var(--panel); padding: 1rem; text-align: center;
+  }
+  .stat-cell .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--red); letter-spacing: 2px; display: block; }
+  .stat-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* GRID */
+  .char-grid {
+    max-width: 1200px; margin: 2rem auto 5rem; padding: 0 2rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem;
+  }
+
+  /* CARD */
+  .char-card {
+    background: var(--panel); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    transition: border-color .2s, transform .2s;
+  }
+  .char-card:hover { border-color: var(--red); transform: translateY(-4px); }
+  .char-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+  }
+
+  /* LIMITED BADGE */
+  .limited-badge {
+    position: absolute; top: .5rem; right: .5rem; z-index: 2;
+    font-family: 'Share Tech Mono', monospace; font-size: .55rem; letter-spacing: 1px;
+    padding: .15rem .45rem; background: var(--red); color: #fff; text-transform: uppercase;
+  }
+
+  .card-stars {
+    position: absolute; top: .5rem; left: .5rem;
+    font-size: .6rem; color: var(--gold); letter-spacing: 1px; z-index: 2;
+    text-shadow: 0 0 8px rgba(0,0,0,1);
+  }
+
+  .card-photo {
+    width: 100%; background: var(--panel2); position: relative;
+  }
+  .card-photo img { width: 100%; height: auto; object-fit: contain; display: block; }
+
+  .placeholder-silhouette {
+    aspect-ratio: 3/4; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #0d1220, #111827);
+  }
+  .silhouette-icon { font-size: 4rem; opacity: .15; }
+  .silhouette-label { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--muted); opacity: .5; margin-top: .4rem; }
+
+  .card-info { padding: .8rem 1rem 1rem; display: flex; flex-direction: column; gap: .3rem; }
+  .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: #fff; line-height: 1.1; }
+  .card-variant { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; color: var(--muted); margin-top: .1rem; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .3rem; }
+  .tag { display: inline-block; padding: .1rem .45rem; font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; }
+  .tag-attacker  { color: var(--red);    border-color: #8a0010; background: rgba(232,0,26,.1); }
+  .tag-defender  { color: #4d9fff;       border-color: #1a4080; background: rgba(0,80,200,.1); }
+  .tag-supporter { color: #40d080;       border-color: #0a5030; background: rgba(0,180,80,.1); }
+  .tag-slash     { color: #c8a0ff;       border-color: #5a3080; background: rgba(160,64,240,.1); }
+  .tag-shot      { color: var(--gold);   border-color: #806000; background: rgba(240,180,0,.1); }
+  .tag-blunt     { color: #ff9060;       border-color: #804020; background: rgba(255,120,60,.1); }
+  .tag-fire      { color: #ff6040;       border-color: #802010; background: rgba(255,80,40,.1); }
+  .tag-wind      { color: #80ffb0;       border-color: #207040; background: rgba(80,255,140,.1); }
+  .tag-lightning { color: #ffe060;       border-color: #806010; background: rgba(255,210,40,.1); }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+<script src="nav.js"></script>
+
+<div class="page-header">
+  <p class="page-label">Gacha</p>
+  <h1 class="page-title">Limited Characters</h1>
+  <p class="page-desc">These ★5 characters are only available during their limited banner window. They may return in future reruns but are not available in the standard pool.</p>
+</div>
+
+<div class="alert-box">
+  <div class="alert-inner">
+    <span class="alert-icon">⚠️</span>
+    <span><strong>Save your Crystals!</strong> Limited characters are not available in the standard gacha pool. If you miss their banner, you'll need to wait for a rerun. Always check this page before pulling to confirm if a character is limited.</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-cell"><span class="val">12</span><span class="lbl">Limited Characters</span></div>
+  <div class="stat-cell"><span class="val">★5</span><span class="lbl">All Limited Rarity</span></div>
+  <div class="stat-cell"><span class="val">RERUN</span><span class="lbl">May Return Later</span></div>
+</div>
+
+<div class="char-grid">
+
+  <a class="char-card" href="char-akari-minase-fc.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/AkariMinase-FC.png" alt="Akari Minase (Festive Christmas)"></div>
+    <div class="card-info">
+      <div class="card-name">Akari Minase</div>
+      <div class="card-variant">Festive Christmas</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-shot">Shot</span>
+        <span class="tag tag-fire">Fire</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-akari-minase-sa.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/AkariMinase-SA.png" alt="Akari Minase (Synchro Aptitude)"></div>
+    <div class="card-info">
+      <div class="card-name">Akari Minase</div>
+      <div class="card-variant">Synchro Aptitude</div>
+      <div class="card-tags">
+        <span class="tag tag-defender">Defender</span>
+        <span class="tag tag-shot">Shot</span>
+        <span class="tag tag-slash">Slash</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-gen-narumi-fs.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/GenNarumi-FS.png" alt="Gen Narumi (Future Sight)"></div>
+    <div class="card-info">
+      <div class="card-name">Gen Narumi</div>
+      <div class="card-variant">Future Sight</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-slash">Slash</span>
+        <span class="tag tag-shot">Shot</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-haruichi-izumo-cc.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/HaruichiIzumo-CC.png" alt="Haruichi Izumo (Calculated Choice)"></div>
+    <div class="card-info">
+      <div class="card-name">Haruichi Izumo</div>
+      <div class="card-variant">Calculated Choice</div>
+      <div class="card-tags">
+        <span class="tag tag-supporter">Supporter</span>
+        <span class="tag tag-shot">Shot</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-hikari-shinomiya-tv.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/HikariShinomiya-TV.png" alt="Hikari Shinomiya (The Valkyrie)"></div>
+    <div class="card-info">
+      <div class="card-name">Hikari Shinomiya</div>
+      <div class="card-variant">The Valkyrie</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-slash">Slash</span>
+        <span class="tag tag-wind">Wind</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-jura-igarashi-gd.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/JuraIgarashi-GD.png" alt="Jura Igarashi (Grit and Duty)"></div>
+    <div class="card-info">
+      <div class="card-name">Jura Igarashi</div>
+      <div class="card-variant">Grit and Duty</div>
+      <div class="card-tags">
+        <span class="tag tag-supporter">Supporter</span>
+        <span class="tag tag-blunt">Blunt</span>
+        <span class="tag tag-fire">Fire</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-kn8-sv.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/KN8-SV.png" alt="Kaiju No. 8 (Scorching Variant)"></div>
+    <div class="card-info">
+      <div class="card-name">Kaiju No. 8</div>
+      <div class="card-variant">Scorching Variant</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-blunt">Blunt</span>
+        <span class="tag tag-fire">Fire</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-sagan-shinomiya-ol.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/SaganShinomiya-OL.png" alt="Sagan Shinomiya (Over Limit)"></div>
+    <div class="card-info">
+      <div class="card-name">Sagan Shinomiya</div>
+      <div class="card-variant">Over Limit</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-slash">Slash</span>
+        <span class="tag tag-fire">Fire</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-sagan-shinomiya-ddd.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/SaganShinomiya-DDD.png" alt="Sagan Shinomiya (Dimensionally Distorted Destiny)"></div>
+    <div class="card-info">
+      <div class="card-name">Sagan Shinomiya</div>
+      <div class="card-variant">Dimensionally Distorted Destiny</div>
+      <div class="card-tags">
+        <span class="tag tag-defender">Defender</span>
+        <span class="tag tag-blunt">Blunt</span>
+        <span class="tag tag-fire">Fire</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-suited-uc.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/Suited-UC.png" alt="Suited (Unbridled Curiosity)"></div>
+    <div class="card-info">
+      <div class="card-name">Suited</div>
+      <div class="card-variant">Unbridled Curiosity</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-blunt">Blunt</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-wang-meixing-nwc.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/WangMeixing-NWC.png" alt="Wang Meixing (Negotiator of Wit and Charm)"></div>
+    <div class="card-info">
+      <div class="card-name">Wang Meixing</div>
+      <div class="card-variant">Negotiator of Wit and Charm</div>
+      <div class="card-tags">
+        <span class="tag tag-supporter">Supporter</span>
+        <span class="tag tag-shot">Shot</span>
+        <span class="tag tag-lightning">Lightning</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="char-card" href="char-zoee-wanderfalke-twu.html">
+    <div class="card-stars">★★★★★</div>
+    <div class="limited-badge">LIMITED</div>
+    <div class="card-photo"><img src="Kn8 Characters/ZoeeWanderfalke-TWU.png" alt="Zoee Wanderfalke (The Weapon Unsealed)"></div>
+    <div class="card-info">
+      <div class="card-name">Zoee Wanderfalke</div>
+      <div class="card-variant">The Weapon Unsealed</div>
+      <div class="card-tags">
+        <span class="tag tag-attacker">Attacker</span>
+        <span class="tag tag-shot">Shot</span>
+        <span class="tag tag-slash">Slash</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+</body>
+</html>
