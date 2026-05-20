@@ -32,19 +32,8 @@
   `;
   document.head.appendChild(style);
 
-  // Detect base path dynamically
-  // Find the nav.js script tag to determine where the root is
-  const scripts = document.querySelectorAll('script[src*="nav.js"]');
-  let base = '/kn8guide/';
-  if (scripts.length > 0) {
-    const src = scripts[scripts.length - 1].getAttribute('src');
-    // src is relative path to nav.js e.g. "nav.js", "../nav.js", "../../nav.js"
-    const depth = (src.match(/\.\.\//g) || []).length;
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    // Go up 'depth' levels from current path
-    const baseParts = parts.slice(0, parts.length - depth);
-    base = '/' + baseParts.join('/') + (baseParts.length ? '/' : '');
-  }
+  // Base path - hardcoded for this repo
+  const base = '/kn8guide/';
 
   const NAV_HTML = `
 <a href="${base}" class="nav-logo">K8<span>GUIDE</span></a>
