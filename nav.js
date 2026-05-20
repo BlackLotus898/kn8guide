@@ -48,10 +48,21 @@
   </li>
   <a href="${base}beginner/">Beginner</a>
   <li class="nav-dropdown">
+    <a href="${base}banners/">Banners ▾</a>
+    <ul class="dropdown-menu">
+      <li><a href="${base}banners/">Current &amp; Upcoming</a></li>
+      <li><a href="${base}limited/">Limited Characters</a></li>
+    </ul>
+  </li>
+  <li class="nav-dropdown">
     <a href="${base}gameguide/">Game Guide ▾</a>
     <ul class="dropdown-menu">
       <li><a href="${base}gameguide/">Game Guide</a></li>
-      <li><a href="${base}limited/">Limited Characters</a></li>
+      <li><a href="${base}gameguide/gacha/">Gacha &amp; Pulling</a></li>
+      <li><a href="${base}gameguide/story/">Story Modes</a></li>
+      <li><a href="${base}gameguide/events/">Events</a></li>
+      <li><a href="${base}gameguide/exploit-medals/">Exploit Medals</a></li>
+      <li><a href="${base}gameguide/currencies/">Currencies</a></li>
     </ul>
   </li>
   <li class="nav-dropdown">
@@ -64,6 +75,7 @@
       <li><a href="${base}combat/uniparts/">Uniparts &amp; Set Effects</a></li>
     </ul>
   </li>
+  <a href="${base}socials/">Socials</a>
 </ul>`;
 
   // Inject nav

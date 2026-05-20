@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banners — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  /* SECTION HEADER */
+  .section-header { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0 1.2rem; }
+  .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: #fff; white-space: nowrap; }
+  .section-header .tag { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; white-space: nowrap; }
+
+  /* BANNER CARD */
+  .banner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+
+  .banner-card {
+    background: var(--panel); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: border-color .2s, transform .2s;
+  }
+  .banner-card:hover { transform: translateY(-3px); }
+  .banner-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .banner-card.active::before  { background: linear-gradient(90deg, var(--red), var(--gold)); }
+  .banner-card.upcoming::before { background: var(--cyan); }
+  .banner-card.rerun::before   { background: #a040f0; }
+  .banner-card.active  { border-color: rgba(232,0,26,.3); }
+  .banner-card.upcoming { border-color: rgba(0,212,255,.3); }
+  .banner-card.rerun   { border-color: rgba(160,64,240,.3); }
+
+  /* STATUS BADGE */
+  .banner-status {
+    position: absolute; top: .8rem; right: .8rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; text-transform: uppercase;
+    padding: .2rem .6rem; border: 1px solid;
+  }
+  .banner-status.active   { color: var(--gold); border-color: var(--gold); background: rgba(240,180,0,.1); }
+  .banner-status.upcoming { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.1); }
+  .banner-status.rerun    { color: #c8a0ff; border-color: #5a3080; background: rgba(160,64,240,.1); }
+
+  /* CHARACTER PHOTO */
+  .banner-photo {
+    width: 100%; aspect-ratio: 16/7; overflow: hidden;
+    background: var(--dark); display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .banner-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .banner-photo-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0d1220, #111827);
+    font-size: 3rem; opacity: .2;
+  }
+  .banner-photo::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 50%; background: linear-gradient(transparent, var(--panel));
+    pointer-events: none;
+  }
+
+  /* BANNER INFO */
+  .banner-info { padding: 1.2rem 1.4rem 1.4rem; }
+
+  .banner-type {
+    font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: .3rem;
+  }
+
+  .banner-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: #fff; line-height: 1.1;
+    margin-bottom: .2rem;
+  }
+  .banner-variant { color: var(--red); font-size: 1.1rem; }
+
+  .banner-dates {
+    font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px;
+    color: var(--muted); margin-top: .6rem;
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .banner-dates span { color: var(--text); }
+
+  .banner-weapon {
+    margin-top: .8rem; padding: .5rem .8rem;
+    background: var(--dark); border: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px;
+    color: var(--muted); display: flex; align-items: center; gap: .5rem;
+  }
+  .banner-weapon strong { color: var(--gold); }
+
+  .banner-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .8rem; }
+  .tag { display: inline-block; padding: .15rem .5rem; font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; }
+  .tag-attacker  { color: var(--red);    border-color: #8a0010; background: rgba(232,0,26,.1); }
+  .tag-defender  { color: #4d9fff;       border-color: #1a4080; background: rgba(0,80,200,.1); }
+  .tag-supporter { color: #40d080;       border-color: #0a5030; background: rgba(0,180,80,.1); }
+  .tag-limited   { color: var(--gold);   border-color: #806000; background: rgba(240,180,0,.1); }
+  .tag-slash     { color: #c8a0ff;       border-color: #5a3080; background: rgba(160,64,240,.1); }
+  .tag-shot      { color: var(--gold);   border-color: #806000; background: rgba(240,180,0,.1); }
+  .tag-blunt     { color: #ff9060;       border-color: #804020; background: rgba(255,120,60,.1); }
+  .tag-fire      { color: #ff6040;       border-color: #802010; background: rgba(255,80,40,.1); }
+
+  .banner-link {
+    display: inline-block; margin-top: 1rem;
+    padding: .5rem 1.2rem;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px;
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    text-decoration: none; transition: all .2s;
+  }
+  .banner-link:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* EMPTY STATE */
+  .empty-state {
+    padding: 3rem; text-align: center; border: 1px dashed var(--border); background: var(--panel);
+  }
+  .empty-state p { font-family: 'Share Tech Mono', monospace; font-size: .75rem; letter-spacing: 2px; color: var(--muted); }
+
+  /* EDIT NOTE */
+  .edit-note {
+    background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--muted);
+    padding: .8rem 1.2rem; margin-bottom: 2rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+
+<div class="page-header">
+  <p class="page-label">Gacha</p>
+  <h1 class="page-title">Banners</h1>
+  <p class="page-desc">Current and upcoming Pickup Gachas. Check here before spending your Dimensional Crystals.</p>
+</div>
+
+<div class="page">
+
+  <div class="edit-note">
+    // TO UPDATE: Edit the banner cards below when new banners go live. Add new cards to the Active or Upcoming sections, and move expired banners to Past Banners.
+  </div>
+
+  <!-- ═══════════════════════════════════
+       ACTIVE BANNERS
+  ════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="tag">// Live Now</span>
+    <h2>Active Banners</h2>
+  </div>
+
+  <div class="banner-grid">
+
+    <!-- ── BANNER CARD — Edit this block to update ── -->
+    <div class="banner-card active">
+      <div class="banner-status active">LIVE NOW</div>
+      <div class="banner-photo">
+        <img src="../Kn8 Characters/SoichiroHoshina-KOWJ.png" alt="Soichiro Hoshina">
+      </div>
+      <div class="banner-info">
+        <div class="banner-type">Pickup Gacha</div>
+        <div class="banner-name">Soichiro Hoshina<br><span class="banner-variant">Keystone of Western Japan</span></div>
+        <div class="banner-dates">
+          <div>BANNER: <span>May 20 – Jun 10, 2026</span></div>
+          <div>MEDAL EXCHANGE: <span>May 20 – Jun 17, 2026</span></div>
+        </div>
+        <div class="banner-weapon">⭐ <strong>Signature Weapon:</strong> AR-6710</div>
+        <div class="banner-tags">
+          <span class="tag tag-supporter">Supporter</span>
+          <span class="tag tag-shot">Shot</span>
+          <span class="tag tag-slash">Slash</span>
+          <span class="tag tag-limited">Limited</span>
+        </div>
+        <a href="../characters/soichiro-hoshina-kowj/" class="banner-link">View Character →</a>
+      </div>
+    </div>
+    <!-- ── END BANNER CARD ── -->
+
+  </div>
+
+  <!-- ═══════════════════════════════════
+       UPCOMING BANNERS
+  ════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="tag">// Coming Soon</span>
+    <h2>Upcoming Banners</h2>
+  </div>
+
+  <div class="banner-grid">
+    <div class="empty-state">
+      <p>// NO UPCOMING BANNERS ANNOUNCED YET</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       PAST BANNERS
+  ════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="tag">// Expired</span>
+    <h2>Past Banners</h2>
+  </div>
+
+  <div class="banner-grid">
+
+    <div class="banner-card rerun">
+      <div class="banner-status rerun">ENDED</div>
+      <div class="banner-photo">
+        <img src="../Kn8 Characters/ZoeeWanderfalke-TWU.png" alt="Zoee Wanderfalke">
+      </div>
+      <div class="banner-info">
+        <div class="banner-type">Pickup Gacha</div>
+        <div class="banner-name">Zoee Wanderfalke<br><span class="banner-variant">The Weapon Unsealed</span></div>
+        <div class="banner-dates">
+          <div>BANNER: <span>Ended</span></div>
+        </div>
+        <div class="banner-weapon">⭐ <strong>Signature Weapon:</strong> RF-Mruwdnil</div>
+        <div class="banner-tags">
+          <span class="tag tag-attacker">Attacker</span>
+          <span class="tag tag-shot">Shot</span>
+          <span class="tag tag-slash">Slash</span>
+          <span class="tag tag-limited">Limited</span>
+        </div>
+        <a href="../characters/zoee-wanderfalke-twu/" class="banner-link">View Character →</a>
+      </div>
+    </div>
+
+    <div class="banner-card rerun">
+      <div class="banner-status rerun">ENDED</div>
+      <div class="banner-photo">
+        <img src="../Kn8 Characters/WangMeixing-NWC.png" alt="Wang Meixing">
+      </div>
+      <div class="banner-info">
+        <div class="banner-type">Pickup Gacha</div>
+        <div class="banner-name">Wang Meixing<br><span class="banner-variant">Negotiator of Wit and Charm</span></div>
+        <div class="banner-dates">
+          <div>BANNER: <span>Ended</span></div>
+        </div>
+        <div class="banner-weapon">⭐ <strong>Signature Weapon:</strong> AR-Gnijiluh</div>
+        <div class="banner-tags">
+          <span class="tag tag-supporter">Supporter</span>
+          <span class="tag tag-shot">Shot</span>
+          <span class="tag tag-limited">Limited</span>
+        </div>
+        <a href="../characters/wang-meixing-nwc/" class="banner-link">View Character →</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+</body>
+</html>

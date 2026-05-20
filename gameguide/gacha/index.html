@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gacha & Pulling — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .info-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin: 1rem 0; }
+  .info-cell { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; }
+  .info-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: .3rem; }
+  .info-cell .val { font-size: .97rem; font-weight: 600; color: var(--text); }
+  .gacha-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .gacha-stat { background: var(--dark); padding: 1.2rem; text-align: center; }
+  .gacha-stat .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); letter-spacing: 2px; display: block; }
+  .gacha-stat .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .story-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .story-card { background: var(--dark); border: 1px solid var(--border); padding: 1.4rem; position: relative; overflow: hidden; }
+  .story-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .story-card.main::before { background: var(--cyan); }
+  .story-card.anime::before { background: var(--red); }
+  .story-card.memory::before { background: var(--gold); }
+  .story-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .story-card p { font-size: .93rem; color: var(--muted); line-height: 1.5; margin-bottom: .6rem; }
+  .story-badge { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; padding: .2rem .6rem; border: 1px solid var(--border); color: var(--muted); display: inline-block; }
+  .event-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .event-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
+  .event-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .event-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .event-card p { font-size: .9rem; color: var(--muted); line-height: 1.5; }
+  .event-rewards { margin-top: .7rem; display: flex; flex-wrap: wrap; gap: .3rem; }
+  .reward-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .15rem .5rem; border: 1px solid var(--border); color: var(--cyan); background: rgba(0,212,255,.05); }
+  .medal-grid { display: flex; flex-direction: column; gap: 1.2rem; }
+  .medal-block { background: var(--dark); border: 1px solid var(--border); overflow: hidden; }
+  .medal-header { display: flex; align-items: center; gap: 1rem; padding: .7rem 1.2rem; background: rgba(255,255,255,.02); border-bottom: 1px solid var(--border); }
+  .medal-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: var(--gold); }
+  .medal-count { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; color: var(--muted); margin-left: auto; }
+  .medal-chars { padding: .8rem 1.2rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .medal-char-tag { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 1px; padding: .2rem .6rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: color .2s, border-color .2s; }
+  .medal-char-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+  .status-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); margin-bottom: 1rem; }
+  .status-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--border); transition: background .2s; }
+  .status-row:last-child { border-bottom: none; }
+  .status-row:hover { background: rgba(0,212,255,.03); }
+  .status-name { padding: .7rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+  .status-desc { padding: .7rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Gacha & Pulling</h1>
+  <p class="page-desc">Banner types, drop rates, pity system and how to farm Dimensional Crystals.</p>
+</div>
+<div class="page">
+  <div class="section-nav">
+    <a href="../">Game Guide</a>
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+  </div>
+<div class="guide-section open" id="gacha">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">💎</span>
+      <span class="guide-section-title">Gacha & Pulling</span>
+      <span class="guide-section-tag">// Dimensional Crystals</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+
+      <div class="gacha-stats">
+        <div class="gacha-stat"><span class="val">3%</span><span class="lbl">★5 Character Rate</span></div>
+        <div class="gacha-stat"><span class="val">5%</span><span class="lbl">★5 Weapon Rate</span></div>
+        <div class="gacha-stat"><span class="val">1%</span><span class="lbl">Pickup Character Rate</span></div>
+        <div class="gacha-stat"><span class="val">250</span><span class="lbl">Medals for ★5 Character</span></div>
+        <div class="gacha-stat"><span class="val">150</span><span class="lbl">Medals for ★5 Weapon</span></div>
+      </div>
+
+      <div class="guide-subheading">Banner Types</div>
+      <ul class="guide-list">
+        <li><strong>THE GAME Gacha</strong> — The permanent banner. Always available and features the standard pool of characters and weapons. Use Dimensional Crystals or THE GAME Gacha Tickets.</li>
+        <li><strong>Pickup Gacha</strong> — Limited-time banners featuring a specific rate-up ★5 character and their signature weapon at increased odds. These are the best opportunities to pull for specific units. Use Pickup Gacha Tickets or Dimensional Crystals.</li>
+      </ul>
+
+      <div class="guide-subheading">Pity System</div>
+      <ul class="guide-list">
+        <li>Every pull earns you <strong>Gacha Medals</strong>. You can exchange <strong>250 medals for a ★5 character</strong> and <strong>150 medals for a ★5 weapon</strong> — this is the pity system.</li>
+        <li>If 9 pulls in a row all result in weapons, your next pull is guaranteed to be a <strong>★4 or higher character</strong>. This applies across single pulls and 10-pulls, and even across different Pickup Gachas.</li>
+        <li>The total ★5 drop rate is <strong>8%</strong> — 3% for characters and 5% for weapons. The pickup rate for the featured character is 1%.</li>
+        <li><strong>Pickup Gacha Medals do not expire</strong> — exchange them at your own pace. 250 for a ★5 character, 150 for a ★5 weapon.</li>
+        <li>Rate-up banners have increased odds for the featured character, making them the best time to pull for specific units.</li>
+      </ul>
+
+      <div class="guide-subheading">How to Earn Dimensional Crystals</div>
+      <ul class="guide-list">
+        <li><strong>Story Modes</strong> — Main Story, Anime Story, and Memory Stories all reward Crystals on first clear.</li>
+        <li><strong>Daily & Weekly Missions</strong> — Consistent daily play provides a steady stream of free Crystals.</li>
+        <li><strong>Events</strong> — Kaiju Rush, Fierce Battle Area, and limited-time events are among the best free sources.</li>
+        <li><strong>Player Rank</strong> — Each rank-up grants a Crystal bonus.</li>
+        <li><strong>First-time clears</strong> — New content and stages always come with one-time Crystal rewards.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Always use the Web Shop:</strong> The official web store at webstore.kj8-thegame.com gives significantly more Dimensional Crystals per dollar than purchasing directly in-game. Never buy Crystals through the in-game shop if you can avoid it.
+      </div>
+
+      <div class="guide-subheading">Smart Pulling Tips</div>
+      <ul class="guide-list">
+        <li>Prioritize pulling on limited banners featuring characters that fill a gap in your squad composition.</li>
+        <li>Don't impulse pull on every banner — limited characters return in reruns eventually.</li>
+        <li>Save at least 100+ pulls before targeting a limited banner to have a reasonable chance at the rate-up unit.</li>
+        <li>Check a character's page before pulling to confirm they fit your playstyle and squad.</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+document.querySelectorAll('.section-nav a').forEach(a => {
+  if (window.location.pathname.includes(new URL(a.href).pathname.split('/').filter(Boolean).pop())) {
+    a.classList.add('active');
+  }
+});
+</script>
+</body>
+</html>
