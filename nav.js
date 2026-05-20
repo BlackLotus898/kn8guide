@@ -32,26 +32,26 @@
   `;
   document.head.appendChild(style);
   const NAV_HTML = `
-<a href="/" class="nav-logo">K8<span>GUIDE</span></a>
+<a href="index.html" class="nav-logo">K8<span>GUIDE</span></a>
 <ul class="nav-links">
   <li class="nav-dropdown">
-    <a href="/characters/">Characters ▾</a>
+    <a href="characters.html">Characters ▾</a>
     <ul class="dropdown-menu">
-      <li><a href="/characters/">Character Roster</a></li>
-      <li><a href="/weapons/">Weapons &amp; Best Users</a></li>
-      <li><a href="/tracker/">Character Tracker</a></li>
+      <li><a href="characters.html">Character Roster</a></li>
+      <li><a href="weapons.html">Weapons &amp; Best Users</a></li>
+      <li><a href="tracker.html">Character Tracker</a></li>
     </ul>
   </li>
-  <a href="/beginner/">Beginner</a>
+  <a href="beginner.html">Beginner</a>
   <li class="nav-dropdown">
-    <a href="/gameguide/">Game Guide ▾</a>
+    <a href="gameguide.html">Game Guide ▾</a>
     <ul class="dropdown-menu">
-      <li><a href="/gameguide/">Game Guide</a></li>
-      <li><a href="/limited/">Limited Characters</a></li>
+      <li><a href="gameguide.html">Game Guide</a></li>
+      <li><a href="limited.html">Limited Characters</a></li>
     </ul>
   </li>
-  <a href="/combat/">Combat</a>
-  <a href="/socials/">Socials</a>
+  <a href="combat.html">Combat</a>
+  <a href="socials.html">Socials</a>
 </ul>`;
 
   // Inject nav
@@ -59,12 +59,11 @@
   if (nav) nav.innerHTML = NAV_HTML;
 
   // Highlight active page
-  const current = window.location.pathname.replace(/\/$/, '').split('/').pop() || '';
+  const parts = window.location.pathname.split('/').filter(Boolean); const current = parts[parts.length-1] || '';
   document.querySelectorAll('#main-nav a').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
-    const hrefClean = href.replace(/\/$/, '').split('/').pop() || '';
-    if (hrefClean === current) {
+    const hrefParts = href.split('/').filter(Boolean); const hrefLast = hrefParts[hrefParts.length-1] || ''; if (hrefLast === current || (current === '' && href.includes('index'))) {
       link.classList.add('active');
       // If inside a dropdown, also highlight the parent
       const dropdown = link.closest('.nav-dropdown');
