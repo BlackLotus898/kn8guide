@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combat Guide — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  /* SECTION NAV */
+  .section-nav {
+    display: flex; flex-wrap: wrap; gap: .4rem;
+    margin: 2rem 0;
+  }
+  .section-nav a {
+    padding: .4rem 1rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+    text-decoration: none; transition: all .2s;
+  }
+  .section-nav a:hover { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+
+  /* GUIDE SECTION */
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none; transition: background .2s;
+  }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+
+  /* CONTENT */
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+
+  /* STATUS TABLES */
+  .status-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); margin-bottom: 1rem; }
+  .status-row {
+    display: grid; grid-template-columns: 180px 1fr;
+    border-bottom: 1px solid var(--border); transition: background .2s;
+  }
+  .status-row:last-child { border-bottom: none; }
+  .status-row:hover { background: rgba(0,212,255,.03); }
+  .status-name {
+    padding: .8rem 1rem; border-right: 1px solid var(--border);
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px;
+    display: flex; align-items: center; background: rgba(255,255,255,.02);
+  }
+  .status-name.ailment { color: var(--red); }
+  .status-name.debuff  { color: #ff9060; }
+  .status-name.special { color: var(--cyan); }
+  .status-desc { padding: .8rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
+
+  /* UNIPARTS GRID */
+  .uniparts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .unipart-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
+  .unipart-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .unipart-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .unipart-effect { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: .6rem; }
+  .unipart-users-label { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: .4rem; }
+  .unipart-users { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .unipart-user-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .15rem .5rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: color .2s, border-color .2s; }
+  .unipart-user-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* TWO COL */
+  .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 600px) { .two-col-grid { grid-template-columns: 1fr; } .status-row { grid-template-columns: 140px 1fr; } }
+
+  .mechanic-box { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; }
+  .mechanic-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin-bottom: .6rem; }
+  .mechanic-box p, .mechanic-box li { font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .mechanic-box ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; padding-left: .5rem; }
+  .mechanic-box ul li { position: relative; padding-left: 1rem; }
+  .mechanic-box ul li::before { content: '›'; position: absolute; left: 0; color: var(--red); }
+  .mechanic-box ul li strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+
+<div class="page-header">
+  <p class="page-label">Systems Reference</p>
+  <h1 class="page-title">Combat Guide</h1>
+  <p class="page-desc">A deep reference for all combat mechanics — from core exposure and SP to every ailment, debuff, special status, and unipart set effect in the game.</p>
+</div>
+
+<div class="page">
+
+  <div class="section-nav">
+    <a href="#core-mechanics">Core Mechanics</a>
+    <a href="#ailments">Ailments</a>
+    <a href="#debuffs">Debuffs</a>
+    <a href="#special-status">Special Status</a>
+    <a href="#elements">Elements</a>
+    <a href="#damage-types">Damage Types</a>
+    <a href="#uniparts">Uniparts & Set Effects</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       CORE MECHANICS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section open" id="core-mechanics">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚔️</span>
+      <span class="guide-section-title">Core Mechanics</span>
+      <span class="guide-section-tag">// How Combat Works</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+
+      <div class="two-col-grid">
+        <div class="mechanic-box">
+          <h3>Core Exposure</h3>
+          <ul>
+            <li>Every Kaiju has a hidden core that must be exposed before Ultimates deal full damage.</li>
+            <li>Use skills matching the Kaiju's <strong>weakness attribute</strong> to chip away at PLT and expose the core.</li>
+            <li>Once exposed, the core is vulnerable for a limited window — coordinate your squad's turn order to maximize damage.</li>
+            <li>Attacks on a Core Exposed Kaiju do not count toward Seen Through activation count.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>SP (Skill Points)</h3>
+          <ul>
+            <li>SP is a shared resource spent on Combat Skills across the whole squad.</li>
+            <li><strong>Normal Attacks</strong> are free. <strong>Combat Skills</strong> cost 1–2 SP.</li>
+            <li>Some characters generate SP through passives or Ascension nodes — check individual character pages.</li>
+            <li>Don't burn SP early if you need it for a key window later in the fight.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>PLT (Plates)</h3>
+          <ul>
+            <li>Kaiju have PLT that must be destroyed to expose the core.</li>
+            <li>Certain attack types (Slash, Shot, Blunt, Piercing) are more effective against specific PLT.</li>
+            <li>Destroying PLT charges your Ultimate Gauge — Normal Attacks on PLT are never wasted.</li>
+            <li>Some skills and passives trigger effects specifically when PLT is destroyed.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Ultimate Gauge</h3>
+          <ul>
+            <li>Each character has an <strong>Ultimate Gauge</strong> that fills as they attack and take hits.</li>
+            <li>When full (default limit: 300), the character can activate their Ultimate attack.</li>
+            <li>Some characters modify their gauge limit or charge rate through skills and ascension.</li>
+            <li>Always save Ultimates for when the Kaiju's core is exposed for maximum impact.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Action Order</h3>
+          <ul>
+            <li>Turn order is determined by each character's and Kaiju's <strong>SPD stat</strong>.</li>
+            <li>Some skills advance or delay Action Order — use these to chain Ultimates efficiently.</li>
+            <li><strong>Freeze</strong> and <strong>Stun</strong> can delay or prevent enemy actions.</li>
+            <li>SPD buffs from Supporter characters can give your squad more frequent turns.</li>
+          </ul>
+        </div>
+        <div class="mechanic-box">
+          <h3>Damage Types</h3>
+          <ul>
+            <li><strong>ST (Single Target)</strong> — Hits one Kaiju for full damage.</li>
+            <li><strong>Blast</strong> — Hits primary target and adjacent Kaiju (reduced damage to adjacent).</li>
+            <li><strong>AoE (Area of Effect)</strong> — Hits all Kaiju on the field.</li>
+            <li><strong>Additional DMG</strong> — Bonus hits triggered by passives, separate from the main attack.</li>
+            <li><strong>DoT (Damage over Time)</strong> — Damage dealt at the start of a turn via ailments.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <strong>Elements:</strong> Fire, Ice, Wind, and Lightning are elemental damage types applied by certain characters. These deal bonus damage to Kaiju with matching weaknesses and enable elemental ailments (Burn, Freeze, Windbite, Shock). See the <strong>Elements & Users</strong> and <strong>Damage Types</strong> sections below for the full breakdown.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       AILMENTS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="ailments">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">☠️</span>
+      <span class="guide-section-title">Ailments</span>
+      <span class="guide-section-tag">// Status Conditions</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Ailments are negative status effects applied to Kaiju. Most ailments deal Damage-over-Time (DoT) at the start of each action. Characters with high <strong>Effect Hit Rate</strong> apply ailments more reliably.</p>
+
+      <div class="status-grid">
+        <div class="status-row">
+          <div class="status-name ailment">Burn</div>
+          <div class="status-desc">Inflicts Fire Damage-over-Time at the start of the action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Freeze</div>
+          <div class="status-desc">Inflicts Ice Damage-over-Time at the start of the action. Also delays the affected target's next action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Poison</div>
+          <div class="status-desc">Inflicts DoT based on the target's Max HP at the start of the action. Maximum Poison damage is capped based on the applier's ATK.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Shock</div>
+          <div class="status-desc">Inflicts Lightning Damage-over-Time at the start of the action.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Soaked</div>
+          <div class="status-desc">Increases damage taken from Damage-over-Time.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Stun</div>
+          <div class="status-desc">Prevents the target from acting for a set number of turns. Also increases CRIT DMG taken when hit while stunned.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Taunt</div>
+          <div class="status-desc">The taunted target cannot choose targets other than the unit that applied Taunt.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name ailment">Windbite</div>
+          <div class="status-desc">Inflicts Wind Damage-over-Time at the start of the action.</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <strong>DoT Synergy:</strong> Characters like Jura Igarashi (Afterburn) and Akari Minase (Flare-Up) have skills that amplify or trigger additional instances of DoT. Pairing ailment appliers with DoT amplifiers significantly boosts damage output.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       DEBUFFS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="debuffs">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⬇️</span>
+      <span class="guide-section-title">Debuffs</span>
+      <span class="guide-section-tag">// Enemy Weakening</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Debuffs weaken Kaiju or create conditions that allies can exploit for increased damage. Unlike ailments, debuffs do not deal direct damage but amplify the damage output of the squad.</p>
+
+      <div class="status-grid">
+        <div class="status-row">
+          <div class="status-name debuff">Fear</div>
+          <div class="status-desc">After an ally attacks a Kaiju in Fear state, deals Slash Additional DMG based on the applier's ATK × the stack count of Fear.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Gunshot Wound</div>
+          <div class="status-desc">After the applier activates Combat Skill or Ultimate against a Kaiju in Gunshot Wound state, deals Shot Additional DMG.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Ice Crystal</div>
+          <div class="status-desc">After an ally attacks a Kaiju in Ice Crystal state, deals Ice Additional DMG corresponding to the applier's ATK.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Mark</div>
+          <div class="status-desc">Increases DMG taken from Follow-Up Skill and Extra Attack.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Opening</div>
+          <div class="status-desc">Activates escalating effects based on the number of stacks applied to the Kaiju. Used by Soshiro Hoshina (New Possibilities).</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Seen Through</div>
+          <div class="status-desc">After allies attack 5 times, removes Seen Through and randomly destroys 3 PLT. Attacks on a Core Exposed Kaiju do not count.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Shock Wire</div>
+          <div class="status-desc">Increases DMG taken from Damage-over-Time. After turn arrives, takes Lightning Damage-over-Time.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Tremble</div>
+          <div class="status-desc">Increases DMG taken from Additional DMG.</div>
+        </div>
+        <div class="status-row">
+          <div class="status-name debuff">Wound</div>
+          <div class="status-desc">Increases DMG taken by the target. If the target is Core Exposed, increases DMG taken further.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SPECIAL STATUS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="special-status">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">✨</span>
+      <span class="guide-section-title">Special Status</span>
+      <span class="guide-section-tag">// Buffs & States</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Special Status effects are buffs and unique states applied to allies. These are often tied to specific characters' kits and synergies.</p>
+
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name special">Acceleration</div><div class="status-desc">Increases this unit's DMG dealt and SPD. After activating Combat Skill against a Core Exposed Kaiju, SP +1. Normal Attack, Combat Skill, and Follow-Up Skill cannot recover Ultimate Gauge.</div></div>
+        <div class="status-row"><div class="status-name special">Afterburn</div><div class="status-desc">Triggers 1 additional instance of DoT equal to a fixed percentage of the DoT the target is currently receiving from status changes.</div></div>
+        <div class="status-row"><div class="status-name special">Ardor</div><div class="status-desc">After an ally activates Ultimate, increases the activator's DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Assistance</div><div class="status-desc">Increases battle buddy's All-Attribute DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Berserk</div><div class="status-desc">Increases CRIT Rate and Shot DMG dealt. Combat Skill changes to Enhanced form. Can only activate Enhanced Combat Skill, Ultimate, and Follow-Up Skill.</div></div>
+        <div class="status-row"><div class="status-name special">Blaze</div><div class="status-desc">Decreases this unit's DMG dealt. Normal Attack changes into Enhanced Normal Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Bold</div><div class="status-desc">After activating Combat Skill or Extra Attack, deals Slash Additional DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Care Package</div><div class="status-desc">After an ally consumes 2 SP, recovers 2 SP and removes Care Package. Automatically removed when applied to another ally.</div></div>
+        <div class="status-row"><div class="status-name special">Chips</div><div class="status-desc">If at 1+ stacks, after activating Normal Attack, Combat Skill, or after an ally uses Combat Skill, Ultimate, Extra Attack, or Counter — activates Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Clarity</div><div class="status-desc">Increases this unit's CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Combined Forces</div><div class="status-desc">After Bakko performs an action, activates Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Engrossed</div><div class="status-desc">Before activating Normal Attack or Combat Skill, recovers the activator's HP. After activating, if HP is 50%+, increases the activator's ATK.</div></div>
+        <div class="status-row"><div class="status-name special">Field Ops</div><div class="status-desc">After attacking, deals Shot Additional DMG corresponding to the attacker's ATK.</div></div>
+        <div class="status-row"><div class="status-name special">Fierce</div><div class="status-desc">Increases this unit's CRIT Rate and CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Fighting Spirit</div><div class="status-desc">Increases this unit's DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Flare-Up</div><div class="status-desc">After an ally attacks a Kaiju in Flare-Up state, triggers a fixed percentage of the DoT the target is currently receiving from each status change. Max 7 activations.</div></div>
+        <div class="status-row"><div class="status-name special">Focus</div><div class="status-desc">Increases this unit's CRIT Rate after reaching max stacks.</div></div>
+        <div class="status-row"><div class="status-name special">Gift</div><div class="status-desc">Increases the target's ATK based on this unit's ATK upon application. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Hot-Blooded</div><div class="status-desc">Increases DMG dealt, ATK, and SPD.</div></div>
+        <div class="status-row"><div class="status-name special">Hyped</div><div class="status-desc">Increases this unit's ATK and CRIT DMG.</div></div>
+        <div class="status-row"><div class="status-name special">Inheritance</div><div class="status-desc">Increases this unit's Ultimate Gauge Charge Rate. After Normal Attack, has a chance to apply DEF Down. After Combat Skill, has a chance to apply DEF Down.</div></div>
+        <div class="status-row"><div class="status-name special">Inner Flame</div><div class="status-desc">Increases this unit's DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Kaiju</div><div class="status-desc">Increases this unit's HP and SPD. Equipped weapons are unequipped and skills change. Lasts until end of battle.</div></div>
+        <div class="status-row"><div class="status-name special">Mark</div><div class="status-desc">Increases DMG taken from Follow-Up Skill and Extra Attack.</div></div>
+        <div class="status-row"><div class="status-name special">Morale</div><div class="status-desc">Increases this unit's DMG dealt and Combat Skill DMG dealt.</div></div>
+        <div class="status-row"><div class="status-name special">Opening</div><div class="status-desc">Activates effects based on the number of stacks applied to the Kaiju.</div></div>
+        <div class="status-row"><div class="status-name special">Patience</div><div class="status-desc">After turn arrives, recovers target's HP.</div></div>
+        <div class="status-row"><div class="status-name special">Progress</div><div class="status-desc">Increases this unit's CRIT Rate and CRIT DMG after reaching max stacks.</div></div>
+        <div class="status-row"><div class="status-name special">Resolve</div><div class="status-desc">Increases this unit's Blunt DMG dealt and Ultimate DMG Multiplier.</div></div>
+        <div class="status-row"><div class="status-name special">Resonance</div><div class="status-desc">This unit's Combat Skill is enhanced.</div></div>
+        <div class="status-row"><div class="status-name special">Seen Through</div><div class="status-desc">After allies attack 5 times, removes state and randomly destroys 3 PLT. Attacks on Core Exposed Kaiju do not count.</div></div>
+        <div class="status-row"><div class="status-name special">Stealth</div><div class="status-desc">Will not be targeted by Kaiju attacks. Becomes a selectable target if all allies are in Stealth state.</div></div>
+        <div class="status-row"><div class="status-name special">Surveillance</div><div class="status-desc">After attacking, if the attacker's HP is 50% or less, recovers the attacker's HP.</div></div>
+        <div class="status-row"><div class="status-name special">True Potential</div><div class="status-desc">Increases the target's CRIT DMG based on the applier's CRIT DMG upon application. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Valor</div><div class="status-desc">When at max stacks, after activating Combat Skill or Ultimate, deals Blunt Additional DMG to the target.</div></div>
+        <div class="status-row"><div class="status-name special">Wit and Courage</div><div class="status-desc">Increases ATK for all other allies. Cannot be overwritten by weaker status changes of the same type.</div></div>
+        <div class="status-row"><div class="status-name special">Wrath</div><div class="status-desc">If at 3+ stacks, after attacking, consumes 3 stacks and activates Extra Attack.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       ELEMENTS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="elements">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔥</span>
+      <span class="guide-section-title">Elements & Users</span>
+      <span class="guide-section-tag">// Elemental Types</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Elements deal bonus damage to Kaiju with matching weaknesses and enable elemental ailments. Characters listed below deal elemental damage alongside their base attack type.</p>
+
+      <div class="two-col-grid">
+
+        <div class="mechanic-box">
+          <h3 style="color:#ff6040;">🔥 Fire</h3>
+          <ul>
+            <li><a href="/characters/akari-minase-fc/" style="color:var(--muted);text-decoration:none;">Akari Minase <span style="color:var(--muted);font-size:.8rem;">(Festive Christmas) — Shot / Fire</span></a></li>
+            <li><a href="/characters/hakua-igarashi-sp/" style="color:var(--muted);text-decoration:none;">Hakua Igarashi <span style="color:var(--muted);font-size:.8rem;">(Sincerity and Potential) — Shot / Fire</span></a></li>
+            <li><a href="/characters/jura-igarashi-gd/" style="color:var(--muted);text-decoration:none;">Jura Igarashi <span style="color:var(--muted);font-size:.8rem;">(Grit and Duty) — Blunt / Fire</span></a></li>
+            <li><a href="/characters/kn8-sv/" style="color:var(--muted);text-decoration:none;">Kaiju No. 8 <span style="color:var(--muted);font-size:.8rem;">(Scorching Variant) — Blunt / Fire</span></a></li>
+            <li><a href="/characters/sagan-shinomiya-ddd/" style="color:var(--muted);text-decoration:none;">Sagan Shinomiya <span style="color:var(--muted);font-size:.8rem;">(Dimensionally Distorted Destiny) — Blunt / Fire</span></a></li>
+            <li><a href="/characters/sagan-shinomiya-ol/" style="color:var(--muted);text-decoration:none;">Sagan Shinomiya <span style="color:var(--muted);font-size:.8rem;">(Over Limit) — Slash / Fire</span></a></li>
+            <li><a href="/characters/tae-nakanoshima-tkepl/" style="color:var(--muted);text-decoration:none;">Tae Nakanoshima <span style="color:var(--muted);font-size:.8rem;">(The Keen-Eyed Platoon Leader) — Shot / Fire</span></a></li>
+          </ul>
+        </div>
+
+        <div class="mechanic-box">
+          <h3 style="color:#80ffb0;">💨 Wind</h3>
+          <ul>
+            <li><a href="/characters/aoi-kaguragi-tprs/" style="color:var(--muted);text-decoration:none;">Aoi Kaguragi <span style="color:var(--muted);font-size:.8rem;">(The Promising Rising Star) — Shot / Wind</span></a></li>
+            <li><a href="/characters/hikari-shinomiya-tv/" style="color:var(--muted);text-decoration:none;">Hikari Shinomiya <span style="color:var(--muted);font-size:.8rem;">(The Valkyrie) — Slash / Wind</span></a></li>
+            <li><a href="/characters/soshiro-hoshina-np/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina <span style="color:var(--muted);font-size:.8rem;">(New Possibilities) — Slash / Wind</span></a></li>
+          </ul>
+        </div>
+
+        <div class="mechanic-box">
+          <h3 style="color:#80e8ff;">❄️ Ice</h3>
+          <ul>
+            <li><a href="/characters/gen-narumi-jss/" style="color:var(--muted);text-decoration:none;">Gen Narumi <span style="color:var(--muted);font-size:.8rem;">(Japan's Strongest Santa) — Slash / Ice</span></a></li>
+            <li><a href="/characters/kota-tachibana-fdff/" style="color:var(--muted);text-decoration:none;">Kota Tachibana <span style="color:var(--muted);font-size:.8rem;">(First Division's Feral Force) — Shot / Ice</span></a></li>
+            <li><a href="/characters/reno-ichikawa-tcu/" style="color:var(--muted);text-decoration:none;">Reno Ichikawa <span style="color:var(--muted);font-size:.8rem;">(The Compatible User) — Shot / Ice</span></a></li>
+          </ul>
+        </div>
+
+        <div class="mechanic-box">
+          <h3 style="color:#ffe060;">⚡ Lightning</h3>
+          <ul>
+            <li><a href="/characters/iharu-furuhashi-lt/" style="color:var(--muted);text-decoration:none;">Iharu Furuhashi <span style="color:var(--muted);font-size:.8rem;">(Latent Talent) — Shot / Lightning</span></a></li>
+            <li><a href="/characters/wang-meixing-nwc/" style="color:var(--muted);text-decoration:none;">Wang Meixing <span style="color:var(--muted);font-size:.8rem;">(Negotiator of Wit and Charm) — Shot / Lightning</span></a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       DAMAGE TYPES
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="damage-types">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">💥</span>
+      <span class="guide-section-title">Damage Types & Users</span>
+      <span class="guide-section-tag">// Attack Types</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Every character deals one or more damage types. Matching your squad's damage types to a Kaiju's weakness significantly increases damage output.</p>
+
+      <div class="guide-subheading">Blunt</div>
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Aoi Kaguragi</div><div class="status-desc">(Fruits of Diligence) — Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Eiji Hasegawa</div><div class="status-desc">(Right-Hand Man of the Strongest) — Blunt / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Isao Shinomiya</div><div class="status-desc">(Prime Fist) — Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Isao Shinomiya</div><div class="status-desc">(The Unbreakable Iron Wall) — Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Jura Igarashi</div><div class="status-desc">(Grit and Duty) — Blunt / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kafka Hibino</div><div class="status-desc">(The Man Who Became a Kaiju) — Shot / Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kaiju No. 8</div><div class="status-desc">(Fortitude 9.8) — Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kaiju No. 8</div><div class="status-desc">(Scorching Variant) — Blunt / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(Evolving Talent) — Slash / Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(The Inherited Will) — Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Sagan Shinomiya</div><div class="status-desc">(Dimensionally Distorted Destiny) — Blunt / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Suited</div><div class="status-desc">(Unbridled Curiosity) — Blunt</div></div>
+      </div>
+
+      <div class="guide-subheading">Shot</div>
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Akari Minase</div><div class="status-desc">(Festive Christmas) — Shot / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Akari Minase</div><div class="status-desc">(Heart of Compassion) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Akari Minase</div><div class="status-desc">(Synchro Aptitude) — Shot / Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Aoi Kaguragi</div><div class="status-desc">(The Promising Rising Star) — Shot / Wind</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Chester</div><div class="status-desc">(The All-Rounder) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Eiji Hasegawa</div><div class="status-desc">(Right-Hand Man of the Strongest) — Blunt / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Gen Narumi</div><div class="status-desc">(Future Sight) — Slash / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Gen Narumi</div><div class="status-desc">(Japan's Strongest Combatant) — Slash / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Hakua Igarashi</div><div class="status-desc">(Sincerity and Potential) — Shot / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Haruichi Izumo</div><div class="status-desc">(Calculated Choice) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Haruichi Izumo</div><div class="status-desc">(The Clean-Cut Elite) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Iharu Furuhashi</div><div class="status-desc">(Latent Talent) — Shot / Lightning</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Kafka Hibino</div><div class="status-desc">(The Man Who Became a Kaiju) — Shot / Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Kafka Hibino</div><div class="status-desc">(The Man Who Became a Reindeer) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Keiji Itami</div><div class="status-desc">(Calm and Quiet) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Kota Tachibana</div><div class="status-desc">(First Division's Feral Force) — Shot / Ice</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Mina Ashiro</div><div class="status-desc">(Aiming for Greater Heights) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Mina Ashiro</div><div class="status-desc">(Off the Scale) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Mina Ashiro</div><div class="status-desc">(Superb Combination) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Reno Ichikawa</div><div class="status-desc">(Signs of Awakening) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Reno Ichikawa</div><div class="status-desc">(The Compatible User) — Shot / Ice</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Rin Shinonome</div><div class="status-desc">(Aspiration and Honor) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Ryo Ikaruga</div><div class="status-desc">(Passion and Responsibility) — Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Tae Nakanoshima</div><div class="status-desc">(The Keen-Eyed Platoon Leader) — Shot / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Wang Meixing</div><div class="status-desc">(Negotiator of Wit and Charm) — Shot / Lightning</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);font-size:.85rem;">Zoee Wanderfalke</div><div class="status-desc">(The Weapon Unsealed) — Shot / Slash</div></div>
+      </div>
+
+      <div class="guide-subheading">Slash</div>
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Akari Minase</div><div class="status-desc">(Synchro Aptitude) — Shot / Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Gen Narumi</div><div class="status-desc">(Future Sight) — Slash / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Gen Narumi</div><div class="status-desc">(Japan's Strongest Combatant) — Slash / Shot</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Gen Narumi</div><div class="status-desc">(Japan's Strongest Santa) — Slash / Ice</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Hikari Shinomiya</div><div class="status-desc">(The Valkyrie) — Slash / Wind</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(Evolving Talent) — Slash / Blunt</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(Full-Power Christmas) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(Guiding Light of the Future) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(The Mission to Be Perfect) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Sagan Shinomiya</div><div class="status-desc">(Over Limit) — Slash / Fire</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Soshiro Hoshina</div><div class="status-desc">(Ax Technique Proficiency) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Soshiro Hoshina</div><div class="status-desc">(Blade Specialist) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Soshiro Hoshina</div><div class="status-desc">(Hoshina-Style Sword-Slay Technique) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Soshiro Hoshina</div><div class="status-desc">(New Possibilities) — Slash / Wind</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Soshiro Hoshina</div><div class="status-desc">(United Front) — Slash</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;font-size:.85rem;">Zoee Wanderfalke</div><div class="status-desc">(The Weapon Unsealed) — Shot / Slash</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       UNIPARTS & SET EFFECTS
+  ════════════════════════════════════════════ -->
+  <div class="guide-section" id="uniparts">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔩</span>
+      <span class="guide-section-title">Uniparts & Set Effects</span>
+      <span class="guide-section-tag">// Equipment</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Uniparts are equipment pieces that provide stat bonuses and set effects. Equipping a full set of the same type activates the set bonus. Always match the unipart type to the character's recommended set on their individual page.</p>
+
+      <div class="uniparts-grid">
+
+        <div class="unipart-card">
+          <div class="unipart-name">Lizard-Type</div>
+          <div class="unipart-effect">Increases ATK and CRIT Rate. Increases DMG dealt when using Ultimate.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/chester-tar/" class="unipart-user-tag">Chester (TAR)</a>
+            <a href="/characters/gen-narumi-fs/" class="unipart-user-tag">Gen Narumi (FS)</a>
+            <a href="/characters/gen-narumi-jsc/" class="unipart-user-tag">Gen Narumi (JSC)</a>
+            <a href="/characters/gen-narumi-jss/" class="unipart-user-tag">Gen Narumi (JSS)</a>
+            <a href="/characters/hikari-shinomiya-tv/" class="unipart-user-tag">Hikari Shinomiya (TV)</a>
+            <a href="/characters/isao-shinomiya-pf/" class="unipart-user-tag">Isao Shinomiya (PF)</a>
+            <a href="/characters/kafka-hibino-tmwbk/" class="unipart-user-tag">Kafka Hibino (TMWBK)</a>
+            <a href="/characters/kikoru-shinomiya-glf/" class="unipart-user-tag">Kikoru Shinomiya (GLF)</a>
+            <a href="/characters/kikoru-shinomiya-tmbp/" class="unipart-user-tag">Kikoru Shinomiya (TMBP)</a>
+            <a href="/characters/reno-ichikawa-sa/" class="unipart-user-tag">Reno Ichikawa (SA)</a>
+            <a href="/characters/rin-shinonome-ah/" class="unipart-user-tag">Rin Shinonome (AH)</a>
+            <a href="/characters/soshiro-hoshina-uf/" class="unipart-user-tag">Soshiro Hoshina (UF)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Spider-Type</div>
+          <div class="unipart-effect">Increases ATK and Effect Hit Rate. Increases DMG dealt to Kaiju with debuffs or status ailments.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/aoi-kaguragi-tprs/" class="unipart-user-tag">Aoi Kaguragi (TPRS)</a>
+            <a href="/characters/iharu-furuhashi-lt/" class="unipart-user-tag">Iharu Furuhashi (LT)</a>
+            <a href="/characters/keiji-itami-cq/" class="unipart-user-tag">Keiji Itami (CQ)</a>
+            <a href="/characters/jura-igarashi-gd/" class="unipart-user-tag">Jura Igarashi (GD)</a>
+            <a href="/characters/reno-ichikawa-tcu/" class="unipart-user-tag">Reno Ichikawa (TCU)</a>
+            <a href="/characters/soshiro-hoshina-atp/" class="unipart-user-tag">Soshiro Hoshina (ATP)</a>
+            <a href="/characters/tae-nakanoshima-tkepl/" class="unipart-user-tag">Tae Nakanoshima (TKEPL)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Bovine-Type</div>
+          <div class="unipart-effect">Increases DMG Taken Reduction and Shield Application Multiplier. Recovers SP at start of battle. Increases DEF when receiving hits (Max 3 stacks).</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/hakua-igarashi-sp/" class="unipart-user-tag">Hakua Igarashi (SP)</a>
+            <a href="/characters/isao-shinomiya-tuiw/" class="unipart-user-tag">Isao Shinomiya (TUIW)</a>
+            <a href="/characters/kota-tachibana-fdff/" class="unipart-user-tag">Kota Tachibana (FDFF)</a>
+            <a href="/characters/sagan-shinomiya-ddd/" class="unipart-user-tag">Sagan Shinomiya (DDD)</a>
+            <a href="/characters/aoi-kaguragi-fd/" class="unipart-user-tag">Aoi Kaguragi (FD)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Wyvern-Type</div>
+          <div class="unipart-effect">Increases SPD and Effect RES. Increases ATK of all allies when using Combat Skill.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/haruichi-izumo-tcce/" class="unipart-user-tag">Haruichi Izumo (TCCE)</a>
+            <a href="/characters/kafka-hibino-tmwbr/" class="unipart-user-tag">Kafka Hibino (TMWBR)</a>
+            <a href="/characters/mina-ashiro-agh/" class="unipart-user-tag">Mina Ashiro (AGH)</a>
+            <a href="/characters/ryo-ikaruga-pr/" class="unipart-user-tag">Ryo Ikaruga (PR)</a>
+            <a href="/characters/soshiro-hoshina-bs/" class="unipart-user-tag">Soshiro Hoshina (BS)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Ant-Type</div>
+          <div class="unipart-effect">Increases HP and Ultimate Gauge Charge Rate. When HP is 50% or higher, increases Effect RES.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/akari-minase-hc/" class="unipart-user-tag">Akari Minase (HC)</a>
+            <a href="/characters/akari-minase-sa/" class="unipart-user-tag">Akari Minase (SA)</a>
+            <a href="/characters/kikoru-shinomiya-fpc/" class="unipart-user-tag">Kikoru Shinomiya (FPC)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Fungal-Type</div>
+          <div class="unipart-effect">Increases ATK and CRIT DMG. Increases DMG dealt when using Ultimate.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/akari-minase-fc/" class="unipart-user-tag">Akari Minase (FC)</a>
+            <a href="/characters/eiji-hasegawa-rhms/" class="unipart-user-tag">Eiji Hasegawa (RHMS)</a>
+            <a href="/characters/haruichi-izumo-cc/" class="unipart-user-tag">Haruichi Izumo (CC)</a>
+            <a href="/characters/mina-ashiro-os/" class="unipart-user-tag">Mina Ashiro (OS)</a>
+            <a href="/characters/soshiro-hoshina-hssst/" class="unipart-user-tag">Soshiro Hoshina (HSSST)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Armored-Type</div>
+          <div class="unipart-effect">Increases Blunt DMG Dealt and ATK. Increases DMG dealt after using an Ultimate (max 3 stacks).</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/kikoru-shinomiya-tiw/" class="unipart-user-tag">Kikoru Shinomiya (TIW)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Caudata-Type</div>
+          <div class="unipart-effect">Increases CRIT Rate and ATK. Increases DMG dealt after activating a Follow-Up Skill or Extra Attack (stacks up to 3 times).</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/kikoru-shinomiya-ev/" class="unipart-user-tag">Kikoru Shinomiya (EV)</a>
+            <a href="/characters/mina-ashiro-sc/" class="unipart-user-tag">Mina Ashiro (SC)</a>
+            <a href="/characters/suited-uc/" class="unipart-user-tag">Suited (UC)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Fungal-Type β</div>
+          <div class="unipart-effect">Increases ATK. Applies DEF PEN Rate (3 turns) when applying a debuff or status ailment. Max 3 stacks.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/wang-meixing-nwc/" class="unipart-user-tag">Wang Meixing (NWC)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Wyvern-Type β</div>
+          <div class="unipart-effect">Increases HP. At start of battle, applies increased Ultimate Gauge on turn start (1 turn) to all allies. Before activating Ultimate, applies DMG dealt buff (2 turns) to allies.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/sagan-shinomiya-ol/" class="unipart-user-tag">Sagan Shinomiya (OL)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Lizard-Type β</div>
+          <div class="unipart-effect">Increases CRIT Rate. Increases ST Attack DMG dealt. When attacking a Core Exposed Kaiju, increases DEF PEN.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <span class="unipart-user-tag" style="color:var(--muted);">Check character pages</span>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Wolf-Type</div>
+          <div class="unipart-effect">Increases CRIT Rate and Effect Hit Rate. When Combat Skill is activated against a Kaiju with a status ailment, DMG is increased (2 turns). Max 3 stacks.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/soshiro-hoshina-np/" class="unipart-user-tag">Soshiro Hoshina (NP)</a>
+          </div>
+        </div>
+
+        <div class="unipart-card">
+          <div class="unipart-name">Paraves-Type α</div>
+          <div class="unipart-effect">Increases HP and CRIT Rate. Each time the equipped unit loses HP, applies DMG dealt +5% (2 turns). Max 5 stacks.</div>
+          <div class="unipart-users-label">Best For</div>
+          <div class="unipart-users">
+            <a href="/characters/zoee-wanderfalke-twu/" class="unipart-user-tag">Zoee Wanderfalke (TWU)</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

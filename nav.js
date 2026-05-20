@@ -32,25 +32,26 @@
   `;
   document.head.appendChild(style);
   const NAV_HTML = `
-<a href="index.html" class="nav-logo">K8<span>GUIDE</span></a>
+<a href="/" class="nav-logo">K8<span>GUIDE</span></a>
 <ul class="nav-links">
   <li class="nav-dropdown">
-    <a href="characters.html">Characters ▾</a>
+    <a href="/characters/">Characters ▾</a>
     <ul class="dropdown-menu">
-      <li><a href="characters.html">Character Roster</a></li>
-      <li><a href="weapons.html">Weapons &amp; Best Users</a></li>
+      <li><a href="/characters/">Character Roster</a></li>
+      <li><a href="/weapons/">Weapons &amp; Best Users</a></li>
+      <li><a href="/tracker/">Character Tracker</a></li>
     </ul>
   </li>
-  <a href="beginner.html">Beginner</a>
+  <a href="/beginner/">Beginner</a>
   <li class="nav-dropdown">
-    <a href="gameguide.html">Game Guide ▾</a>
+    <a href="/gameguide/">Game Guide ▾</a>
     <ul class="dropdown-menu">
-      <li><a href="gameguide.html">Game Guide</a></li>
-      <li><a href="limited.html">Limited Characters</a></li>
+      <li><a href="/gameguide/">Game Guide</a></li>
+      <li><a href="/limited/">Limited Characters</a></li>
     </ul>
   </li>
-  <a href="combat.html">Combat</a>
-  <a href="socials.html">Socials</a>
+  <a href="/combat/">Combat</a>
+  <a href="/socials/">Socials</a>
 </ul>`;
 
   // Inject nav
@@ -58,11 +59,12 @@
   if (nav) nav.innerHTML = NAV_HTML;
 
   // Highlight active page
-  const current = window.location.pathname.split('/').pop() || 'index.html';
+  const current = window.location.pathname.replace(/\/$/, '').split('/').pop() || '';
   document.querySelectorAll('#main-nav a').forEach(link => {
     const href = link.getAttribute('href');
     if (!href) return;
-    if (href === current) {
+    const hrefClean = href.replace(/\/$/, '').split('/').pop() || '';
+    if (hrefClean === current) {
       link.classList.add('active');
       // If inside a dropdown, also highlight the parent
       const dropdown = link.closest('.nav-dropdown');

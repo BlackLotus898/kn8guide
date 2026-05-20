@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Characters — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e8001a;
+    --gold: #f0b400;
+    --cyan: #00d4ff;
+    --dark: #080b10;
+    --panel: #0d1220;
+    --panel2: #111827;
+    --border: #1e2d45;
+    --text: #c8d8ea;
+    --muted: #5a7090;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 900;
+    background: rgba(8,11,16,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 56px;
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: #fff; text-decoration: none; }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; list-style: none; }
+  .nav-links a {
+    display: block; padding: .4rem 1.1rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .78rem; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; border-left: 1px solid var(--border); transition: color .2s, background .2s;
+  }
+  .nav-links a:last-child { border-right: 1px solid var(--border); }
+  .nav-links a:hover { color: var(--cyan); background: rgba(0,212,255,.05); }
+  .nav-links a.active { color: var(--cyan); }
+  .nav-dropdown { position: relative; list-style: none; }
+  .nav-dropdown > a { display: block; padding: .4rem 1.1rem; font-family: 'Share Tech Mono', monospace; font-size: .78rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; border-left: 1px solid var(--border); transition: color .2s, background .2s; white-space: nowrap; }
+  .nav-dropdown > a:hover, .nav-dropdown:hover > a { color: var(--cyan); background: rgba(0,212,255,.05); }
+  .nav-dropdown > a.active { color: var(--cyan); }
+  .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background: rgba(8,11,16,.97); border: 1px solid var(--border); border-top: 2px solid var(--red); min-width: 200px; list-style: none; z-index: 999; backdrop-filter: blur(12px); }
+  .nav-dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu li a { display: block; padding: .6rem 1.2rem; font-family: 'Share Tech Mono', monospace; font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); transition: color .2s, background .2s, padding-left .2s; white-space: nowrap; }
+  .dropdown-menu li:last-child a { border-bottom: none; }
+  .dropdown-menu li a:hover { color: var(--cyan); background: rgba(0,212,255,.05); padding-left: 1.6rem; }
+
+  /* PAGE HEADER */
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1200px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 500px; }
+
+  /* CONTROLS */
+  .controls {
+    max-width: 1200px; margin: 2.5rem auto 0; padding: 0 2rem;
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; }
+  .search-wrap input {
+    width: 100%; background: var(--panel); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: .8rem; letter-spacing: 1px;
+    padding: .6rem 1rem .6rem 2.4rem; outline: none; transition: border-color .2s;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus { border-color: var(--cyan); }
+  .search-icon { position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .8rem; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .filter-group { display: flex; gap: .3rem; flex-wrap: wrap; }
+  .filter-btn {
+    padding: .4rem .9rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+    cursor: pointer; transition: all .2s;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--text); }
+  .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+  .divider-v { width: 1px; height: 32px; background: var(--border); align-self: center; }
+
+  .results-bar {
+    max-width: 1200px; margin: 1.2rem auto 0; padding: 0 2rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 2px; color: var(--muted);
+  }
+  .results-bar span { color: var(--cyan); }
+
+  /* GRID */
+  .char-grid {
+    max-width: 1200px; margin: 1.5rem auto 0; padding: 0 2rem 5rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem;
+  }
+
+  /* CARD */
+  .char-card {
+    background: var(--panel); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    transition: border-color .2s, transform .2s; cursor: pointer;
+  }
+  .char-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+
+  .card-stars {
+    position: absolute; top: .5rem; left: .5rem;
+    font-size: .6rem; color: var(--gold); letter-spacing: 1px; z-index: 2;
+    text-shadow: 0 0 8px rgba(0,0,0,1);
+  }
+
+  .card-photo {
+    width: 100%;
+    background: var(--dark);
+    position: relative;
+  }
+  .card-photo img { width: 100%; height: auto; object-fit: contain; display: block; }
+
+  .placeholder-silhouette {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #0d1220, #111827);
+  }
+  .silhouette-icon { font-size: 4rem; opacity: .15; }
+  .silhouette-label { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--muted); opacity: .5; margin-top: .4rem; }
+
+  .card-info { padding: .8rem 1rem 1rem; display: flex; flex-direction: column; gap: .3rem; }
+  .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: #fff; line-height: 1.1; }
+  .card-variant { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; color: var(--muted); margin-top: .1rem; }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .3rem; }
+  .tag {
+    display: inline-block; padding: .1rem .45rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid;
+  }
+  .tag-attacker { color: var(--red);    border-color: #8a0010; background: rgba(232,0,26,.1); }
+  .tag-defender { color: #4d9fff;       border-color: #1a4080; background: rgba(0,80,200,.1); }
+  .tag-supporter{ color: #40d080;       border-color: #0a5030; background: rgba(0,180,80,.1); }
+  .tag-slash    { color: #c8a0ff;       border-color: #5a3080; background: rgba(160,64,240,.1); }
+  .tag-shot     { color: var(--gold);   border-color: #806000; background: rgba(240,180,0,.1); }
+  .tag-blunt    { color: #ff9060;       border-color: #804020; background: rgba(255,120,60,.1); }
+  .tag-fire     { color: #ff6040;       border-color: #802010; background: rgba(255,80,40,.1); }
+  .tag-ice      { color: #80e8ff;       border-color: #206080; background: rgba(100,220,255,.1); }
+  .tag-wind     { color: #80ffb0;       border-color: #207040; background: rgba(80,255,140,.1); }
+  .tag-lightning{ color: #ffe060;       border-color: #806010; background: rgba(255,210,40,.1); }
+
+  .no-results { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; display: none; }
+  .no-results.show { display: block; }
+  .no-results p { font-family: 'Share Tech Mono', monospace; font-size: .8rem; letter-spacing: 2px; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 2px; color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--cyan); }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+
+<div class="page-header">
+  <p class="page-label">Roster</p>
+  <h1 class="page-title">Characters</h1>
+  <p class="page-desc">Browse all officers. Filter by class, attack type, element, or star rarity.</p>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Search character name...">
+  </div>
+  <div class="filters">
+    <!-- CLASS -->
+    <div class="filter-group" id="filter-class">
+      <button class="filter-btn active" data-filter="class" data-value="all">All</button>
+      <button class="filter-btn" data-filter="class" data-value="attacker">Attacker</button>
+      <button class="filter-btn" data-filter="class" data-value="defender">Defender</button>
+      <button class="filter-btn" data-filter="class" data-value="supporter">Supporter</button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- ATTACK TYPE -->
+    <div class="filter-group" id="filter-type">
+      <button class="filter-btn active" data-filter="type" data-value="all">All</button>
+      <button class="filter-btn" data-filter="type" data-value="slash">Slash</button>
+      <button class="filter-btn" data-filter="type" data-value="shot">Shot</button>
+      <button class="filter-btn" data-filter="type" data-value="blunt">Blunt</button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- ELEMENT -->
+    <div class="filter-group" id="filter-element">
+      <button class="filter-btn active" data-filter="element" data-value="all">All</button>
+      <button class="filter-btn" data-filter="element" data-value="fire">Fire</button>
+      <button class="filter-btn" data-filter="element" data-value="ice">Ice</button>
+      <button class="filter-btn" data-filter="element" data-value="wind">Wind</button>
+      <button class="filter-btn" data-filter="element" data-value="lightning">Lightning</button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- STARS -->
+    <div class="filter-group" id="filter-stars">
+      <button class="filter-btn active" data-filter="stars" data-value="all">All</button>
+      <button class="filter-btn" data-filter="stars" data-value="5">★★★★★</button>
+      <button class="filter-btn" data-filter="stars" data-value="4">★★★★</button>
+    </div>
+  </div>
+</div>
+
+<div class="results-bar">Showing <span id="count">0</span> characters</div>
+
+<div class="char-grid" id="char-grid">
+  <div class="no-results" id="no-results"><p>// NO CHARACTERS MATCH YOUR FILTERS</p></div>
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+const IMG = "Kn8 Characters/";
+
+const characters = [
+  { id:"akari-minase-fc",   name:"Akari Minase",    variant:"Festive Christmas",              stars:5, cls:"attacker", types:["shot"],         elements:["fire"],      img:"AkariMinase-FC.png" },
+  { id:"akari-minase-hc",   name:"Akari Minase",    variant:"Heart of Compassion",            stars:4, cls:"defender", types:["shot"],         elements:[],            img:"AkariMinase-HC.png" },
+  { id:"akari-minase-sa",   name:"Akari Minase",    variant:"Synchro Aptitude",               stars:5, cls:"defender", types:["shot","slash"], elements:[],            img:"AkariMinase-SA.png" },
+  { id:"aoi-kaguragi-fd",   name:"Aoi Kaguragi",    variant:"Fruits of Diligence",            stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"AoiKaguragi-FD.png" },
+  { id:"aoi-kaguragi-tprs", name:"Aoi Kaguragi",    variant:"The Promising Rising Star",      stars:4, cls:"attacker", types:["shot"],         elements:["wind"],      img:"AoiKaguragi-TPRS.png" },
+  { id:"chester-tar",       name:"Chester",          variant:"The All-Rounder",                stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"Chester-TAR.png" },
+  { id:"eiji-hasegawa-rhms",name:"Eiji Hasegawa",   variant:"Right-Hand Man of the Strongest",stars:4, cls:"attacker", types:["blunt","shot"], elements:[],            img:"EijiHasegawa-RHMS.png" },
+  { id:"gen-narumi-fs",     name:"Gen Narumi",       variant:"Future Sight",                   stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-FS.png" },
+  { id:"gen-narumi-jsc",    name:"Gen Narumi",       variant:"Japan's Strongest Combatant",    stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-JSC.png" },
+  { id:"gen-narumi-jss",    name:"Gen Narumi",       variant:"Japan's Strongest Santa",        stars:5, cls:"attacker", types:["slash"],        elements:["ice"],       img:"GenNarumi-JSS.png" },
+  { id:"hakua-igarashi-sp", name:"Hakua Igarashi",  variant:"Sincerity and Potential",        stars:4, cls:"defender", types:["shot"],         elements:["fire"],      img:"HakuaIgarashi-SP.png" },
+  { id:"haruichi-izumo-cc", name:"Haruichi Izumo",  variant:"Calculated Choice",              stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-CC.png" },
+  { id:"haruichi-izumo-tcce",name:"Haruichi Izumo", variant:"The Clean-Cut Elite",            stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-TCCE.png" },
+  { id:"hikari-shinomiya-tv",name:"Hikari Shinomiya",variant:"The Valkyrie",                  stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"HikariShinomiya-TV.png" },
+  { id:"iharu-furuhashi-lt",name:"Iharu Furuhashi", variant:"Latent Talent",                  stars:4, cls:"supporter",types:["shot"],         elements:["lightning"], img:"IharuFuruhashi-LT.png" },
+  { id:"isao-shinomiya-pf", name:"Isao Shinomiya",  variant:"Prime Fist",                     stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"IsaoShinomiya-PF.png" },
+  { id:"isao-shinomiya-tuiw",name:"Isao Shinomiya", variant:"The Unbreakable Iron Wall",      stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"IsaoShinomiya-TUIW.png" },
+  { id:"jura-igarashi-gd",  name:"Jura Igarashi",   variant:"Grit and Duty",                  stars:5, cls:"supporter",types:["blunt"],        elements:["fire"],      img:"JuraIgarashi-GD.png" },
+  { id:"kafka-hibino-tmwbk",name:"Kafka Hibino",    variant:"The Man Who Became a Kaiju",     stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"KafkaHibino-TMWBK.png" },
+  { id:"kafka-hibino-tmwbr",name:"Kafka Hibino",    variant:"The Man Who Became a Reindeer",  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KafkaHibino-TMWBR.png" },
+  { id:"kn8-f98",           name:"Kaiju No. 8",     variant:"Fortitude 9.8",                  stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KN8-F98.png" },
+  { id:"kn8-sv",            name:"Kaiju No. 8",     variant:"Scorching Variant",               stars:5, cls:"attacker", types:["blunt"],        elements:["fire"],      img:"KN8-SV.png" },
+  { id:"keiji-itami-cq",    name:"Keiji Itami",     variant:"Calm and Quiet",                  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KeijiItami-CQ.png" },
+  { id:"kikoru-shinomiya-ev",name:"Kikoru Shinomiya",variant:"Evolving Talent",               stars:5, cls:"attacker", types:["slash","blunt"],elements:[],            img:"KikoruShinomiya-EV.png" },
+  { id:"kikoru-shinomiya-fpc",name:"Kikoru Shinomiya",variant:"Full-Power Christmas",         stars:5, cls:"defender", types:["slash"],        elements:[],            img:"KikoruShinomiya-FPC.png" },
+  { id:"kikoru-shinomiya-glf",name:"Kikoru Shinomiya",variant:"Guiding Light of the Future",  stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-GLF.png" },
+  { id:"kikoru-shinomiya-tiw",name:"Kikoru Shinomiya",variant:"The Inherited Will",           stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KikoruShinomiya-TIW.png" },
+  { id:"kikoru-shinomiya-tmbp",name:"Kikoru Shinomiya",variant:"The Mission to Be Perfect",   stars:4, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-TMBP.png" },
+  { id:"kota-tachibana-fdff",name:"Kota Tachibana", variant:"First Division's Feral Force",   stars:4, cls:"defender", types:["shot"],         elements:["ice"],       img:"KotaTachibana-FDFF.png" },
+  { id:"mina-ashiro-agh",   name:"Mina Ashiro",     variant:"Aiming for Greater Heights",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"MinaAshiro-AGH.png" },
+  { id:"mina-ashiro-os",    name:"Mina Ashiro",     variant:"Off the Scale",                  stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-OS.png" },
+  { id:"mina-ashiro-sc",    name:"Mina Ashiro",     variant:"Superb Combination",             stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-SC.png" },
+  { id:"reno-ichikawa-sa",  name:"Reno Ichikawa",   variant:"Signs of Awakening",             stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"RenoIchikawa-SA.png" },
+  { id:"reno-ichikawa-tcu", name:"Reno Ichikawa",   variant:"The Compatible User",            stars:5, cls:"attacker", types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TCU.png" },
+  { id:"rin-shinonome-ah",  name:"Rin Shinonome",   variant:"Aspiration and Honor",           stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"RinShinonome-AH.png" },
+  { id:"ryo-ikaruga-pr",    name:"Ryo Ikaruga",     variant:"Passion and Responsibility",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"RyoIkaruga-PR.png" },
+  { id:"sagan-shinomiya-ddd",name:"Sagan Shinomiya",variant:"Dimensionally Distorted Destiny",stars:5, cls:"defender", types:["blunt"],        elements:["fire"],      img:"SaganShinomiya-DDD.png" },
+  { id:"sagan-shinomiya-ol", name:"Sagan Shinomiya",variant:"Over Limit",                     stars:5, cls:"attacker", types:["slash"],        elements:["fire"],      img:"SaganShinomiya-OL.png" },
+  { id:"soichiro-hoshina-kowj",name:"Soichiro Hoshina",variant:"Keystone of Western Japan",   stars:5, cls:"supporter",types:["shot","slash"], elements:[],            img:"SoichiroHoshina-KOWJ.png" },
+  { id:"soshiro-hoshina-atp",name:"Soshiro Hoshina",variant:"Ax Technique Proficiency",       stars:5, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-ATP.png" },
+  { id:"soshiro-hoshina-bs", name:"Soshiro Hoshina",variant:"Blade Specialist",               stars:4, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-BS.png" },
+  { id:"soshiro-hoshina-hssst",name:"Soshiro Hoshina",variant:"Hoshina-Style Sword-Slay Technique",stars:5,cls:"attacker",types:["slash"],    elements:[],            img:"SoshiroHoshina-HSSST.png" },
+  { id:"soshiro-hoshina-np",name:"Soshiro Hoshina", variant:"New Possibilities",              stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"SoshiroHoshina-NP.png" },
+  { id:"soshiro-hoshina-uf",name:"Soshiro Hoshina", variant:"United Front",                   stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"SoshiroHoshina-UF.png" },
+  { id:"suited-uc",         name:"Suited",           variant:"Unbridled Curiosity",            stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"Suited-UC.png" },
+  { id:"tae-nakanoshima-tkepl",name:"Tae Nakanoshima",variant:"The Keen-Eyed Platoon Leader", stars:4, cls:"attacker", types:["shot"],         elements:["fire"],      img:"TaeNakanoshima-TKEPL.png" },
+  { id:"wang-meixing-nwc",  name:"Wang Meixing",    variant:"Negotiator of Wit and Charm",    stars:5, cls:"supporter",types:["shot"],         elements:["lightning"], img:"WangMeixing-NWC.png" },
+  { id:"zoee-wanderfalke-twu",name:"Zoee Wanderfalke",variant:"The Weapon Unsealed",          stars:5, cls:"attacker", types:["shot","slash"], elements:[],            img:"ZoeeWanderfalke-TWU.png" },
+];
+
+const starStr = n => "★".repeat(n) + "☆".repeat(5 - n);
+
+function tagHTML(val, cls) {
+  return `<span class="tag tag-${cls}">${val}</span>`;
+}
+
+function buildCard(c) {
+  const typeTags = c.types.map(t => tagHTML(t, t)).join('');
+  const elemTags = c.elements.map(e => tagHTML(e, e)).join('');
+
+  const photo = c.img
+    ? `<img src="${IMG}${c.img}" alt="${c.name}" loading="lazy">`
+    : `<div class="placeholder-silhouette"><div class="silhouette-icon">👤</div><div class="silhouette-label">COMING SOON</div></div>`;
+
+  return `
+    <a class="char-card"
+       href="/characters/${c.id}/"
+       data-name="${c.name.toLowerCase()} ${c.variant.toLowerCase()}"
+       data-class="${c.cls}"
+       data-types="${c.types.join(',')}"
+       data-elements="${c.elements.join(',')}"
+       data-stars="${c.stars}">
+      <div class="card-stars">${starStr(c.stars)}</div>
+      <div class="card-photo">${photo}</div>
+      <div class="card-info">
+        <div class="card-name">${c.name}</div>
+        <div class="card-variant">${c.variant}</div>
+        <div class="card-tags">
+          ${tagHTML(c.cls, c.cls)}
+          ${typeTags}
+          ${elemTags}
+        </div>
+      </div>
+    </a>`;
+}
+
+const grid = document.getElementById('char-grid');
+const noResults = document.getElementById('no-results');
+characters.forEach(c => grid.insertAdjacentHTML('beforeend', buildCard(c)));
+
+let activeFilters = { class: 'all', type: 'all', element: 'all', stars: 'all' };
+let searchQuery = '';
+
+function applyFilters() {
+  const cards = grid.querySelectorAll('.char-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const name     = card.dataset.name;
+    const cls      = card.dataset.class;
+    const types    = card.dataset.types.split(',').filter(Boolean);
+    const elements = card.dataset.elements.split(',').filter(Boolean);
+    const stars    = card.dataset.stars;
+
+    const matchSearch  = searchQuery === '' || name.includes(searchQuery);
+    const matchClass   = activeFilters.class   === 'all' || cls === activeFilters.class;
+    const matchType    = activeFilters.type    === 'all' || types.includes(activeFilters.type);
+    const matchElement = activeFilters.element === 'all' || elements.includes(activeFilters.element);
+    const matchStars   = activeFilters.stars   === 'all' || stars === activeFilters.stars;
+
+    const show = matchSearch && matchClass && matchType && matchElement && matchStars;
+    card.style.display = show ? 'flex' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('count').textContent = visible;
+  noResults.classList.toggle('show', visible === 0);
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filterType = btn.dataset.filter;
+    btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilters[filterType] = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  applyFilters();
+});
+
+applyFilters();
+</script>
+</body>
+</html>

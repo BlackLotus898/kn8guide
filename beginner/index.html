@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beginner Guide — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; margin-bottom: 3rem; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  /* QUICK TIPS GRID */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .tip-card {
+    background: var(--panel);
+    padding: 1.6rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: background .2s;
+  }
+  .tip-card:hover { background: var(--panel2); }
+  .tip-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s;
+  }
+  .tip-card:hover::after { transform: scaleX(1); }
+
+  .tip-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: rgba(232,0,26,.2);
+    line-height: 1;
+    margin-bottom: .4rem;
+    letter-spacing: 2px;
+  }
+  .tip-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: .4rem;
+  }
+  .tip-desc { font-size: .93rem; color: var(--muted); line-height: 1.5; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 2rem;
+  }
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-divider-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  /* GUIDE SECTIONS */
+  .guide-section {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .guide-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    transition: background .2s;
+  }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #fff;
+    flex: 1;
+  }
+  .guide-section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .guide-toggle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .8rem;
+    color: var(--muted);
+    transition: transform .3s;
+  }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+
+  .guide-section-body {
+    display: none;
+    padding: 1.6rem;
+  }
+  .guide-section.open .guide-section-body { display: block; }
+
+  /* CONTENT STYLES */
+  .guide-text {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .guide-text strong { color: var(--text); }
+
+  .guide-subheading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    margin: 1.4rem 0 .6rem;
+  }
+  .guide-subheading:first-child { margin-top: 0; }
+
+  .guide-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+  }
+  .guide-list li {
+    position: relative;
+    padding-left: 1.4rem;
+    font-size: .97rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .guide-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-size: 1rem;
+  }
+  .guide-list li strong { color: var(--text); }
+
+  .highlight-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .highlight-box strong { color: var(--gold); }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .8rem;
+    margin: 1rem 0;
+  }
+  .info-cell {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: .8rem 1rem;
+  }
+  .info-cell .lbl {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .3rem;
+  }
+  .info-cell .val {
+    font-size: .97rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+
+<div class="page-header">
+  <p class="page-label">New to K8?</p>
+  <h1 class="page-title">Beginner Guide</h1>
+  <p class="page-desc">Everything you need to know to get started in Kaiju No. 8 The Game — from your first pull to your first endgame clear.</p>
+</div>
+
+<div class="page">
+
+  <!-- QUICK TIPS -->
+  <div class="tips-grid">
+
+    <div class="tip-card">
+      <div class="tip-number">01</div>
+      <div class="tip-title">Claim Your Free ★5</div>
+      <p class="tip-desc">The game grants you a free ★5 character on login. Pick an Attacker you plan to build around — this is your cornerstone unit.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">02</div>
+      <div class="tip-title">Complete Story Modes First</div>
+      <p class="tip-desc">Main Story, Anime Story, and Memory Stories all award Dimensional Crystals. Clear these before spending pulls.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">03</div>
+      <div class="tip-title">Use the Web Shop</div>
+      <p class="tip-desc">The official Web Store gives significantly more Dimensional Crystals per dollar than buying directly in-game.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">04</div>
+      <div class="tip-title">Do Daily Training</div>
+      <p class="tip-desc">Training missions drop upgrade materials and Credits. Don't leave your energy capped — use it every day.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">05</div>
+      <div class="tip-title">Expose the Core</div>
+      <p class="tip-desc">Battles revolve around exposing the Kaiju's core. Save Ultimate attacks for when the core is exposed for max damage.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">06</div>
+      <div class="tip-title">Raise Your Player Rank</div>
+      <p class="tip-desc">Player Rank unlocks Memory Stories at Rank 6 and other content. Consistent daily play is the fastest path up.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">07</div>
+      <div class="tip-title">Focus Your Resources</div>
+      <p class="tip-desc">Build one strong squad before spreading resources thin. Fully leveling a few characters beats having many weak ones.</p>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-number">08</div>
+      <div class="tip-title">Don't Skip Events</div>
+      <p class="tip-desc">Kaiju Rush, Fierce Battle Area, and limited events award Dimensional Crystals and upgrade materials. Participate every time.</p>
+    </div>
+
+  </div>
+
+  <div class="section-divider">
+    <span class="section-divider-label">// Detailed Sections</span>
+  </div>
+
+  <!-- SECTION: GETTING STARTED -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🚀</span>
+      <span class="guide-section-title">Getting Started</span>
+      <span class="guide-section-tag">// Day 1</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">When you first launch the game, you'll be walked through an introductory battle and given the chance to select a free ★5 character. <strong>This choice matters</strong> — pick wisely based on the playstyle you want to build around.</p>
+
+      <div class="guide-subheading">What to Do First</div>
+      <ul class="guide-list">
+        <li><strong>Select your free ★5</strong> — Attackers are recommended for beginners as they clear content fastest.</li>
+        <li><strong>Link your account</strong> — Connect a Google, Apple, or social login immediately to protect your progress.</li>
+        <li><strong>Start the Main Story</strong> — Follow the main quest chain to unlock features and earn Dimensional Crystals.</li>
+        <li><strong>Claim all login rewards</strong> — Check the inbox and event tab for free resources waiting to be claimed.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Reroll tip:</strong> If you're unhappy with your free ★5 selection or your early pulls, new accounts can reroll by clearing app data and starting fresh. This is most worthwhile if you're targeting a specific top-tier character.
+      </div>
+
+      <div class="guide-subheading">Key Features Unlocked Early</div>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">Rank 1</span><div class="val">Main Story, Daily Training</div></div>
+        <div class="info-cell"><span class="lbl">Rank 3</span><div class="val">Anime Story Mode</div></div>
+        <div class="info-cell"><span class="lbl">Rank 6</span><div class="val">Memory Stories</div></div>
+        <div class="info-cell"><span class="lbl">Rank 10+</span><div class="val">Combat Zone, Events</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: PROGRESSION -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📈</span>
+      <span class="guide-section-title">Progression & Leveling</span>
+      <span class="guide-section-tag">// Building Up</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Character progression in K8 The Game involves leveling, skill upgrades, weapon equipping, uniparts, and ascension nodes. Focus on your main squad first before branching out.</p>
+
+      <div class="guide-subheading">Character Leveling Priority</div>
+      <ul class="guide-list">
+        <li><strong>Level your main Attacker first</strong> — they clear content fastest and unlock more story stages.</li>
+        <li><strong>Then level your Defender/Support</strong> — survivability matters more as difficulty increases.</li>
+        <li>Use EXP materials only on characters you actively use — don't waste them on bench units early.</li>
+      </ul>
+
+      <div class="guide-subheading">Skill Upgrades</div>
+      <ul class="guide-list">
+        <li>Check each character's <strong>Skill Upgrade Priority</strong> on their character page before spending materials.</li>
+        <li>Generally, Passive Skills and Combat Skills provide the most value early.</li>
+        <li>Don't spread skill materials across every character — max out your core squad first.</li>
+      </ul>
+
+      <div class="guide-subheading">Ascension Nodes</div>
+      <ul class="guide-list">
+        <li>Ascension (A1–A6) significantly boosts a character's power. Prioritize A1 and A2 nodes first as they provide the strongest bonuses.</li>
+        <li>A3 and A5 are Skill Level nodes — unlock these when you have materials to immediately level those skills.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Unlocked Potential</strong> is a post-max enhancement system available for select characters. Once a character is fully maxed, this allows further skill and stat upgrades. Currently available for Isao Shinomiya (The Unbreakable Iron Wall), Mina Ashiro (Off the Scale), and Soshiro Hoshina (Hoshina-Style Sword-Slay Technique).
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: SQUAD BUILDING -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">👥</span>
+      <span class="guide-section-title">Squad Building</span>
+      <span class="guide-section-tag">// Team Comp</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">You field a squad of 4 officers. A balanced team is key — you need damage, survivability, and support to handle all content types.</p>
+
+      <div class="guide-subheading">Recommended Starter Composition</div>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">Slot 1</span><div class="val">Main Attacker (★5)</div></div>
+        <div class="info-cell"><span class="lbl">Slot 2</span><div class="val">Sub Attacker</div></div>
+        <div class="info-cell"><span class="lbl">Slot 3</span><div class="val">Defender or Support</div></div>
+        <div class="info-cell"><span class="lbl">Slot 4</span><div class="val">Healer or Buffer</div></div>
+      </div>
+
+      <div class="guide-subheading">Attribute Matching</div>
+      <ul class="guide-list">
+        <li>Match at least 2 characters' attack types to the Kaiju's weakness for maximum damage.</li>
+        <li>Check the Kaiju's weakness before a battle and swap squad members accordingly.</li>
+        <li>Elemental types (Fire, Ice, Wind, Lightning) deal bonus damage to specific Kaiju.</li>
+      </ul>
+
+      <div class="guide-subheading">Synergy Tips</div>
+      <ul class="guide-list">
+        <li><strong>Battle Buddy system</strong> — some characters have skills that specifically buff or interact with their Battle Buddy (the character positioned next to them). Check character pages for buddy-specific skills.</li>
+        <li>Supporters like Chester and Haruichi Izumo provide universal buffs that boost the whole squad.</li>
+        <li>Pair DoT characters (Burn, Shock, Windbite) together to maximize damage-over-time output.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: GACHA -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">💎</span>
+      <span class="guide-section-title">Gacha & Pulling</span>
+      <span class="guide-section-tag">// Crystals</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Dimensional Crystals are the main gacha currency. Spend them wisely — limited characters return in reruns but good opportunities are still worth saving for.</p>
+
+      <div class="guide-subheading">How to Earn Crystals for Free</div>
+      <ul class="guide-list">
+        <li><strong>Story Modes</strong> — Main Story, Anime Story, and Memory Stories each award Crystals on first clear.</li>
+        <li><strong>Daily missions</strong> — Log in and complete daily tasks every day for a steady trickle.</li>
+        <li><strong>Events</strong> — Kaiju Rush, Fierce Battle Area, and limited events are some of the best sources.</li>
+        <li><strong>Player Rank rewards</strong> — Each rank-up grants a Crystal bonus.</li>
+        <li><strong>Combat Zone</strong> — Monthly endgame mode that awards Crystals based on how far you climb.</li>
+      </ul>
+
+      <div class="guide-subheading">Smart Pulling Tips</div>
+      <ul class="guide-list">
+        <li><strong>Use the Web Shop</strong> — Always purchase Crystals from the official web store, not in-game. You get significantly more for the same price.</li>
+        <li><strong>Understand the pity system</strong> — Pulls accumulate toward a guaranteed ★5. Never switch banners mid-pity.</li>
+        <li><strong>Save for limited banners</strong> — Featured characters on rate-up banners have increased odds. General pool characters appear at any time.</li>
+        <li><strong>Don't impulse pull</strong> — If you don't have a specific target, save your Crystals.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Web Shop link:</strong> webstore.kj8-thegame.com — Always check here before purchasing Crystals. The value difference compared to in-game purchases is significant.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: DAILY ROUTINE -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📋</span>
+      <span class="guide-section-title">Daily & Weekly Routine</span>
+      <span class="guide-section-tag">// Efficiency</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Consistency is the fastest path to progress. A short daily routine ensures you never waste resources or miss time-limited rewards.</p>
+
+      <div class="guide-subheading">Daily Checklist</div>
+      <ul class="guide-list">
+        <li>✓ <strong>Log in</strong> — Claim login bonus and check inbox for free items.</li>
+        <li>✓ <strong>Complete daily missions</strong> — Quick tasks that award Crystals and upgrade materials.</li>
+        <li>✓ <strong>Spend stamina/energy</strong> — Run Training missions to collect character upgrade materials. Don't cap out.</li>
+        <li>✓ <strong>Check active events</strong> — Complete event stages for bonus Crystals and exclusive rewards.</li>
+        <li>✓ <strong>Claim friend points</strong> — Free pulls from friend interactions.</li>
+      </ul>
+
+      <div class="guide-subheading">Weekly Priorities</div>
+      <ul class="guide-list">
+        <li>✓ <strong>Combat Zone</strong> — Attempt the monthly Combat Zone to earn Crystals. Resets monthly so don't wait until the last minute.</li>
+        <li>✓ <strong>Kaiju Rush</strong> — Multi-stage survival event with good material rewards. Run it when active.</li>
+        <li>✓ <strong>Fierce Battle Area</strong> — Endgame challenge mode with unique mechanics each run.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: COMBAT BASICS -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚔️</span>
+      <span class="guide-section-title">Combat Basics</span>
+      <span class="guide-section-tag">// Fighting Kaiju</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">K8 The Game uses a turn-based combat system centered around exposing and exploiting the Kaiju's core. Understanding these fundamentals will carry you through all content.</p>
+
+      <div class="guide-subheading">The Core System</div>
+      <ul class="guide-list">
+        <li>Every Kaiju has a hidden core. Use skills that match the Kaiju's <strong>weakness attribute</strong> to expose it.</li>
+        <li>When the core is exposed, the Kaiju takes significantly increased damage.</li>
+        <li><strong>Save your Ultimate attacks</strong> for when the core is exposed — this is when they deal full damage.</li>
+        <li>The core exposure window is limited — coordinate your squad's turn order to maximize damage during it.</li>
+      </ul>
+
+      <div class="guide-subheading">SP (Skill Points)</div>
+      <ul class="guide-list">
+        <li>SP is shared across your squad and spent on Combat Skills.</li>
+        <li>Basic Normal Attacks are free — skills cost SP.</li>
+        <li>Manage SP carefully — don't burn it all early if you'll need it for a key skill later in the fight.</li>
+        <li>Some characters and skills generate SP or reduce costs — check character pages for details.</li>
+      </ul>
+
+      <div class="guide-subheading">PLT (Plates)</div>
+      <ul class="guide-list">
+        <li>Kaiju have PLT (Plates) that must be destroyed to fully expose the core.</li>
+        <li>Certain attack types are more effective at destroying specific PLT types.</li>
+        <li>Destroying PLT also charges your Ultimate Gauge, so Normal Attacks on PLT are never wasted.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>For more detail</strong> on elements, damage types, ailments, debuffs, and advanced combat mechanics — check the <a href="/combat/" style="color:var(--cyan);">Combat Guide</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: EQUIPMENT -->
+  <div class="guide-section">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔧</span>
+      <span class="guide-section-title">Weapons & Uniparts</span>
+      <span class="guide-section-tag">// Equipment</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Equipping the right weapon and uniparts can dramatically boost a character's performance. Always check the recommended loadout on each character's page.</p>
+
+      <div class="guide-subheading">Weapons</div>
+      <ul class="guide-list">
+        <li>Each character uses a specific weapon type — they cannot equip weapons outside their type.</li>
+        <li>★5 weapons provide the strongest bonuses. Prioritize getting the recommended weapon for your main Attacker first.</li>
+        <li>Check the <a href="/weapons/" style="color:var(--cyan);">Weapons & Best Users</a> page for a full list of who uses what.</li>
+        <li><strong>Exception:</strong> Kaiju No. 8 variants cannot equip weapons — their power comes entirely from skills and ascension.</li>
+      </ul>
+
+      <div class="guide-subheading">Uniparts</div>
+      <ul class="guide-list">
+        <li>Uniparts are equipment pieces that provide stat bonuses based on set effects.</li>
+        <li>Follow the <strong>Stat Priority</strong> listed on each character's page when choosing uniparts (e.g. ATK > CRIT DMG > SPD).</li>
+        <li>Set bonuses activate when you equip multiple pieces of the same type — aim for full sets on your main units.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
