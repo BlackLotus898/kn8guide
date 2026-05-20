@@ -63,6 +63,7 @@
       <li><a href="${base}gameguide/events/">Events</a></li>
       <li><a href="${base}gameguide/exploit-medals/">Exploit Medals</a></li>
       <li><a href="${base}gameguide/currencies/">Currencies</a></li>
+      <li><a href="${base}gameguide/synthesis/">Material Synthesis</a></li>
     </ul>
   </li>
   <li class="nav-dropdown">

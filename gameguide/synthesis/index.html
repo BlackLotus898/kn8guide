@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Synthesis — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: "Share Tech Mono", monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: "Bebas Neue", sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: "Share Tech Mono", monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: "Bebas Neue", sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: "Share Tech Mono", monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: "Share Tech Mono", monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: "Bebas Neue", sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: "›"; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (max-width: 600px) { .two-col-grid { grid-template-columns: 1fr; } }
+  .mechanic-box { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; }
+  .mechanic-box h3 { font-family: "Bebas Neue", sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin-bottom: .6rem; }
+  .mechanic-box p { font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .mechanic-box ul { list-style: none; display: flex; flex-direction: column; gap: .3rem; padding-left: .5rem; margin-top: .5rem; }
+  .mechanic-box ul li { position: relative; padding-left: 1rem; font-size: .93rem; color: var(--muted); }
+  .mechanic-box ul li::before { content: "›"; position: absolute; left: 0; color: var(--red); }
+  .mechanic-box ul li strong { color: var(--text); }
+  .rarity-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .rarity-table th { font-family: "Share Tech Mono", monospace; font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: .6rem 1rem; background: var(--dark); border: 1px solid var(--border); text-align: left; }
+  .rarity-table td { padding: .7rem 1rem; border: 1px solid var(--border); font-size: .93rem; color: var(--muted); vertical-align: middle; }
+  .rarity-table tr:hover td { background: rgba(0,212,255,.03); }
+  .rarity-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: .5rem; vertical-align: middle; }
+  .rarity-dot.green  { background: #40d080; }
+  .rarity-dot.blue   { background: #4d9fff; }
+  .rarity-dot.purple { background: #c8a0ff; }
+  .steps { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; }
+  .step { display: grid; grid-template-columns: 40px 1fr; gap: 1rem; background: var(--dark); border: 1px solid var(--border); }
+  .step-num { background: var(--red); display: flex; align-items: center; justify-content: center; font-family: "Bebas Neue", sans-serif; font-size: 1.3rem; color: #fff; }
+  .step-content { padding: .8rem 1rem .8rem 0; font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .step-content strong { color: var(--text); }
+  .material-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .material-card { background: var(--dark); border: 1px solid var(--border); padding: 1rem 1.2rem; }
+  .material-card h4 { font-family: "Bebas Neue", sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--cyan); margin-bottom: .4rem; }
+  .material-card p { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+  .material-card .obtain { margin-top: .5rem; font-family: "Share Tech Mono", monospace; font-size: .62rem; letter-spacing: 1px; color: var(--muted); }
+  .material-card .obtain strong { color: var(--text); }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Material Synthesis</h1>
+  <p class="page-desc">How to craft and convert materials — a key system for upgrading characters, skills, weapons, and uniparts.</p>
+</div>
+<div class="page">
+
+  <div class="section-nav">
+    <a href="../">Game Guide</a>
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/" class="active">Material Synthesis</a>
+  </div>
+
+  <!-- WHAT IS SYNTHESIS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚗️</span>
+      <span class="guide-section-title">What is Material Synthesis?</span>
+      <span class="guide-section-tag">// Overview</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Material Synthesis lets you turn extra or lower-rarity materials into rarer ones needed for upgrades. It's an essential system for upgrading Weapons, Uniparts, and Character Skills — especially once farming becomes harder at higher levels.</p>
+
+      <div class="two-col-grid">
+        <div class="mechanic-box">
+          <h3>Material Conversion</h3>
+          <p>Exchange materials of the <strong>same rarity</strong> for a different material of the same rarity. Useful when you have excess of one type but need another specific material.</p>
+        </div>
+        <div class="mechanic-box">
+          <h3>Material Synthesis</h3>
+          <p>Consume specific lower-rarity materials to <strong>craft one of a higher rarity</strong>. Essential for obtaining rare upgrade materials when farming isn't giving you what you need.</p>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <strong>Unlock Requirement:</strong> Material Synthesis becomes available after clearing Main Story Chapter 0-7. It unlocks alongside Achievements, Storage, Memories, and Messages.
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO ACCESS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📍</span>
+      <span class="guide-section-title">How to Access Synthesis</span>
+      <span class="guide-section-tag">// Navigation</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content">Open the <strong>Menu</strong> from the top right of the Home Screen.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content">Tap the <strong>Synthesis</strong> button to open the Synthesis menu.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content">Choose between <strong>Material Synthesis</strong> (craft higher rarity) and <strong>Material Conversion</strong> (swap same rarity).</div></div>
+      </div>
+      <p class="guide-text" style="margin-top:.5rem;">Items that are locked or unavailable due to missing materials appear grayed out. Make sure you have the required Spec-Ops Rank and materials before attempting synthesis.</p>
+    </div>
+  </div>
+
+  <!-- USES -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🎯</span>
+      <span class="guide-section-title">What Synthesis is Used For</span>
+      <span class="guide-section-tag">// Uses</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <ul class="guide-list">
+        <li><strong>Unlock Character Level Cap</strong> — Synthesize enhancement items to raise your character's level limit when you run out of rare materials for limit breaks.</li>
+        <li><strong>Skill Enhancement</strong> — Craft special materials needed to level up character skills. As skills get higher, the required materials become increasingly rare.</li>
+        <li><strong>Develop Uniparts</strong> — Combine lower-tier Unimaterials into higher rarity ones for crafting better Unipart equipment.</li>
+        <li><strong>Convert Excess Materials</strong> — Turn surplus materials into the specific ones you actually need instead of farming.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- UNIMATERIALS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔩</span>
+      <span class="guide-section-title">Unimaterial Rarities</span>
+      <span class="guide-section-tag">// Uniparts Crafting</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Unimaterials come in three colors, each used to craft different Unipart rarities. You can upgrade them through synthesis.</p>
+
+      <table class="rarity-table">
+        <tr>
+          <th>Color</th>
+          <th>Used For</th>
+          <th>How to Get Higher Rarity</th>
+        </tr>
+        <tr>
+          <td><span class="rarity-dot green"></span><strong style="color:#40d080;">Green</strong></td>
+          <td>Craft ★3 Uniparts</td>
+          <td>Farm from Training missions</td>
+        </tr>
+        <tr>
+          <td><span class="rarity-dot blue"></span><strong style="color:#4d9fff;">Blue</strong></td>
+          <td>Craft ★3 and ★4 Uniparts</td>
+          <td>Synthesize multiple Green Unimaterials</td>
+        </tr>
+        <tr>
+          <td><span class="rarity-dot purple"></span><strong style="color:#c8a0ff;">Purple</strong></td>
+          <td>Craft ★4 and ★5 Uniparts</td>
+          <td>Synthesize multiple Blue Unimaterials</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SKILL ENHANCEMENT MATERIALS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📚</span>
+      <span class="guide-section-title">Skill Enhancement Materials</span>
+      <span class="guide-section-tag">// By Attribute</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Each attack attribute has its own skill enhancement material. These are needed to level up skills beyond a certain point and can be crafted through Synthesis.</p>
+
+      <div class="material-grid">
+        <div class="material-card">
+          <h4>Indestructible Edge</h4>
+          <p>Skill enhancement material for <strong>Slash</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Slash Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Unbreakable Fist</h4>
+          <p>Skill enhancement material for <strong>Blunt</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Blunt Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Unerring Cannon</h4>
+          <p>Skill enhancement material for <strong>Shot</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Shot Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Scorching Flame</h4>
+          <p>Skill enhancement material for <strong>Fire</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Fire Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Frozen Fractal</h4>
+          <p>Skill enhancement material for <strong>Ice</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Ice Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Tempest Shear</h4>
+          <p>Skill enhancement material for <strong>Wind</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Wind Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Charged Crystal</h4>
+          <p>Skill enhancement material for <strong>Lightning</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Lightning Training missions, Synthesis, Conversion</p>
+        </div>
+      </div>
+
+      <div class="guide-subheading">Character Enhancement Materials</div>
+      <div class="material-grid">
+        <div class="material-card">
+          <h4>Attacker Enhancement Uniorgan α</h4>
+          <p>Enhancement material for <strong>Attacker</strong> role characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Attacker Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Support Enhancement Uniorgan α</h4>
+          <p>Enhancement material for <strong>Supporter</strong> role characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Support Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Defender Enhancement Uniorgan α</h4>
+          <p>Enhancement material for <strong>Defender</strong> role characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Defender Training missions, Synthesis, Conversion</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+</script>
+</body>
+</html>
