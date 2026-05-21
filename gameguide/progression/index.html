@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Progression — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .warning-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .warning-box strong { color: var(--red); }
+  .info-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin: 1rem 0; }
+  .info-cell { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; }
+  .info-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: .3rem; }
+  .info-cell .val { font-size: .97rem; font-weight: 600; color: var(--text); }
+  .prog-steps { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; }
+  .prog-step { display: grid; grid-template-columns: 36px 1fr; gap: 1rem; }
+  .prog-step-num { background: var(--red); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
+  .prog-step-content { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .prog-step-content strong { color: var(--text); }
+  .training-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .training-card { background: var(--dark); border: 1px solid var(--border); padding: 1.1rem; }
+  .training-card h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--cyan); margin-bottom: .4rem; }
+  .training-card p { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+  .training-card .note { margin-top: .5rem; font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; color: var(--muted); }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Character Progression</h1>
+  <p class="page-desc">Everything you need to know about leveling, skill enhancement, ascension, and weapon upgrades.</p>
+</div>
+<div class="page">
+
+  <div class="section-nav">
+    <a href="../">Game Guide</a>
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
+    <a href="../spec-ops/">Spec-Ops Rank</a>
+    <a href="../progression/" class="active">Character Progression</a>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📊</span>
+      <span class="guide-section-title">Progression Overview</span>
+      <span class="guide-section-tag">// Where to Start</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Characters in K8 The Game are strengthened through several systems. Focus on your core squad first before spreading resources thin.</p>
+      <div class="prog-steps">
+        <div class="prog-step">
+          <div class="prog-step-num">1</div>
+          <div class="prog-step-content"><strong>Level Up</strong> — Use EXP materials to raise character level. Each level increases base stats.</div>
+        </div>
+        <div class="prog-step">
+          <div class="prog-step-num">2</div>
+          <div class="prog-step-content"><strong>Level Limit Break</strong> — Hit the cap? Break it using Honju Neutralization materials and the appropriate Spec-Ops Rank.</div>
+        </div>
+        <div class="prog-step">
+          <div class="prog-step-num">3</div>
+          <div class="prog-step-content"><strong>Skill Enhancement</strong> — Level up each of the character's 5 skill types using attribute and role materials plus Exploit Medals and Kaiju Core Materials at higher levels.</div>
+        </div>
+        <div class="prog-step">
+          <div class="prog-step-num">4</div>
+          <div class="prog-step-content"><strong>Ascension (A1–A6)</strong> — Unlock powerful passive bonuses using Talent Shards earned from duplicate pulls.</div>
+        </div>
+        <div class="prog-step">
+          <div class="prog-step-num">5</div>
+          <div class="prog-step-content"><strong>Equip & Level Weapon</strong> — Equip the best weapon and level it up using weapon EXP materials. Ascend it up to 4 times using duplicate weapons.</div>
+        </div>
+        <div class="prog-step">
+          <div class="prog-step-num">6</div>
+          <div class="prog-step-content"><strong>Develop Uniparts</strong> — Craft and equip the recommended Unipart set using Unimaterials from Training.</div>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong>Priority order:</strong> Level → Skill Enhancement → Ascension → Weapon → Uniparts. Skills provide the biggest power jump per resource spent.
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVELING -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⬆️</span>
+      <span class="guide-section-title">Leveling & Level Limit Break</span>
+      <span class="guide-section-tag">// Raising the Cap</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Characters have a level cap that increases with your Spec-Ops Rank. To keep leveling past the cap you need to perform a <strong>Level Limit Break</strong> using materials from Training: Honju Neutralization.</p>
+
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">Spec-Ops Rank 1</span><div class="val">Level 40 cap</div></div>
+        <div class="info-cell"><span class="lbl">Spec-Ops Rank 2</span><div class="val">Level 70 cap</div></div>
+        <div class="info-cell"><span class="lbl">Spec-Ops Rank 3</span><div class="val">Level 90 cap</div></div>
+        <div class="info-cell"><span class="lbl">Spec-Ops Rank 4</span><div class="val">Level 100 cap</div></div>
+      </div>
+
+      <div class="guide-subheading">How to Farm Leveling Materials</div>
+      <ul class="guide-list">
+        <li><strong>Training: Basic Material</strong> — Primary source of EXP materials (Kaijumite). Run this whenever you have stamina to spare.</li>
+        <li><strong>Training: Honju Neutralization</strong> — Drops Level Limit Break materials for both characters and weapons. Essential for breaking the level cap.</li>
+        <li>Higher Spec-Ops Rank unlocks harder Training stages with better material yields.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Tip:</strong> Don't save EXP materials — use them immediately on your active squad. Stamina is always regenerating so materials will keep coming.
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILL ENHANCEMENT -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">✨</span>
+      <span class="guide-section-title">Skill Enhancement</span>
+      <span class="guide-section-tag">// Biggest Power Spike</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Each character has 5 skill types that can be leveled up independently. Fully upgraded skills can be nearly twice as effective as base level. Always check a character's <strong>Skill Upgrade Priority</strong> on their page before spending materials.</p>
+
+      <div class="guide-subheading">Materials Required</div>
+      <div class="training-grid">
+        <div class="training-card">
+          <h4>Role Materials</h4>
+          <p>Attacker, Supporter, or Defender enhancement materials based on the character's role.</p>
+          <p class="note">Source: Training → Role Material</p>
+        </div>
+        <div class="training-card">
+          <h4>Attribute Materials</h4>
+          <p>Slash, Shot, Blunt, Fire, Wind, Ice, or Lightning materials matching the character's attack type.</p>
+          <p class="note">Source: Training → Attribute Material</p>
+        </div>
+        <div class="training-card">
+          <h4>Exploit Medals</h4>
+          <p>Required for mid-to-high level skill upgrades. Each character uses a specific medal type.</p>
+          <p class="note">Source: Training → Identified Kaiju Neutralization (5×/week, 0 stamina)</p>
+        </div>
+        <div class="training-card">
+          <h4>Kaiju Core Material</h4>
+          <p>Required for the final levels of skill enhancement. ★5 characters need it from Skill Level 9+. Very rare.</p>
+          <p class="note">Source: Emblem of Defense Shop, Encounter Stone Shop, Defense Force Pass, Events</p>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <strong>Don't spread thin:</strong> Leveling all skills on every character wastes materials. Focus on the top 2–3 skills of your main squad first, following their Skill Upgrade Priority.
+      </div>
+    </div>
+  </div>
+
+  <!-- ASCENSION -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔺</span>
+      <span class="guide-section-title">Ascension (A1–A6)</span>
+      <span class="guide-section-tag">// Passive Upgrades</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Ascension unlocks powerful passive bonuses for each character across 6 nodes (A1–A6). Each node requires <strong>Talent Shards</strong>, which are earned from pulling duplicate copies of that character.</p>
+
+      <div class="guide-subheading">General Priority</div>
+      <ul class="guide-list">
+        <li><strong>A1 and A2 first</strong> — These typically provide the strongest direct power increases and are the highest priority.</li>
+        <li><strong>A3 and A5 are Skill Level nodes</strong> — They raise the level cap of specific skills. Only unlock these when you have the materials to immediately use the extra levels — otherwise the node does nothing.</li>
+        <li><strong>A4 and A6</strong> — Vary by character. Check the individual character page for their specific Ascension Priority rating.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Note:</strong> Each character has unique Ascension effects. Always check the Ascension Priority on a character's page before spending Talent Shards.
+      </div>
+    </div>
+  </div>
+
+  <!-- UNLOCKED POTENTIAL -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">💥</span>
+      <span class="guide-section-title">Unlocked Potential</span>
+      <span class="guide-section-tag">// Post-Max Enhancement</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Unlocked Potential is an advanced enhancement system available for select fully maxed characters. It allows further skill and stat upgrades beyond normal limits using <strong>Potential Shard</strong> materials.</p>
+      <div class="guide-subheading">Currently Available For</div>
+      <ul class="guide-list">
+        <li><a href="../../characters/isao-shinomiya-tuiw/" style="color:var(--cyan);">Isao Shinomiya (The Unbreakable Iron Wall)</a></li>
+        <li><a href="../../characters/mina-ashiro-os/" style="color:var(--cyan);">Mina Ashiro (Off the Scale)</a></li>
+        <li><a href="../../characters/soshiro-hoshina-hssst/" style="color:var(--cyan);">Soshiro Hoshina (Hoshina-Style Sword-Slay Technique)</a></li>
+      </ul>
+      <div class="warning-box">
+        <strong>Requirements:</strong> The character must be fully maxed (Level 100, A6, all skills at max) before Unlocked Potential becomes available.
+      </div>
+    </div>
+  </div>
+
+  <!-- WEAPONS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚔️</span>
+      <span class="guide-section-title">Weapon Leveling & Ascension</span>
+      <span class="guide-section-tag">// Gear Upgrades</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Weapons can be leveled up and ascended, similar to characters. Always level and ascend the weapon on your main Attacker first.</p>
+
+      <div class="guide-subheading">Weapon Leveling</div>
+      <ul class="guide-list">
+        <li>Level weapons using weapon EXP materials from Training: Basic Material and Honju Neutralization.</li>
+        <li>Weapons have level caps tied to your Spec-Ops Rank, just like characters.</li>
+        <li>Unlike characters, leveling weapons has a smaller impact — prioritize characters first.</li>
+      </ul>
+
+      <div class="guide-subheading">Weapon Ascension</div>
+      <ul class="guide-list">
+        <li>Weapons can be ascended up to <strong>4 times (A1–A4)</strong> using duplicate copies of the same weapon.</li>
+        <li>Ascension enhances the weapon's <strong>effect</strong> (passive ability) — it does not increase base stats.</li>
+        <li><strong>Weapon Ascension does not cost Credits</strong> — always ascend weapons whenever you have duplicates. There is no reason to hold back.</li>
+        <li>Check weapon effects before ascending to understand what you're improving.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Disassemble wisely:</strong> Disassembling a ★5 weapon gives 1 Refinement Crystal for the Weapon Exchange Shop. Don't disassemble unless you have a duplicate or truly don't need it.
+      </div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>

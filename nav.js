@@ -65,6 +65,7 @@
       <li><a href="${base}gameguide/currencies/">Currencies</a></li>
       <li><a href="${base}gameguide/synthesis/">Material Synthesis</a></li>
       <li><a href="${base}gameguide/spec-ops/">Spec-Ops Rank</a></li>
+      <li><a href="${base}gameguide/progression/">Character Progression</a></li>
     </ul>
   </li>
   <li class="nav-dropdown">
