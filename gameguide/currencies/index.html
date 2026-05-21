@@ -40,7 +40,7 @@
   .info-cell { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; }
   .info-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: .3rem; }
   .info-cell .val { font-size: .97rem; font-weight: 600; color: var(--text); }
-  .gacha-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .gacha-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1.5rem; }
   .gacha-stat { background: var(--dark); padding: 1.2rem; text-align: center; }
   .gacha-stat .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); letter-spacing: 2px; display: block; }
   .gacha-stat .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
@@ -91,7 +91,7 @@
     <a href="../story/">Story Modes</a>
     <a href="../events/">Events</a>
     <a href="../exploit-medals/">Exploit Medals</a>
-    <a href="../currencies/">Currencies</a>
+    <a href="../currencies/" class="active">Currencies</a>
   </div>
 <div class="guide-section open" id="gacha">
     <div class="guide-section-header" onclick="toggleSection(this)">
@@ -213,11 +213,7 @@ function toggleSection(header) {
   const section = header.parentElement;
   section.classList.toggle('open');
 }
-document.querySelectorAll('.section-nav a').forEach(a => {
-  if (window.location.pathname.includes(new URL(a.href).pathname.split('/').filter(Boolean).pop())) {
-    a.classList.add('active');
-  }
-});
+
 </script>
 </body>
 </html>
