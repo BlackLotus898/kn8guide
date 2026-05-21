@@ -17,7 +17,7 @@
   .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
   .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
   .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
-  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
   .guide-section-header:hover { background: rgba(0,212,255,.03); }
   .guide-section-icon { font-size: 1.3rem; }
   .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
@@ -32,7 +32,7 @@
   .guide-subheading:first-child { margin-top: 0; }
   .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
   .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
-  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li::before { content: "›"; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
   .guide-list li strong { color: var(--text); }
   .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
   .highlight-box strong { color: var(--gold); }
@@ -40,13 +40,13 @@
   .info-cell { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; }
   .info-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: .3rem; }
   .info-cell .val { font-size: .97rem; font-weight: 600; color: var(--text); }
-  .gacha-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .gacha-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1.5rem; }
   .gacha-stat { background: var(--dark); padding: 1.2rem; text-align: center; }
   .gacha-stat .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); letter-spacing: 2px; display: block; }
   .gacha-stat .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
   .story-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
   .story-card { background: var(--dark); border: 1px solid var(--border); padding: 1.4rem; position: relative; overflow: hidden; }
-  .story-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .story-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .story-card.main::before { background: var(--cyan); }
   .story-card.anime::before { background: var(--red); }
   .story-card.memory::before { background: var(--gold); }
@@ -55,7 +55,7 @@
   .story-badge { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; padding: .2rem .6rem; border: 1px solid var(--border); color: var(--muted); display: inline-block; }
   .event-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
   .event-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
-  .event-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .event-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
   .event-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
   .event-card p { font-size: .9rem; color: var(--muted); line-height: 1.5; }
   .event-rewards { margin-top: .7rem; display: flex; flex-wrap: wrap; gap: .3rem; }
@@ -72,7 +72,7 @@
   .status-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--border); transition: background .2s; }
   .status-row:last-child { border-bottom: none; }
   .status-row:hover { background: rgba(0,212,255,.03); }
-  .status-name { padding: .7rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+  .status-name { padding: .7rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: .9rem; }
   .status-desc { padding: .7rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
 </style>
 </head>
@@ -92,60 +92,59 @@
     <a href="../events/" class="active">Events</a>
     <a href="../exploit-medals/">Exploit Medals</a>
     <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
   </div>
-<div class="guide-section open" id="gacha">
+  <div class="guide-section open">
     <div class="guide-section-header" onclick="toggleSection(this)">
-      <span class="guide-section-icon">💎</span>
-      <span class="guide-section-title">Gacha & Pulling</span>
-      <span class="guide-section-tag">// Dimensional Crystals</span>
+      <span class="guide-section-icon">🏆</span>
+      <span class="guide-section-title">Events</span>
+      <span class="guide-section-tag">// Limited Content</span>
       <span class="guide-toggle">▼</span>
     </div>
     <div class="guide-section-body">
-
-      <div class="gacha-stats">
-        <div class="gacha-stat"><span class="val">3%</span><span class="lbl">★5 Character Rate</span></div>
-        <div class="gacha-stat"><span class="val">5%</span><span class="lbl">★5 Weapon Rate</span></div>
-        <div class="gacha-stat"><span class="val">1%</span><span class="lbl">Pickup Character Rate</span></div>
-        <div class="gacha-stat"><span class="val">250</span><span class="lbl">Medals for ★5 Character</span></div>
-        <div class="gacha-stat"><span class="val">150</span><span class="lbl">Medals for ★5 Weapon</span></div>
+      <p class="guide-text">Events are time-limited content that rotate regularly. They provide some of the best rewards in the game. Never skip active events.</p>
+      <div class="event-cards">
+        <div class="event-card">
+          <h3>Kaiju Rush</h3>
+          <p>A multi-stage survival event where your squad fights through consecutive Kaiju encounters. HP carries between fights so resource management is key.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Upgrade Materials</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Raids</h3>
+          <p>Community cooperative battles against a specific Kaiju boss. You receive 3 permits per day. The event runs until the community defeats the boss together.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Upgrade Materials</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Fierce Battle Area</h3>
+          <p>A limited-time challenge mode with unique stage effects each run. Rewards scale with how far you climb. Read the stage effects before entering.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Proof of Valor</span><span class="reward-tag">Emblem of Defense</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Mop-Up Operation</h3>
+          <p>Triggered after a Raid boss is defeated by the community. Farm Reinforcement Materials and Unimaterials. Rare 5-Star Unimaterials can drop.</p>
+          <div class="event-rewards"><span class="reward-tag">Reinforcement Materials</span><span class="reward-tag">Unimaterials</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Large Conquest</h3>
+          <p>Form two squads to fight endless waves of Kaiju. Neutralize as many as you can to reach reward milestones.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Proof of Valor</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Chapter Events</h3>
+          <p>Story-driven limited events tied to specific characters or narrative arcs. Often introduce new characters on rate-up alongside exclusive story content.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Character Materials</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Mini Special Events</h3>
+          <p>Smaller limited-time events that run between major updates. Quick to complete but worth doing for Crystal and material rewards.</p>
+          <div class="event-rewards"><span class="reward-tag">Dimensional Crystals</span><span class="reward-tag">Materials</span></div>
+        </div>
+        <div class="event-card">
+          <h3>Limited-Time Banners</h3>
+          <p>Special Pickup Gachas featuring rate-up characters and signature weapons. Check the <a href="../../banners/" style="color:var(--cyan);">Banners page</a> for what's currently active.</p>
+          <div class="event-rewards"><span class="reward-tag">Exclusive Characters</span><span class="reward-tag">Rate-Up ★5</span></div>
+        </div>
       </div>
-
-      <div class="guide-subheading">Banner Types</div>
-      <ul class="guide-list">
-        <li><strong>THE GAME Gacha</strong> — The permanent banner. Always available and features the standard pool of characters and weapons. Use Dimensional Crystals or THE GAME Gacha Tickets.</li>
-        <li><strong>Pickup Gacha</strong> — Limited-time banners featuring a specific rate-up ★5 character and their signature weapon at increased odds. These are the best opportunities to pull for specific units. Use Pickup Gacha Tickets or Dimensional Crystals.</li>
-      </ul>
-
-      <div class="guide-subheading">Pity System</div>
-      <ul class="guide-list">
-        <li>Every pull earns you <strong>Gacha Medals</strong>. You can exchange <strong>250 medals for a ★5 character</strong> and <strong>150 medals for a ★5 weapon</strong> — this is the pity system.</li>
-        <li>If 9 pulls in a row all result in weapons, your next pull is guaranteed to be a <strong>★4 or higher character</strong>. This applies across single pulls and 10-pulls, and even across different Pickup Gachas.</li>
-        <li>The total ★5 drop rate is <strong>8%</strong> — 3% for characters and 5% for weapons. The pickup rate for the featured character is 1%.</li>
-        <li><strong>Pickup Gacha Medals do not expire</strong> — exchange them at your own pace. 250 for a ★5 character, 150 for a ★5 weapon.</li>
-        <li>Rate-up banners have increased odds for the featured character, making them the best time to pull for specific units.</li>
-      </ul>
-
-      <div class="guide-subheading">How to Earn Dimensional Crystals</div>
-      <ul class="guide-list">
-        <li><strong>Story Modes</strong> — Main Story, Anime Story, and Memory Stories all reward Crystals on first clear.</li>
-        <li><strong>Daily & Weekly Missions</strong> — Consistent daily play provides a steady stream of free Crystals.</li>
-        <li><strong>Events</strong> — Kaiju Rush, Fierce Battle Area, and limited-time events are among the best free sources.</li>
-        <li><strong>Player Rank</strong> — Each rank-up grants a Crystal bonus.</li>
-        <li><strong>First-time clears</strong> — New content and stages always come with one-time Crystal rewards.</li>
-      </ul>
-
-      <div class="highlight-box">
-        <strong>Always use the Web Shop:</strong> The official web store at webstore.kj8-thegame.com gives significantly more Dimensional Crystals per dollar than purchasing directly in-game. Never buy Crystals through the in-game shop if you can avoid it.
-      </div>
-
-      <div class="guide-subheading">Smart Pulling Tips</div>
-      <ul class="guide-list">
-        <li>Prioritize pulling on limited banners featuring characters that fill a gap in your squad composition.</li>
-        <li>Don't impulse pull on every banner — limited characters return in reruns eventually.</li>
-        <li>Save at least 100+ pulls before targeting a limited banner to have a reasonable chance at the rate-up unit.</li>
-        <li>Check a character's page before pulling to confirm they fit your playstyle and squad.</li>
-      </ul>
-
     </div>
   </div>
 </div>
@@ -155,10 +154,8 @@
 </footer>
 <script>
 function toggleSection(header) {
-  const section = header.parentElement;
-  section.classList.toggle('open');
+  header.parentElement.classList.toggle('open');
 }
-
 </script>
 </body>
 </html>

@@ -17,7 +17,7 @@
   .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
   .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
   .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
-  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
   .guide-section-header:hover { background: rgba(0,212,255,.03); }
   .guide-section-icon { font-size: 1.3rem; }
   .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
@@ -32,7 +32,7 @@
   .guide-subheading:first-child { margin-top: 0; }
   .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
   .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
-  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li::before { content: "›"; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
   .guide-list li strong { color: var(--text); }
   .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
   .highlight-box strong { color: var(--gold); }
@@ -46,7 +46,7 @@
   .gacha-stat .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
   .story-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
   .story-card { background: var(--dark); border: 1px solid var(--border); padding: 1.4rem; position: relative; overflow: hidden; }
-  .story-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .story-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .story-card.main::before { background: var(--cyan); }
   .story-card.anime::before { background: var(--red); }
   .story-card.memory::before { background: var(--gold); }
@@ -55,7 +55,7 @@
   .story-badge { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; padding: .2rem .6rem; border: 1px solid var(--border); color: var(--muted); display: inline-block; }
   .event-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
   .event-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
-  .event-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+  .event-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
   .event-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
   .event-card p { font-size: .9rem; color: var(--muted); line-height: 1.5; }
   .event-rewards { margin-top: .7rem; display: flex; flex-wrap: wrap; gap: .3rem; }
@@ -72,7 +72,7 @@
   .status-row { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid var(--border); transition: background .2s; }
   .status-row:last-child { border-bottom: none; }
   .status-row:hover { background: rgba(0,212,255,.03); }
-  .status-name { padding: .7rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+  .status-name { padding: .7rem 1rem; border-right: 1px solid var(--border); display: flex; align-items: center; background: rgba(255,255,255,.02); font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: .9rem; }
   .status-desc { padding: .7rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
 </style>
 </head>
@@ -92,117 +92,114 @@
     <a href="../events/">Events</a>
     <a href="../exploit-medals/">Exploit Medals</a>
     <a href="../currencies/" class="active">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
   </div>
-<div class="guide-section open" id="gacha">
+  <div class="guide-section open">
     <div class="guide-section-header" onclick="toggleSection(this)">
-      <span class="guide-section-icon">💎</span>
-      <span class="guide-section-title">Gacha & Pulling</span>
-      <span class="guide-section-tag">// Dimensional Crystals</span>
+      <span class="guide-section-icon">💰</span>
+      <span class="guide-section-title">Currencies Overview</span>
+      <span class="guide-section-tag">// Resources</span>
       <span class="guide-toggle">▼</span>
     </div>
     <div class="guide-section-body">
-
-      <div class="gacha-stats">
-        <div class="gacha-stat"><span class="val">3%</span><span class="lbl">★5 Character Rate</span></div>
-        <div class="gacha-stat"><span class="val">5%</span><span class="lbl">★5 Weapon Rate</span></div>
-        <div class="gacha-stat"><span class="val">1%</span><span class="lbl">Pickup Character Rate</span></div>
-        <div class="gacha-stat"><span class="val">250</span><span class="lbl">Medals for ★5 Character</span></div>
-        <div class="gacha-stat"><span class="val">150</span><span class="lbl">Medals for ★5 Weapon</span></div>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">Dimensional Crystals</span><div class="val" style="font-size:.88rem;">Primary gacha currency. Used to pull on all banners.</div></div>
+        <div class="info-cell"><span class="lbl">Credits</span><div class="val" style="font-size:.88rem;">General currency. Used for leveling, upgrades, and shop purchases.</div></div>
+        <div class="info-cell"><span class="lbl">Stamina</span><div class="val" style="font-size:.88rem;">Energy spent on Training missions and story stages. Regenerates over time.</div></div>
+        <div class="info-cell"><span class="lbl">Talent Shards</span><div class="val" style="font-size:.88rem;">Earned from duplicate characters. Used to Ascend characters (A1–A6).</div></div>
+        <div class="info-cell"><span class="lbl">Refinement Crystal</span><div class="val" style="font-size:.88rem;">Earned by disassembling ★5 weapons. Exchange for select ★5 weapons in the Shop once per month.</div></div>
+        <div class="info-cell"><span class="lbl">Pickup Gacha Medals</span><div class="val" style="font-size:.88rem;">Earned from Pickup Gacha pulls. No expiry. 250 = ★5 character, 150 = ★5 weapon.</div></div>
+        <div class="info-cell"><span class="lbl">Expedition Points</span><div class="val" style="font-size:.88rem;">Earned from Expeditions. Weekly cap of 1,000 points.</div></div>
+        <div class="info-cell"><span class="lbl">Proof of Valor</span><div class="val" style="font-size:.88rem;">Earned from Fierce Battle Area and Large Conquest clears.</div></div>
       </div>
-
-      <div class="guide-subheading">Banner Types</div>
-      <ul class="guide-list">
-        <li><strong>THE GAME Gacha</strong> — The permanent banner. Always available and features the standard pool of characters and weapons. Use Dimensional Crystals or THE GAME Gacha Tickets.</li>
-        <li><strong>Pickup Gacha</strong> — Limited-time banners featuring a specific rate-up ★5 character and their signature weapon at increased odds. These are the best opportunities to pull for specific units. Use Pickup Gacha Tickets or Dimensional Crystals.</li>
-      </ul>
-
-      <div class="guide-subheading">Pity System</div>
-      <ul class="guide-list">
-        <li>Every pull earns you <strong>Gacha Medals</strong>. You can exchange <strong>250 medals for a ★5 character</strong> and <strong>150 medals for a ★5 weapon</strong> — this is the pity system.</li>
-        <li>If 9 pulls in a row all result in weapons, your next pull is guaranteed to be a <strong>★4 or higher character</strong>. This applies across single pulls and 10-pulls, and even across different Pickup Gachas.</li>
-        <li>The total ★5 drop rate is <strong>8%</strong> — 3% for characters and 5% for weapons. The pickup rate for the featured character is 1%.</li>
-        <li><strong>Pickup Gacha Medals do not expire</strong> — exchange them at your own pace. 250 for a ★5 character, 150 for a ★5 weapon.</li>
-        <li>Rate-up banners have increased odds for the featured character, making them the best time to pull for specific units.</li>
-      </ul>
-
-      <div class="guide-subheading">How to Earn Dimensional Crystals</div>
-      <ul class="guide-list">
-        <li><strong>Story Modes</strong> — Main Story, Anime Story, and Memory Stories all reward Crystals on first clear.</li>
-        <li><strong>Daily & Weekly Missions</strong> — Consistent daily play provides a steady stream of free Crystals.</li>
-        <li><strong>Events</strong> — Kaiju Rush, Fierce Battle Area, and limited-time events are among the best free sources.</li>
-        <li><strong>Player Rank</strong> — Each rank-up grants a Crystal bonus.</li>
-        <li><strong>First-time clears</strong> — New content and stages always come with one-time Crystal rewards.</li>
-      </ul>
-
-      <div class="highlight-box">
-        <strong>Always use the Web Shop:</strong> The official web store at webstore.kj8-thegame.com gives significantly more Dimensional Crystals per dollar than purchasing directly in-game. Never buy Crystals through the in-game shop if you can avoid it.
-      </div>
-
-      <div class="guide-subheading">Smart Pulling Tips</div>
-      <ul class="guide-list">
-        <li>Prioritize pulling on limited banners featuring characters that fill a gap in your squad composition.</li>
-        <li>Don't impulse pull on every banner — limited characters return in reruns eventually.</li>
-        <li>Save at least 100+ pulls before targeting a limited banner to have a reasonable chance at the rate-up unit.</li>
-        <li>Check a character's page before pulling to confirm they fit your playstyle and squad.</li>
-      </ul>
-
     </div>
   </div>
-</div>
 
-  <!-- EXPEDITION POINTS DETAIL -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">💎</span>
+      <span class="guide-section-title">Encounter Stones</span>
+      <span class="guide-section-tag">// Gacha Duplicates</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Acquired by pulling duplicate characters or weapons from the Gacha. Exchange them in the Shop for valuable items each month.</p>
+      <div class="guide-subheading">Duplicate Characters</div>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">★5 Character — 2nd to 7th copy</span><div class="val">Talent Shard ×1 + 40 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★5 Character — 8th copy+</span><div class="val">100 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★4 Character — 2nd to 7th copy</span><div class="val">Talent Shard ×1 + 8 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★4 Character — 8th copy+</span><div class="val">20 Stones</div></div>
+      </div>
+      <div class="guide-subheading">Weapons</div>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">★5 Weapon</span><div class="val">40 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★4 Weapon</span><div class="val">8 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★3 Weapon</span><div class="val">2 Stones</div></div>
+        <div class="info-cell"><span class="lbl">★5 Weapon Disassemble</span><div class="val">Refinement Crystal ×1</div></div>
+      </div>
+      <div class="highlight-box" style="border-left-color:var(--muted);">
+        <strong>Note:</strong> Unlike characters, duplicate weapons are NOT automatically converted. Disassemble ★5 weapons manually via Home → Storage. Weapon Exchange resets on the 1st of each month at 04:00 JST.
+      </div>
+      <div class="guide-subheading">Monthly Shop Priority</div>
+      <div class="status-grid">
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">Kaiju Core Material</div><div class="status-desc"><strong>50 Stones</strong> — Up to 1 per month. Highest priority.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">Pickup Gacha Ticket</div><div class="status-desc"><strong>30 Stones</strong> — Up to 10 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">THE GAME Gacha Ticket</div><div class="status-desc"><strong>30 Stones</strong> — Up to 10 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">Exploit Medals</div><div class="status-desc"><strong>15 Stones</strong> — Up to 3 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--muted);">Green Reinforcement Material</div><div class="status-desc"><strong>1 Stone</strong> — Up to 20 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--muted);">Blue Reinforcement Material</div><div class="status-desc"><strong>3 Stones</strong> — Up to 10 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--muted);">Defense Force Manual III</div><div class="status-desc"><strong>5 Stones</strong> — Up to 20 per month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--muted);">Kaijumite III</div><div class="status-desc"><strong>5 Stones</strong> — Up to 20 per month.</div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="guide-section open">
     <div class="guide-section-header" onclick="toggleSection(this)">
       <span class="guide-section-icon">🧭</span>
       <span class="guide-section-title">Expedition Points</span>
-      <span class="guide-section-tag">// How to Earn & Spend</span>
+      <span class="guide-section-tag">// Weekly Currency</span>
       <span class="guide-toggle">▼</span>
     </div>
     <div class="guide-section-body">
-      <p class="guide-text">Expedition Points are earned by completing Expeditions. There is a <strong>weekly cap of 1,000 points</strong> — plan accordingly and don't miss weekly Expeditions.</p>
-
-      <div class="guide-subheading">Exchange Priority</div>
+      <p class="guide-text">Earned by completing Expeditions. <strong>Weekly cap of 1,000 points</strong> — don't miss your weekly Expeditions.</p>
       <div class="status-grid">
-        <div class="status-row"><div class="status-name" style="color:var(--gold);">THE GAME Gacha Ticket</div><div class="status-desc"><strong>100 pts</strong> — Up to 10 per month. Highest priority — always buy the maximum.</div></div>
-        <div class="status-row"><div class="status-name" style="color:var(--gold);">Stamina Jelly</div><div class="status-desc"><strong>50 pts</strong> — Up to 10 per month. Demand increases as you progress, always grab these.</div></div>
-        <div class="status-row"><div class="status-name" style="color:#c8a0ff;">Unipart Material (Purple)</div><div class="status-desc"><strong>60 pts</strong> — Up to 50 per month. Unlocks at Spec-Ops Rank 3.</div></div>
-        <div class="status-row"><div class="status-name" style="color:#4d9fff;">Unipart Material (Blue)</div><div class="status-desc"><strong>40 pts</strong> — Up to 50 per month. Unlocks at Spec-Ops Rank 2.</div></div>
-        <div class="status-row"><div class="status-name" style="color:#40d080;">Unipart Material (Green)</div><div class="status-desc"><strong>20 pts</strong> — Up to 50 per month.</div></div>
-        <div class="status-row"><div class="status-name" style="color:var(--muted);">1,000 Credits</div><div class="status-desc"><strong>10 pts</strong> — No exchange limit. Lowest priority.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">THE GAME Gacha Ticket</div><div class="status-desc"><strong>100 pts</strong> — Up to 10/month. Always buy the maximum.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">Stamina Jelly</div><div class="status-desc"><strong>50 pts</strong> — Up to 10/month. Demand increases as you progress.</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8a0ff;">Unipart Material (Purple)</div><div class="status-desc"><strong>60 pts</strong> — Up to 50/month. Unlocks at Spec-Ops Rank 3.</div></div>
+        <div class="status-row"><div class="status-name" style="color:#4d9fff;">Unipart Material (Blue)</div><div class="status-desc"><strong>40 pts</strong> — Up to 50/month. Unlocks at Spec-Ops Rank 2.</div></div>
+        <div class="status-row"><div class="status-name" style="color:#40d080;">Unipart Material (Green)</div><div class="status-desc"><strong>20 pts</strong> — Up to 50/month.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--muted);">1,000 Credits</div><div class="status-desc"><strong>10 pts</strong> — No limit. Lowest priority.</div></div>
       </div>
     </div>
   </div>
 
-  <!-- PROOF OF VALOR DETAIL -->
   <div class="guide-section open">
     <div class="guide-section-header" onclick="toggleSection(this)">
       <span class="guide-section-icon">🏆</span>
       <span class="guide-section-title">Proof of Valor</span>
-      <span class="guide-section-tag">// How to Earn & Spend</span>
+      <span class="guide-section-tag">// FBA & Large Conquest</span>
       <span class="guide-toggle">▼</span>
     </div>
     <div class="guide-section-body">
-      <p class="guide-text">Proof of Valor is earned by clearing stages in the Fierce Battle Area and Large Conquest. You only need to clear a stage once to receive it.</p>
-
+      <p class="guide-text">Earned by clearing Fierce Battle Area and Large Conquest stages. One-time rewards per stage.</p>
       <div class="guide-subheading">How to Earn</div>
       <div class="info-row">
-        <div class="info-cell"><span class="lbl">Fierce Battle Area — Stages 1–5</span><div class="val">Proof of Valor ×10</div></div>
-        <div class="info-cell"><span class="lbl">Fierce Battle Area — Stages 6–15</span><div class="val">Proof of Valor ×20</div></div>
-        <div class="info-cell"><span class="lbl">Large Conquest — Stages 1–3</span><div class="val">Proof of Valor ×20</div></div>
-        <div class="info-cell"><span class="lbl">Large Conquest — Stages 4–6</span><div class="val">Proof of Valor ×30</div></div>
+        <div class="info-cell"><span class="lbl">FBA Stages 1–5</span><div class="val">×10 per stage</div></div>
+        <div class="info-cell"><span class="lbl">FBA Stages 6–15</span><div class="val">×20 per stage</div></div>
+        <div class="info-cell"><span class="lbl">Large Conquest Stages 1–3</span><div class="val">×20 per stage</div></div>
+        <div class="info-cell"><span class="lbl">Large Conquest Stages 4–6</span><div class="val">×30 per stage</div></div>
       </div>
-
       <div class="guide-subheading">Exchange Priority</div>
       <div class="status-grid">
-        <div class="status-row"><div class="status-name" style="color:var(--gold);">AR-Hyperion (★5)</div><div class="status-desc"><strong>150 pts</strong> — Once per month. Highest priority — compatible with many characters and provides ATK + ally SPD support.</div></div>
-        <div class="status-row"><div class="status-name" style="color:var(--gold);">Pickup Gacha Ticket</div><div class="status-desc"><strong>30 pts</strong> — Up to 5 times. Get these after securing AR-Hyperion.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">AR-Hyperion (★5)</div><div class="status-desc"><strong>150 pts</strong> — Once/month. Top priority — compatible with many characters.</div></div>
+        <div class="status-row"><div class="status-name" style="color:var(--gold);">Pickup Gacha Ticket</div><div class="status-desc"><strong>30 pts</strong> — Up to 5 times.</div></div>
         <div class="status-row"><div class="status-name" style="color:var(--gold);">THE GAME Gacha Ticket</div><div class="status-desc"><strong>30 pts</strong> — Up to 5 times.</div></div>
-        <div class="status-row"><div class="status-name" style="color:#c8d8ea;">Stamina Jelly</div><div class="status-desc"><strong>30 pts</strong> — Up to 20 times. Good use of leftover points.</div></div>
-        <div class="status-row"><div class="status-name" style="color:var(--muted);">Ax-Var / GS-Takamimusubi / SW-Takeminakata (★5)</div><div class="status-desc"><strong>150 pts</strong> — Once per month. Consider if you own matching characters and lack a ★5 weapon.</div></div>
+        <div class="status-row"><div class="status-name" style="color:#c8d8ea;">Stamina Jelly</div><div class="status-desc"><strong>30 pts</strong> — Up to 20 times.</div></div>
       </div>
     </div>
   </div>
-
 </div>
 <footer>
   <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
@@ -210,10 +207,8 @@
 </footer>
 <script>
 function toggleSection(header) {
-  const section = header.parentElement;
-  section.classList.toggle('open');
+  header.parentElement.classList.toggle('open');
 }
-
 </script>
 </body>
 </html>
