@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spec-Ops Rank — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .warning-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .warning-box strong { color: var(--red); }
+  .rank-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .rank-table th { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: .6rem 1rem; background: var(--dark); border: 1px solid var(--border); text-align: left; }
+  .rank-table td { padding: .8rem 1rem; border: 1px solid var(--border); font-size: .93rem; color: var(--muted); }
+  .rank-table tr:hover td { background: rgba(0,212,255,.03); }
+  .rank-table td strong { color: var(--text); }
+  .rank-badge { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--gold); }
+  .exam-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .exam-card { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; position: relative; overflow: hidden; }
+  .exam-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .exam-card.e1::before { background: #40d080; }
+  .exam-card.e2::before { background: var(--gold); }
+  .exam-card.e3::before { background: var(--red); }
+  .exam-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #fff; margin-bottom: .5rem; }
+  .exam-card p { font-size: .9rem; color: var(--muted); line-height: 1.5; margin-bottom: .4rem; }
+  .exam-tag { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 1px; padding: .2rem .6rem; border: 1px solid var(--border); color: var(--muted); display: inline-block; margin-top: .5rem; }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Spec-Ops Rank</h1>
+  <p class="page-desc">Your overall progression rank. Raising it unlocks higher character level caps, new content, and shop items — but also makes story Kaiju harder.</p>
+</div>
+<div class="page">
+
+  <div class="section-nav">
+    <a href="../">Game Guide</a>
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
+    <a href="../spec-ops/" class="active">Spec-Ops Rank</a>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🎖️</span>
+      <span class="guide-section-title">What is Spec-Ops Rank?</span>
+      <span class="guide-section-tag">// Overview</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Spec-Ops Rank is your overall progression rank, separate from Player Rank. It is raised by clearing <strong>Promotion Exams</strong> — special missions that unlock once you hit a required Player Rank. There are currently 4 Spec-Ops Ranks.</p>
+      <table class="rank-table">
+        <tr><th>Rank</th><th>Character Level Cap</th><th>How to Unlock</th></tr>
+        <tr><td><span class="rank-badge">Rank 1</span></td><td><strong>Level 40</strong></td><td>Starting rank</td></tr>
+        <tr><td><span class="rank-badge">Rank 2</span></td><td><strong>Level 70</strong></td><td>Clear Promotion Exam 1</td></tr>
+        <tr><td><span class="rank-badge">Rank 3</span></td><td><strong>Level 90</strong></td><td>Clear Promotion Exam 2</td></tr>
+        <tr><td><span class="rank-badge">Rank 4</span></td><td><strong>Level 100</strong></td><td>Clear Promotion Exam 3 (Player Rank 40)</td></tr>
+      </table>
+      <div class="warning-box">
+        <strong>⚠ Warning:</strong> Raising your Spec-Ops Rank makes Kaiju in the Main Story harder. Make sure your squad is ready before clearing a Promotion Exam.
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO RAISE -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📈</span>
+      <span class="guide-section-title">How to Raise Spec-Ops Rank</span>
+      <span class="guide-section-tag">// Steps</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <ul class="guide-list">
+        <li><strong>Raise your Player Rank</strong> — Earn Player EXP through Story Mode (100 EXP per combat stage, free), Daily Missions (up to 1,000 EXP/day), and spending Stamina.</li>
+        <li><strong>Unlock the Promotion Exam</strong> — Once you hit the required Player Rank, a Special Request unlocks. Go to Home → Special Requests to find it.</li>
+        <li><strong>Read the unlock message</strong> — Check your inbox for the notice. Read it to the end for <strong>Dimensional Crystals ×20</strong>.</li>
+        <li><strong>Clear the Promotion Exam</strong> — Defeat waves of Kaiju. Their level scales with the exam. Clearing it raises your Spec-Ops Rank.</li>
+        <li><strong>Claim rewards & read follow-up</strong> — After clearing, read the follow-up message for another <strong>Dimensional Crystals ×20</strong>.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>Tip:</strong> Don't rush Promotion Exams. The level cap increase only matters when you have the materials to actually level characters to the new cap.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMOTION EXAMS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">⚔️</span>
+      <span class="guide-section-title">Promotion Exams</span>
+      <span class="guide-section-tag">// All 3 Exams</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <div class="exam-cards">
+        <div class="exam-card e1">
+          <h3>Promotion Exam 1</h3>
+          <p>Raises character level cap from <strong>40 → 70</strong>. Unlocks Spec-Ops Rank 2 and the Spec-Ops Rank II Pack in the Shop.</p>
+          <p><strong>Enemy weakness:</strong> Shot and Physical (Common) plates.</p>
+          <p><strong>Recommended level:</strong> 40+</p>
+          <p>Clearable with a well-built 4-star squad. Gen Narumi (multi-PLT reduction) and Rin Shinonome (AoE) are very effective.</p>
+          <span class="exam-tag">DIFFICULTY: EASY</span>
+        </div>
+        <div class="exam-card e2">
+          <h3>Promotion Exam 2</h3>
+          <p>Raises character level cap from <strong>70 → 90</strong>. Unlocks Spec-Ops Rank 3 and the Spec-Ops Rank III Pack in the Shop.</p>
+          <p><strong>Enemy weakness:</strong> Blunt, Elemental, and Common plates.</p>
+          <p><strong>Recommended level:</strong> 70+</p>
+          <p>Notably harder than Exam 1. Bring Blunt and Elemental characters. Kaiju No. 8 (Fortitude 9.8) is a strong pick.</p>
+          <span class="exam-tag">DIFFICULTY: MEDIUM</span>
+        </div>
+        <div class="exam-card e3">
+          <h3>Promotion Exam 3</h3>
+          <p>Raises character level cap from <strong>90 → 100</strong>. Unlocks Spec-Ops Rank 4.</p>
+          <p><strong>Unlock requirement:</strong> Player Rank 40</p>
+          <p><strong>Recommended level:</strong> 90+</p>
+          <p>All Kaiju are Level 90 and hit very hard. Bring at least 1–2 fully leveled characters with strong Uniparts and Weapons. Include a Defender to absorb damage and a Supporter to buff.</p>
+          <span class="exam-tag">DIFFICULTY: HARD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🎁</span>
+      <span class="guide-section-title">Benefits of Raising Spec-Ops Rank</span>
+      <span class="guide-section-tag">// Rewards & Unlocks</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <ul class="guide-list">
+        <li><strong>Higher Character & Weapon Level Cap</strong> — Each rank raises the reinforcement cap for both characters and weapons.</li>
+        <li><strong>Expedition Shop unlocks</strong> — Blue Unipart Materials unlock at Rank 2, Purple Unipart Materials at Rank 3.</li>
+        <li><strong>Harder Training missions</strong> — Higher Spec-Ops Rank unlocks more difficult Training stages with better material rewards.</li>
+        <li><strong>Spec-Ops Rank Packs</strong> — Paid shop packs unlock at Rank 2 and 3 containing Dimensional Crystals and upgrade materials.</li>
+        <li><strong>Dimensional Crystals</strong> — ×20 from reading the unlock message and ×20 from reading the post-clear message for each exam.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>
