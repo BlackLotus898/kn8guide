@@ -44,6 +44,10 @@
   .status-name.ailment { color: var(--red); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
   .status-name.debuff { color: #ff9060; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
   .status-name.special { color: var(--cyan); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; }
+  .damage-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  .damage-table td { padding: .5rem 1rem; border-bottom: 1px solid var(--border); font-size: .93rem; }
+  .damage-table tr:last-child td { border-bottom: none; }
+  .damage-table tr:hover td { background: rgba(0,212,255,.03); }
   .status-desc { padding: .8rem 1rem; font-size: .93rem; color: var(--muted); display: flex; align-items: center; line-height: 1.5; }
   .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
   .mechanic-box { background: var(--dark); border: 1px solid var(--border); padding: 1.2rem; }
@@ -144,20 +148,73 @@
     <div class="guide-section-body">
       <p class="guide-text">Every character deals one or more damage types. Matching your squad's damage types to a Kaiju's weakness significantly increases damage output.</p>
 
-      <div class="guide-subheading">Blunt</div>
-      <div class="status-grid">
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Aoi Kaguragi</div><div class="status-desc">(Fruits of Diligence) — Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Eiji Hasegawa</div><div class="status-desc">(Right-Hand Man of the Strongest) — Blunt / Shot</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Isao Shinomiya</div><div class="status-desc">(Prime Fist) — Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Isao Shinomiya</div><div class="status-desc">(The Unbreakable Iron Wall) — Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Jura Igarashi</div><div class="status-desc">(Grit and Duty) — Blunt / Fire</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kafka Hibino</div><div class="status-desc">(The Man Who Became a Kaiju) — Shot / Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kaiju No. 8</div><div class="status-desc">(Fortitude 9.8) — Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kaiju No. 8</div><div class="status-desc">(Scorching Variant) — Blunt / Fire</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(Evolving Talent) — Slash / Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Kikoru Shinomiya</div><div class="status-desc">(The Inherited Will) — Blunt</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Sagan Shinomiya</div><div class="status-desc">(Dimensionally Distorted Destiny) — Blunt / Fire</div></div>
-        <div class="status-row"><div class="status-name" style="color:#ff9060;font-size:.85rem;">Suited</div><div class="status-desc">(Unbridled Curiosity) — Blunt</div></div>
+  <div class="guide-subheading" style="color:#c8a0ff;">Slash</div>
+  <ul class="guide-list" style="margin-bottom:2rem;">
+          <li><a href="../../characters/akari-minase-sa/" style="color:var(--muted);text-decoration:none;">Akari Minase (Synchro Aptitude)</a></li>
+          <li><a href="../../characters/gen-narumi-fs/" style="color:var(--muted);text-decoration:none;">Gen Narumi (Future Sight)</a></li>
+          <li><a href="../../characters/gen-narumi-jsc/" style="color:var(--muted);text-decoration:none;">Gen Narumi (Japan's Strongest Combatant)</a></li>
+          <li><a href="../../characters/gen-narumi-jss/" style="color:var(--muted);text-decoration:none;">Gen Narumi (Japan's Strongest Santa)</a></li>
+          <li><a href="../../characters/hikari-shinomiya-tv/" style="color:var(--muted);text-decoration:none;">Hikari Shinomiya (The Valkyrie)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-ev/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (Evolving Talent)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-fpc/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (Full-Power Christmas)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-glf/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (Guiding Light of the Future)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-tmbp/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (The Mission to Be Perfect)</a></li>
+          <li><a href="../../characters/sagan-shinomiya-ol/" style="color:var(--muted);text-decoration:none;">Sagan Shinomiya (Over Limit)</a></li>
+          <li><a href="../../characters/soichiro-hoshina-kowj/" style="color:var(--muted);text-decoration:none;">Soichiro Hoshina (Keystone of Western Japan)</a></li>
+          <li><a href="../../characters/soshiro-hoshina-atp/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina (Ax Technique Proficiency)</a></li>
+          <li><a href="../../characters/soshiro-hoshina-bs/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina (Blade Specialist)</a></li>
+          <li><a href="../../characters/soshiro-hoshina-hssst/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina (Hoshina-Style Sword-Slay Technique)</a></li>
+          <li><a href="../../characters/soshiro-hoshina-np/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina (New Possibilities)</a></li>
+          <li><a href="../../characters/soshiro-hoshina-uf/" style="color:var(--muted);text-decoration:none;">Soshiro Hoshina (United Front)</a></li>
+          <li><a href="../../characters/zoee-wanderfalke-twu/" style="color:var(--muted);text-decoration:none;">Zoee Wanderfalke (The Weapon Unsealed)</a></li>
+  </ul>
+
+  <div class="guide-subheading" style="color:var(--gold);">Shot</div>
+  <ul class="guide-list" style="margin-bottom:2rem;">
+          <li><a href="../../characters/akari-minase-fc/" style="color:var(--muted);text-decoration:none;">Akari Minase (Festive Christmas)</a></li>
+          <li><a href="../../characters/akari-minase-hc/" style="color:var(--muted);text-decoration:none;">Akari Minase (Heart of Compassion)</a></li>
+          <li><a href="../../characters/akari-minase-sa/" style="color:var(--muted);text-decoration:none;">Akari Minase (Synchro Aptitude)</a></li>
+          <li><a href="../../characters/aoi-kaguragi-tprs/" style="color:var(--muted);text-decoration:none;">Aoi Kaguragi (The Promising Rising Star)</a></li>
+          <li><a href="../../characters/chester-tar/" style="color:var(--muted);text-decoration:none;">Chester (The All-Rounder)</a></li>
+          <li><a href="../../characters/gen-narumi-fs/" style="color:var(--muted);text-decoration:none;">Gen Narumi (Future Sight)</a></li>
+          <li><a href="../../characters/gen-narumi-jsc/" style="color:var(--muted);text-decoration:none;">Gen Narumi (Japan's Strongest Combatant)</a></li>
+          <li><a href="../../characters/hakua-igarashi-sp/" style="color:var(--muted);text-decoration:none;">Hakua Igarashi (Sincerity and Potential)</a></li>
+          <li><a href="../../characters/haruichi-izumo-cc/" style="color:var(--muted);text-decoration:none;">Haruichi Izumo (Calculated Choice)</a></li>
+          <li><a href="../../characters/haruichi-izumo-tcce/" style="color:var(--muted);text-decoration:none;">Haruichi Izumo (The Clean-Cut Elite)</a></li>
+          <li><a href="../../characters/iharu-furuhashi-lt/" style="color:var(--muted);text-decoration:none;">Iharu Furuhashi (Latent Talent)</a></li>
+          <li><a href="../../characters/kafka-hibino-tmwbk/" style="color:var(--muted);text-decoration:none;">Kafka Hibino (The Man Who Became a Kaiju)</a></li>
+          <li><a href="../../characters/kafka-hibino-tmwbr/" style="color:var(--muted);text-decoration:none;">Kafka Hibino (The Man Who Became a Reindeer)</a></li>
+          <li><a href="../../characters/keiji-itami-cq/" style="color:var(--muted);text-decoration:none;">Keiji Itami (Calm and Quiet)</a></li>
+          <li><a href="../../characters/kota-tachibana-fdff/" style="color:var(--muted);text-decoration:none;">Kota Tachibana (First Division's Feral Force)</a></li>
+          <li><a href="../../characters/mina-ashiro-agh/" style="color:var(--muted);text-decoration:none;">Mina Ashiro (Aiming for Greater Heights)</a></li>
+          <li><a href="../../characters/mina-ashiro-os/" style="color:var(--muted);text-decoration:none;">Mina Ashiro (Off the Scale)</a></li>
+          <li><a href="../../characters/mina-ashiro-sc/" style="color:var(--muted);text-decoration:none;">Mina Ashiro (Superb Combination)</a></li>
+          <li><a href="../../characters/reno-ichikawa-sa/" style="color:var(--muted);text-decoration:none;">Reno Ichikawa (Signs of Awakening)</a></li>
+          <li><a href="../../characters/reno-ichikawa-tcu/" style="color:var(--muted);text-decoration:none;">Reno Ichikawa (The Compatible User)</a></li>
+          <li><a href="../../characters/rin-shinonome-ah/" style="color:var(--muted);text-decoration:none;">Rin Shinonome (Aspiration and Honor)</a></li>
+          <li><a href="../../characters/ryo-ikaruga-pr/" style="color:var(--muted);text-decoration:none;">Ryo Ikaruga (Passion and Responsibility)</a></li>
+          <li><a href="../../characters/soichiro-hoshina-kowj/" style="color:var(--muted);text-decoration:none;">Soichiro Hoshina (Keystone of Western Japan)</a></li>
+          <li><a href="../../characters/tae-nakanoshima-tkepl/" style="color:var(--muted);text-decoration:none;">Tae Nakanoshima (The Keen-Eyed Platoon Leader)</a></li>
+          <li><a href="../../characters/wang-meixing-nwc/" style="color:var(--muted);text-decoration:none;">Wang Meixing (Negotiator of Wit and Charm)</a></li>
+          <li><a href="../../characters/zoee-wanderfalke-twu/" style="color:var(--muted);text-decoration:none;">Zoee Wanderfalke (The Weapon Unsealed)</a></li>
+  </ul>
+
+  <div class="guide-subheading" style="color:#ff9060;">Blunt</div>
+  <ul class="guide-list" style="margin-bottom:2rem;">
+          <li><a href="../../characters/aoi-kaguragi-fd/" style="color:var(--muted);text-decoration:none;">Aoi Kaguragi (Fruits of Diligence)</a></li>
+          <li><a href="../../characters/eiji-hasegawa-rhms/" style="color:var(--muted);text-decoration:none;">Eiji Hasegawa (Right-Hand Man of the Strongest)</a></li>
+          <li><a href="../../characters/isao-shinomiya-pf/" style="color:var(--muted);text-decoration:none;">Isao Shinomiya (Prime Fist)</a></li>
+          <li><a href="../../characters/isao-shinomiya-tuiw/" style="color:var(--muted);text-decoration:none;">Isao Shinomiya (The Unbreakable Iron Wall)</a></li>
+          <li><a href="../../characters/jura-igarashi-gd/" style="color:var(--muted);text-decoration:none;">Jura Igarashi (Grit and Duty)</a></li>
+          <li><a href="../../characters/kafka-hibino-tmwbk/" style="color:var(--muted);text-decoration:none;">Kafka Hibino (The Man Who Became a Kaiju)</a></li>
+          <li><a href="../../characters/kn8-f98/" style="color:var(--muted);text-decoration:none;">Kaiju No. 8 (Fortitude 9.8)</a></li>
+          <li><a href="../../characters/kn8-sv/" style="color:var(--muted);text-decoration:none;">Kaiju No. 8 (Scorching Variant)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-ev/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (Evolving Talent)</a></li>
+          <li><a href="../../characters/kikoru-shinomiya-tiw/" style="color:var(--muted);text-decoration:none;">Kikoru Shinomiya (The Inherited Will)</a></li>
+          <li><a href="../../characters/sagan-shinomiya-ddd/" style="color:var(--muted);text-decoration:none;">Sagan Shinomiya (Dimensionally Distorted Destiny)</a></li>
+          <li><a href="../../characters/suited-uc/" style="color:var(--muted);text-decoration:none;">Suited (Unbridled Curiosity)</a></li>
+  </ul>
+</div></div>
       </div>
 </div>
 <footer>
