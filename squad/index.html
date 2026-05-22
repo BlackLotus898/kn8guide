@@ -72,6 +72,11 @@
   .slot-tag.wind { color: #80ffb0; border-color: #206040; }
   .slot-tag.ice { color: #80d4ff; border-color: #204060; }
   .slot-tag.lightning { color: #ffe060; border-color: #806020; }
+  .slot-tag.buffer   { color: #40d080; border-color: #0a5030; background: rgba(0,180,80,.1); }
+  .slot-tag.healer   { color: #ff80b0; border-color: #802040; background: rgba(255,80,120,.1); }
+  .slot-tag.debuffer { color: #ff9060; border-color: #804020; background: rgba(255,120,60,.1); }
+  .slot-tag.tank     { color: #4d9fff; border-color: #1a4080; background: rgba(0,80,200,.1); }
+  .slot-tag.plt      { color: #c8a0ff; border-color: #5a3080; background: rgba(160,64,240,.1); }
   .slot-remove { position: absolute; top: .4rem; right: .4rem; width: 18px; height: 18px; background: var(--dark); border: 1px solid var(--border); color: var(--muted); font-size: .6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
   .slot-remove:hover { color: var(--red); border-color: var(--red); }
 
@@ -194,12 +199,14 @@ const STORAGE_KEY = 'kn8_squads_v1';
 // ── CHARACTER DATA ──────────────────────────────────────────────────────────
 const CHARACTERS = [
   { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',               stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'AkariMinase-FC.png',
+    subRoles:['Debuffer'],
     teamBuffs:[ {scope:'all', desc:'Recovers all allies HP equal to 9.5% of this unit\'s Max HP +77'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'akari-minase-hc',    name:'Akari Minase',     variant:'Heart of Compassion',             stars:4, role:'Defender',  types:['Shot'],           img:'AkariMinase-HC.png',
     teamBuffs:[ {scope:'all', desc:'Recovers all allies HP equal to 9.5% of this unit\'s Max HP +77'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'akari-minase-sa',    name:'Akari Minase',     variant:'Synchro Aptitude',                stars:5, role:'Defender',  types:['Shot','Slash'],   img:'AkariMinase-SA.png',
+    subRoles:['Healer', 'Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Applies CRIT DMG +33% (3 turns) for Follow-Up, Extra Attack, and Overflow Attack to all allies'}, {scope:'all', desc:'After Overflow Attack: DEF PEN Rate +20% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[ {desc:'Applies Surveillance to all allies (enemy debuff-tracking effect)'} ] },
   { id:'aoi-kaguragi-fd',    name:'Aoi Kaguragi',     variant:'Fruits of Diligence',             stars:5, role:'Defender',  types:['Blunt'],          img:'AoiKaguragi-FD.png',
@@ -223,12 +230,14 @@ const CHARACTERS = [
   { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, role:'Attacker',  types:['Slash','Ice'],    img:'GenNarumi-JSS.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'hakua-igarashi-sp', dotEffects:[ {type:'burn',desc:'Fire DoT (via Patience)'} ],  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot','Fire'],    img:'HakuaIgarashi-SP.png',
+    subRoles:['PLT Breaker'],
     teamBuffs:[ {scope:'all', desc:'Applies Patience (2 turns) to all allies'}, {scope:'all', desc:'All allies\' Fire DMG dealt +16.5%'}, {scope:'all', desc:'All allies\' Blast Attack and AoE Attack DMG +10%'}, {scope:'all', desc:'Randomly removes 1 debuff from all allies after Combat Skill'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot'],    img:'HaruichiIzumo-CC.png',
     teamBuffs:[], 
     buddyBuffs:[ {desc:'Battle Buddy\'s All-Attribute DMG dealt +19.2%'}, {desc:'After Combat Skill: ATK +26.4% (2 turns) to Battle Buddy'}, {desc:'After Combat Skill: ST Attack and Blast Attack DMG +30% (1 turn) to Battle Buddy'}, {desc:'A4: All-Attribute DMG buff extends to all allies'} ], debuffs:[] },
   { id:'haruichi-izumo-tcce',name:'Haruichi Izumo',   variant:'The Clean-Cut Elite',             stars:4, role:'Supporter', types:['Shot'],           img:'HaruichiIzumo-TCCE.png',
+    subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'All allies\' Effect RES +10%'} ],
     buddyBuffs:[ {desc:'After Follow-Up Skill: removes 1 debuff from a single ally'} ], debuffs:[] },
   { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, role:'Supporter', types:['Shot','Lightning'],img:'IharuFuruhashi-LT.png',
@@ -243,11 +252,13 @@ const CHARACTERS = [
     teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%', isDot:true}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ] },
   { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, role:'Attacker',  types:['Shot'],           img:'KafkaHibino-TMWBK.png',
+    subRoles:['Debuffer'],
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'kafka-hibino-tmwbr', name:'Kafka Hibino',     variant:'The Man Who Became a Reindeer',   stars:4, role:'Supporter', types:['Shot'],           img:'KafkaHibino-TMWBR.png',
     teamBuffs:[], buddyBuffs:[ {desc:'Applies buffs to allies with higher SPD before their turn'} ], debuffs:[] },
   { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, role:'Supporter', types:['Shot'],           img:'KeijiItami-CQ.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'} ] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'} ],
+    subRoles:['Buffer'] },
   { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya', variant:'Evolving Talent',                 stars:5, role:'Attacker',  types:['Slash','Blunt'],  img:'KikoruShinomiya-EV.png',
     teamBuffs:[ {scope:'all', desc:'Before attacking: DMG Taken Reduction +9.6% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
@@ -255,30 +266,38 @@ const CHARACTERS = [
     teamBuffs:[ {scope:'all', desc:'After Normal Attack or Follow-Up Skill: DMG dealt +9.9% (1 turn) to all allies'}, {scope:'all', desc:'Recovers all allies\' HP equal to 7.3% of Max HP +42'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',    stars:5, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-GLF.png',
+    subRoles:['Debuffer'],
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',             stars:5, role:'Attacker',  types:['Blunt'],          img:'KikoruShinomiya-TIW.png',
+    subRoles:['Debuffer'],
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',     stars:4, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-TMBP.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    subRoles:['Tank'] },
   { id:'kn8-f98',            name:'Kaiju No. 8',      variant:'Fortitude 9.8',                   stars:5, role:'Attacker',  types:['Blunt'],          img:'KN8-F98.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    subRoles:['Tank'] },
   { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",   stars:4, role:'Defender',  types:['Shot','Ice'],     img:'KotaTachibana-FDFF.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'mina-ashiro-agh',    name:'Mina Ashiro',      variant:'Aiming for Greater Heights',      stars:4, role:'Supporter', types:['Shot'],           img:'MinaAshiro-AGH.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    subRoles:['Buffer'],
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    subRoles:[] },
   { id:'mina-ashiro-os',     name:'Mina Ashiro',      variant:'Off the Scale',                   stars:5, role:'Attacker',  types:['Shot'],           img:'MinaAshiro-OS.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'mina-ashiro-sc',     name:'Mina Ashiro',      variant:'Superb Combination',              stars:5, role:'Attacker', types:['Shot'],           img:'MinaAshiro-SC.png',
     teamBuffs:[ {scope:'all', desc:'Boosts allies\' Ultimate DMG and charges Ultimate Gauges'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png',
+    subRoles:['Debuffer'],
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
   { id:'reno-ichikawa-tcu',  name:'Reno Ichikawa',    variant:'The Compatible User',             stars:5, role:'Attacker', types:['Shot','Ice'],     img:'RenoIchikawa-TCU.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies multiple elemental debuffs and Plate reduction'} ] },
   { id:'rin-shinonome-ah',   name:'Rin Shinonome',    variant:'Aspiration and Honor',            stars:5, role:'Attacker',  types:['Shot'],           img:'RinShinonome-AH.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    subRoles:['Debuffer', 'PLT Breaker'] },
   { id:'ryo-ikaruga-pr',     name:'Ryo Ikaruga',      variant:'Passion and Responsibility',      stars:4, role:'Supporter', types:['Shot'],           img:'RyoIkaruga-PR.png',
     teamBuffs:[ {scope:'all', desc:'All other allies\' ATK +12.8%'}, {scope:'all', desc:'At start of wave: ATK +10% (2 turns) to all allies'}, {scope:'all', desc:'All allies\' DMG dealt +10%'} ],
     buddyBuffs:[], debuffs:[] },
@@ -292,6 +311,7 @@ const CHARACTERS = [
     teamBuffs:[ {scope:'all', desc:'Buffs and debuffs enemies to boost team\'s damage output'} ],
     buddyBuffs:[], debuffs:[ {desc:'Applies debuffs to reduce enemy resistance and boost ally ATK'} ] },
   { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',  variant:'Ax Technique Proficiency',        stars:5, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-ATP.png',
+    subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'All allies\' DMG dealt +5.5%'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina',  variant:'Blade Specialist',                stars:4, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-BS.png',
@@ -302,7 +322,8 @@ const CHARACTERS = [
   { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png',
     teamBuffs:[], buddyBuffs:[ {desc:'Boosts Battle Buddy\'s action and provides SPD/CRIT support'} ], debuffs:[] },
   { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    subRoles:[] },
   { id:'suited-uc',          name:'Suited',            variant:'Unbridled Curiosity',             stars:5, role:'Attacker',  types:['Blunt'],          img:'Suited-UC.png',
     teamBuffs:[ {scope:'all', desc:'After Extra Attack: Follow-Up and Extra Attack DMG dealt +15% (2 turns) to all allies (max 3 stacks)'}, {scope:'all', desc:'After Extra Attack: CRIT DMG +25% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
@@ -336,8 +357,11 @@ function isBuddy(slotA, slotB) { return (slotA === 0 && slotB === 1) || (slotA =
 function buddyOf(slotIdx) { return slotIdx === 0 ? 1 : slotIdx === 1 ? 0 : slotIdx === 2 ? 3 : 2; }
 
 function tagColor(type) {
-  const m = { 'Slash':'slash','Shot':'shot','Blunt':'blunt','Fire':'fire','Wind':'wind','Ice':'ice','Lightning':'lightning',
-    'Attacker':'attacker','Defender':'defender','Supporter':'supporter' };
+  const m = {
+    'Slash':'slash','Shot':'shot','Blunt':'blunt','Fire':'fire','Wind':'wind','Ice':'ice','Lightning':'lightning',
+    'Attacker':'attacker','Defender':'defender','Supporter':'supporter',
+    'Buffer':'buffer','Healer':'healer','Debuffer':'debuffer','Tank':'tank','PLT Breaker':'plt'
+  };
   return m[type] || '';
 }
 
@@ -386,6 +410,7 @@ function renderSlot(idx) {
         <div class="slot-tags">
           <span class="slot-tag ${tagColor(char.role)}">${char.role}</span>
           ${char.types.map(t => `<span class="slot-tag ${tagColor(t)}">${t}</span>`).join('')}
+          ${(char.subRoles||[]).map(r => `<span class="slot-tag ${tagColor(r)}">${r}</span>`).join('')}
         </div>
       </div>`;
     slot.querySelector('.slot-remove').addEventListener('click', (e) => {
@@ -450,6 +475,7 @@ function renderRoster() {
           <div class="roster-char ${inSquad.includes(c.id)?'in-squad':''}" data-id="${c.id}">
             <img src="${IMG}${c.img}" alt="${c.name}" onerror="this.parentElement.style.background='#111'">
             <div class="roster-char-label">${c.name} (${c.variant})</div>
+            ${(c.subRoles||[]).length ? `<div style="display:flex;flex-wrap:wrap;gap:1px;padding:0 2px 2px;">${(c.subRoles||[]).map(r => `<span style="font-family:'Share Tech Mono',monospace;font-size:.4rem;letter-spacing:.3px;padding:.1rem .2rem;border:1px solid #333;color:#666;">${r}</span>`).join('')}</div>` : ''}
           </div>`).join('')}
       </div>
     </div>`;
