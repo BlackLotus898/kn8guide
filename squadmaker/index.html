@@ -592,11 +592,24 @@ function renderAnalysis() {
   }
 
   // Coverage
+  // Coverage flags from all buff sources including conditional
+  const allBuffSources = [...teamBuffs, ...buddyBuffs, ...condBuffs];
+  const hasATK    = allBuffSources.some(b => b.desc.toLowerCase().includes('atk'));
+  const hasCRIT   = allBuffSources.some(b => b.desc.toLowerCase().includes('crit'));
+  const hasSPD    = allBuffSources.some(b => b.desc.toLowerCase().includes('spd'));
+  const hasDefPen = allBuffSources.some(b => b.desc.toLowerCase().includes('def pen'));
+  const hasDMG    = allBuffSources.some(b => b.desc.toLowerCase().includes('dmg dealt'));
+
   html += `<div class="analysis-section">
     <div class="analysis-section-title">Coverage</div>
     <div class="coverage-row"><span><span class="coverage-dot ${allTypes.length>0?'yes':'no'}"></span>Damage Types</span><strong>${allTypes.join(', ')||'—'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${hasHealing?'yes':'no'}"></span>Healing</span><strong>${hasHealing?'Yes':'None'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${hasShield?'yes':'no'}"></span>Shields</span><strong>${hasShield?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasATK?'yes':'no'}"></span>ATK Buff</span><strong>${hasATK?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasCRIT?'yes':'no'}"></span>CRIT Buff</span><strong>${hasCRIT?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasSPD?'yes':'no'}"></span>SPD Buff</span><strong>${hasSPD?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasDMG?'yes':'no'}"></span>DMG Dealt Buff</span><strong>${hasDMG?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasDefPen?'yes':'no'}"></span>DEF PEN</span><strong>${hasDefPen?'Yes':'None'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${dotTypes.length>0?'yes':'no'}"></span>DoT Effects</span><strong>${dotTypes.length>0?dotTypes.join(', '):'None'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${hasDoTBonus?'yes':'no'}"></span>DoT DMG Boost</span><strong>${hasDoTBonus?'Yes':'None'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${debuffs.length>0?'yes':'no'}"></span>Enemy Debuffs</span><strong>${debuffs.length>0?'Yes':'None'}</strong></div>
