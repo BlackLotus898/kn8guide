@@ -44,6 +44,7 @@
       <li><a href="${base}characters/">Character Roster</a></li>
       <li><a href="${base}weapons/">Weapons &amp; Best Users</a></li>
       <li><a href="${base}tracker/">Character Tracker</a></li>
+      <li><a href="${base}squad/">Squad Maker</a></li>
     </ul>
   </li>
   <a href="${base}beginner/">Beginner</a>
