@@ -81,6 +81,7 @@
     </ul>
   </li>
   <a href="${base}socials/">Socials</a>
+  <a href="${base}feedback/">Feedback</a>
 </ul>`;
 
   // Inject nav

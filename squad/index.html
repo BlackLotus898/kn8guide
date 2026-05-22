@@ -94,7 +94,9 @@
   /* ANALYSIS PANEL */
   .analysis-panel { background: var(--panel); border: 1px solid var(--border); overflow: hidden; position: sticky; top: 1rem; }
   .analysis-header { padding: .8rem 1rem; background: var(--dark); border-bottom: 1px solid var(--border); font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #fff; }
-  .analysis-body { padding: 1rem; max-height: 80vh; overflow-y: auto; }
+  .analysis-body { padding: 0; max-height: 80vh; overflow-y: auto; }
+  .analysis-warnings-sticky { position: sticky; top: 0; z-index: 10; background: var(--panel); padding: 1rem 1rem 0; }
+  .analysis-content { padding: 0 1rem 1rem; }
   .analysis-empty { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: #333; text-align: center; padding: 2rem 1rem; }
 
   .analysis-section { margin-bottom: 1.2rem; }
@@ -556,14 +558,6 @@ function renderAnalysis() {
   // ── BUILD HTML ──
   let html = '';
 
-  // Warnings FIRST
-  if (warnings.length > 0) {
-    html += `<div class="analysis-section">
-      <div class="analysis-section-title">⚠ Warnings</div>
-      ${warnings.map(w => `<div class="warning-item ${w.type==='danger'?'danger':''}">${w.text}</div>`).join('')}
-    </div>`;
-  }
-
   // Role breakdown
   html += `<div class="analysis-section">
     <div class="analysis-section-title">Role Breakdown</div>
@@ -681,7 +675,19 @@ function renderAnalysis() {
     </div>`;
   }
 
-  body.innerHTML = html;
+  // Split warnings from rest
+  const warningsMatch = html.match(/(<div class="analysis-section">[\s\S]*?<\/div>\s*<\/div>)/);
+  if (warnings.length > 0) {
+    const warningHTML = `<div class="analysis-section">
+      <div class="analysis-section-title">⚠ Warnings</div>
+      ${warnings.map(w => `<div class="warning-item ${w.type==='danger'?'danger':''}">${w.text}</div>`).join('')}
+    </div>`;
+    // Remove warnings from html since we already built them
+    const restHTML = html.replace(warningHTML, '');
+    body.innerHTML = `<div class="analysis-warnings-sticky">${warningHTML}</div><div class="analysis-content">${restHTML}</div>`;
+  } else {
+    body.innerHTML = `<div class="analysis-content" style="padding:1rem;">${html}</div>`;
+  }
 }
 
 // ── SQUAD NAME ────────────────────────────────────────────────────────────────
