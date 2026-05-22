@@ -128,6 +128,14 @@
 
   .warning-item { background: var(--dark); border: 1px solid var(--border); border-left: 2px solid var(--gold); padding: .5rem .7rem; margin-bottom: .3rem; font-size: .82rem; color: var(--muted); }
   .warning-item.danger { border-left-color: var(--red); }
+  .buff-item.conditional { border-left-color: #ff9060; }
+  .buff-scope.conditional { color: #ff9060; border-color: rgba(255,144,96,.3); }
+  .stat-totals { display: flex; flex-direction: column; gap: .4rem; }
+  .stat-total-row { display: grid; grid-template-columns: 90px 1fr 52px; align-items: center; gap: .5rem; }
+  .stat-total-label { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: .5px; color: var(--muted); }
+  .stat-total-bar-wrap { height: 6px; background: var(--dark); border: 1px solid var(--border); overflow: hidden; }
+  .stat-total-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #ffcc00); transition: width .4s; }
+  .stat-total-val { font-family: 'Bebas Neue', sans-serif; font-size: .95rem; color: var(--gold); text-align: right; letter-spacing: 1px; }
 </style>
 </head>
 <body>
@@ -208,7 +216,7 @@ const CHARACTERS = [
     buddyBuffs:[], debuffs:[ {desc:'PLT reduction on multiple targets'} ] },
   { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, role:'Attacker',  types:['Slash','Ice'],    img:'GenNarumi-JSS.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
-  { id:'hakua-igarashi-sp',  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot'],           img:'HakuaIgarashi-SP.png',
+  { id:'hakua-igarashi-sp', dotEffects:[ {type:'burn',desc:'Fire DoT (via Patience)'} ],  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot'],           img:'HakuaIgarashi-SP.png',
     teamBuffs:[ {scope:'all', desc:'Applies Patience (2 turns) to all allies'}, {scope:'all', desc:'All allies\' Fire DMG dealt +16.5%'}, {scope:'all', desc:'All allies\' Blast Attack and AoE Attack DMG +10%'}, {scope:'all', desc:'Randomly removes 1 debuff from all allies after Combat Skill'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot','Fire'],    img:'HaruichiIzumo-CC.png',
@@ -225,8 +233,8 @@ const CHARACTERS = [
   { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya',   variant:'The Unbreakable Iron Wall',       stars:5, role:'Defender',  types:['Blunt'],          img:'IsaoShinomiya-TUIW.png',
     teamBuffs:[ {scope:'all', desc:'Shield equal to 7.5% of DEF +33 to all allies (3 turns)'}, {scope:'conditional', desc:'For each ally with a Shield: all allies\' DMG dealt +3.2%'}, {scope:'all', desc:'After Combat Skill: Effect RES +15% (3 turns) to all allies'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
-  { id:'jura-igarashi-gd',   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png',
-    teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%'}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
+  { id:'jura-igarashi-gd', dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png',
+    teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%', isDot:true}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ] },
   { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, role:'Attacker',  types:['Shot','Blunt'],   img:'KafkaHibino-TMWBK.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[] },
@@ -292,9 +300,9 @@ const CHARACTERS = [
   { id:'suited-uc',          name:'Suited',            variant:'Unbridled Curiosity',             stars:5, role:'Attacker',  types:['Blunt'],          img:'Suited-UC.png',
     teamBuffs:[ {scope:'all', desc:'After Extra Attack: Follow-Up and Extra Attack DMG dealt +15% (2 turns) to all allies (max 3 stacks)'}, {scope:'all', desc:'After Extra Attack: CRIT DMG +25% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[] },
-  { id:'tae-nakanoshima-tkepl',name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',   stars:4, role:'Attacker',  types:['Shot','Fire'],    img:'TaeNakanoshima-TKEPL.png',
+  { id:'tae-nakanoshima-tkepl', dotEffects:[ {type:'burn',desc:'Fire debuffs'} ],name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',   stars:4, role:'Attacker',  types:['Shot','Fire'],    img:'TaeNakanoshima-TKEPL.png',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Fire debuffs on enemies'} ] },
-  { id:'wang-meixing-nwc',   name:'Wang Meixing',      variant:'Negotiator of Wit and Charm',     stars:5, role:'Supporter', types:['Shot'],           img:'WangMeixing-NWC.png',
+  { id:'wang-meixing-nwc', dotEffects:[ {type:'shock',desc:'Shock Wire'} ],   name:'Wang Meixing',      variant:'Negotiator of Wit and Charm',     stars:5, role:'Supporter', types:['Shot'],           img:'WangMeixing-NWC.png',
     teamBuffs:[ {scope:'conditional', desc:'[4+ PLTs removed]: DoT DMG Multiplier +16.5% (1 turn) to all allies'}, {scope:'conditional', desc:'[6+ PLTs removed]: DEF PEN Rate +7.8% (1 turn) to all allies'}, {scope:'conditional', desc:'When ally attacks Kaiju in Shock Wire state: ally\'s DMG dealt +15%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Shock Wire — DEF reduction and DoT; triggers team DMG bonus'} ] },
   { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, role:'Attacker',  types:['Shot','Slash'],   img:'ZoeeWanderfalke-TWU.png',
@@ -464,71 +472,83 @@ function renderAnalysis() {
     return;
   }
 
-  // Role breakdown
   const attackers = filled.filter(f => f.char.role === 'Attacker').length;
   const defenders = filled.filter(f => f.char.role === 'Defender').length;
   const supporters = filled.filter(f => f.char.role === 'Supporter').length;
-
-  // All types in squad
   const allTypes = [...new Set(filled.flatMap(f => f.char.types))];
 
-  // Collect all team buffs
-  const allTeamBuffs = [];
-  filled.forEach(f => {
-    f.char.teamBuffs.forEach(b => {
-      allTeamBuffs.push({ source: f.char.name + ' (' + f.char.variant + ')', ...b });
-    });
-  });
+  // Separate buffs into regular, conditional, buddy
+  const teamBuffs = [], condBuffs = [], buddyBuffs = [], debuffs = [], dotEffects = [];
 
-  // Collect buddy buffs (only count if actual buddy exists)
-  const activeBuddyBuffs = [];
   filled.forEach(f => {
+    const src = `${f.char.name} (${f.char.variant})`;
+    f.char.teamBuffs.forEach(b => {
+      if (b.scope === 'conditional') condBuffs.push({source: src, ...b});
+      else teamBuffs.push({source: src, ...b});
+    });
+    f.char.debuffs.forEach(b => debuffs.push({source: src, ...b}));
+    if (f.char.dotEffects) f.char.dotEffects.forEach(b => dotEffects.push({source: src, ...b}));
+
+    // Buddy buffs — only if buddy exists
     const buddyIdx = buddyOf(f.slotIdx);
     const buddyChar = slotChar(buddyIdx);
     if (buddyChar && f.char.buddyBuffs.length > 0) {
       f.char.buddyBuffs.forEach(b => {
-        activeBuddyBuffs.push({
-          source: `${f.char.name} (${f.char.variant}) → ${buddyChar.name} (${buddyChar.variant})`,
-          desc: b.desc
-        });
+        if (b.conditional) condBuffs.push({source: `${src} → ${buddyChar.name} (${buddyChar.variant})`, desc: b.desc, scope:'buddy', isBuddy:true});
+        else buddyBuffs.push({source: `${src} → ${buddyChar.name} (${buddyChar.variant})`, desc: b.desc});
       });
     }
   });
 
-  // Collect debuffs
-  const allDebuffs = [];
-  filled.forEach(f => {
-    f.char.debuffs.forEach(b => {
-      allDebuffs.push({ source: f.char.name + ' (' + f.char.variant + ')', desc: b.desc });
+  // ── AGGREGATE STAT TOTALS ──
+  // Extract numeric values from buff descriptions
+  function extractStat(buffs, keywords) {
+    let total = 0;
+    buffs.forEach(b => {
+      keywords.forEach(kw => {
+        if (b.desc.toLowerCase().includes(kw.toLowerCase())) {
+          const match = b.desc.match(/([\d.]+)%/);
+          if (match) total += parseFloat(match[1]);
+        }
+      });
     });
-  });
+    return total;
+  }
 
-  // Healing check
-  const hasHealing = filled.some(f => f.char.teamBuffs.some(b => b.desc.toLowerCase().includes('recover') || b.desc.toLowerCase().includes('hp')));
-  const hasShield = filled.some(f => f.char.teamBuffs.some(b => b.desc.toLowerCase().includes('shield')));
-  const hasATK = allTeamBuffs.some(b => b.desc.toLowerCase().includes('atk'));
-  const hasCRIT = allTeamBuffs.some(b => b.desc.toLowerCase().includes('crit'));
-  const hasSPD = [...allTeamBuffs, ...activeBuddyBuffs].some(b => b.desc.toLowerCase().includes('spd'));
-  const hasDefPen = [...allTeamBuffs, ...activeBuddyBuffs].some(b => b.desc.toLowerCase().includes('def pen'));
-  const hasDefender = defenders > 0;
+  const allBuffs = [...teamBuffs, ...buddyBuffs];
+  const atkTotal   = extractStat(allBuffs, ['atk +', 'atk boost', 'atk equal']);
+  const critRTotal = extractStat(allBuffs, ['crit rate +']);
+  const critDTotal = extractStat(allBuffs, ['crit dmg +']);
+  const spdTotal   = extractStat(allBuffs, ['spd +']);
+  const defPenTotal= extractStat(allBuffs, ['def pen rate +']);
+  const dmgTotal   = extractStat(allBuffs, ['dmg dealt +']);
+  const hasHealing = [...teamBuffs,...buddyBuffs].some(b => b.desc.toLowerCase().includes('recover') || b.desc.toLowerCase().includes('hp'));
+  const hasShield  = [...teamBuffs,...buddyBuffs].some(b => b.desc.toLowerCase().includes('shield'));
+
+  // DoT coverage
+  const hasBurn      = filled.some(f => f.char.dotEffects?.some(d => d.type === 'burn') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('burn')));
+  const hasAftBurn   = filled.some(f => f.char.dotEffects?.some(d => d.type === 'afterburn') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('afterburn')));
+  const hasShockWire = filled.some(f => f.char.dotEffects?.some(d => d.type === 'shock') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('shock wire')));
+  const hasDoTBonus  = filled.some(f => [...f.char.teamBuffs,...f.char.buddyBuffs].some(b => b.desc.toLowerCase().includes('dot') || b.desc.toLowerCase().includes('multiplier')));
+  const dotTypes = [];
+  if (hasBurn) dotTypes.push('Burn');
+  if (hasAftBurn) dotTypes.push('Afterburn');
+  if (hasShockWire) dotTypes.push('Shock Wire');
 
   // Warnings
   const warnings = [];
-  if (defenders === 0) warnings.push({ type:'danger', text:'No Defender — squad is fragile without a tank or shield user.' });
-  if (supporters === 0) warnings.push({ type:'warn', text:'No Supporter — consider adding a buffer to increase damage output.' });
-  if (attackers === 0) warnings.push({ type:'warn', text:'No Attacker — squad may struggle to deal sufficient damage.' });
-  if (attackers >= 3) warnings.push({ type:'warn', text:'Heavy Attacker-focused — little survivability or support.' });
-
-  // Check buddy buff potential (buddy slot empty)
+  if (defenders === 0) warnings.push({type:'danger', text:'No Defender — squad has no tank or shield user.'});
+  if (supporters === 0) warnings.push({type:'warn', text:'No Supporter — no buffers to boost damage output.'});
+  if (attackers === 0) warnings.push({type:'warn', text:'No Attacker — squad may lack damage output.'});
+  if (attackers >= 3) warnings.push({type:'warn', text:'Heavy Attacker-focused — little survivability or support.'});
   filled.forEach(f => {
-    if (f.char.buddyBuffs.length > 0) {
-      const buddyIdx = buddyOf(f.slotIdx);
-      if (!slotChar(buddyIdx)) {
-        warnings.push({ type:'warn', text:`${f.char.name} (${f.char.variant}) has Battle Buddy buffs but no partner in slot ${buddyIdx+1}.` });
-      }
+    if (f.char.buddyBuffs.length > 0 && !slotChar(buddyOf(f.slotIdx))) {
+      warnings.push({type:'warn', text:`${f.char.name} (${f.char.variant}) has Battle Buddy buffs but slot ${buddyOf(f.slotIdx)+1} is empty.`});
     }
   });
+  if (dotTypes.length > 0 && !hasDoTBonus) warnings.push({type:'warn', text:`DoT applied (${dotTypes.join(', ')}) but no character boosts DoT DMG Multiplier.`});
 
+  // ── BUILD HTML ──
   let html = '';
 
   // Role breakdown
@@ -541,57 +561,96 @@ function renderAnalysis() {
     </div>
   </div>`;
 
+  // Stat totals
+  const statRows = [
+    { label:'ATK Boost',    val: atkTotal,    show: atkTotal > 0 },
+    { label:'CRIT Rate',    val: critRTotal,  show: critRTotal > 0 },
+    { label:'CRIT DMG',     val: critDTotal,  show: critDTotal > 0 },
+    { label:'DMG Dealt',    val: dmgTotal,    show: dmgTotal > 0 },
+    { label:'SPD',          val: spdTotal,    show: spdTotal > 0 },
+    { label:'DEF PEN Rate', val: defPenTotal, show: defPenTotal > 0 },
+  ].filter(s => s.show);
+
+  if (statRows.length > 0) {
+    html += `<div class="analysis-section">
+      <div class="analysis-section-title">Buff Totals <span style="color:#555;font-size:.55rem;">— stacked from all sources</span></div>
+      <div class="stat-totals">
+        ${statRows.map(s => `
+          <div class="stat-total-row">
+            <span class="stat-total-label">${s.label}</span>
+            <div class="stat-total-bar-wrap">
+              <div class="stat-total-bar" style="width:${Math.min(s.val,100)}%"></div>
+            </div>
+            <span class="stat-total-val">+${s.val.toFixed(1)}%</span>
+          </div>`).join('')}
+      </div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#444;margin-top:.5rem;letter-spacing:.5px;">* Totals are additive sums of all active buff values. Conditional buffs excluded.</p>
+    </div>`;
+  }
+
   // Coverage
   html += `<div class="analysis-section">
     <div class="analysis-section-title">Coverage</div>
-    <div class="coverage-row"><span><span class="coverage-dot ${allTypes.length > 0 ? 'yes' : 'no'}"></span>Damage Types</span><strong>${allTypes.join(', ') || '—'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasHealing ? 'yes' : 'no'}"></span>Healing</span><strong>${hasHealing ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasShield ? 'yes' : 'no'}"></span>Shields</span><strong>${hasShield ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasATK ? 'yes' : 'no'}"></span>ATK Buff</span><strong>${hasATK ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasCRIT ? 'yes' : 'no'}"></span>CRIT Buff</span><strong>${hasCRIT ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasSPD ? 'yes' : 'no'}"></span>SPD Buff</span><strong>${hasSPD ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${hasDefPen ? 'yes' : 'no'}"></span>DEF PEN</span><strong>${hasDefPen ? 'Yes' : 'None'}</strong></div>
-    <div class="coverage-row"><span><span class="coverage-dot ${allDebuffs.length > 0 ? 'yes' : 'no'}"></span>Enemy Debuffs</span><strong>${allDebuffs.length > 0 ? 'Yes' : 'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${allTypes.length>0?'yes':'no'}"></span>Damage Types</span><strong>${allTypes.join(', ')||'—'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasHealing?'yes':'no'}"></span>Healing</span><strong>${hasHealing?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasShield?'yes':'no'}"></span>Shields</span><strong>${hasShield?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${dotTypes.length>0?'yes':'no'}"></span>DoT Effects</span><strong>${dotTypes.length>0?dotTypes.join(', '):'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${hasDoTBonus?'yes':'no'}"></span>DoT DMG Boost</span><strong>${hasDoTBonus?'Yes':'None'}</strong></div>
+    <div class="coverage-row"><span><span class="coverage-dot ${debuffs.length>0?'yes':'no'}"></span>Enemy Debuffs</span><strong>${debuffs.length>0?'Yes':'None'}</strong></div>
   </div>`;
 
   // Team buffs
-  if (allTeamBuffs.length > 0) {
+  if (teamBuffs.length > 0) {
     html += `<div class="analysis-section">
-      <div class="analysis-section-title">Team Buffs <span style="color:#555;font-size:.55rem;"> — affect all allies</span></div>
+      <div class="analysis-section-title">Team Buffs</div>
       <div class="buff-list">
-        ${allTeamBuffs.map(b => `
-          <div class="buff-item">
-            <div class="buff-source">${b.source}</div>
-            <div class="buff-desc">${b.desc} <span class="buff-scope all">ALL</span></div>
-          </div>`).join('')}
+        ${teamBuffs.map(b => `<div class="buff-item"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc} <span class="buff-scope all">ALL</span></div></div>`).join('')}
       </div>
     </div>`;
   }
 
-  // Battle Buddy buffs
-  if (activeBuddyBuffs.length > 0) {
+  // Buddy buffs
+  if (buddyBuffs.length > 0) {
     html += `<div class="analysis-section">
-      <div class="analysis-section-title">Battle Buddy Buffs <span style="color:#555;font-size:.55rem;"> — buddy only</span></div>
+      <div class="analysis-section-title">Battle Buddy Buffs</div>
       <div class="buff-list">
-        ${activeBuddyBuffs.map(b => `
-          <div class="buff-item buddy-buff">
-            <div class="buff-source">${b.source}</div>
-            <div class="buff-desc">${b.desc} <span class="buff-scope buddy">BUDDY</span></div>
-          </div>`).join('')}
+        ${buddyBuffs.map(b => `<div class="buff-item buddy-buff"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc} <span class="buff-scope buddy">BUDDY</span></div></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Conditional buffs
+  if (condBuffs.length > 0) {
+    html += `<div class="analysis-section">
+      <div class="analysis-section-title">Conditional Buffs <span style="color:#555;font-size:.55rem;">— require specific triggers</span></div>
+      <div class="buff-list">
+        ${condBuffs.map(b => `<div class="buff-item conditional"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc} <span class="buff-scope conditional">CONDITIONAL</span></div></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // DoT section
+  if (dotTypes.length > 0 || hasDoTBonus) {
+    html += `<div class="analysis-section">
+      <div class="analysis-section-title">DoT Breakdown</div>
+      <div class="buff-list">
+        ${dotTypes.length > 0 ? dotTypes.map(dt => {
+          const src = filled.find(f => f.char.debuffs?.some(d => d.desc.toLowerCase().includes(dt.toLowerCase())));
+          return `<div class="buff-item debuff"><div class="buff-source">${src ? src.char.name + ' (' + src.char.variant + ')' : 'Squad'}</div><div class="buff-desc">Applies <strong>${dt}</strong> — damage over time effect on enemies</div></div>`;
+        }).join('') : ''}
+        ${hasDoTBonus ? filled.filter(f => [...f.char.teamBuffs,...f.char.buddyBuffs].some(b => b.desc.toLowerCase().includes('dot') || b.desc.toLowerCase().includes('multiplier'))).map(f =>
+          `<div class="buff-item"><div class="buff-source">${f.char.name} (${f.char.variant})</div><div class="buff-desc">Boosts DoT DMG Multiplier for the team</div></div>`
+        ).join('') : ''}
       </div>
     </div>`;
   }
 
   // Enemy debuffs
-  if (allDebuffs.length > 0) {
+  if (debuffs.length > 0) {
     html += `<div class="analysis-section">
       <div class="analysis-section-title">Enemy Debuffs</div>
       <div class="buff-list">
-        ${allDebuffs.map(b => `
-          <div class="buff-item debuff">
-            <div class="buff-source">${b.source}</div>
-            <div class="buff-desc">${b.desc}</div>
-          </div>`).join('')}
+        ${debuffs.map(b => `<div class="buff-item debuff"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc}</div></div>`).join('')}
       </div>
     </div>`;
   }
@@ -600,7 +659,7 @@ function renderAnalysis() {
   if (warnings.length > 0) {
     html += `<div class="analysis-section">
       <div class="analysis-section-title">Warnings</div>
-      ${warnings.map(w => `<div class="warning-item ${w.type === 'danger' ? 'danger' : ''}">${w.text}</div>`).join('')}
+      ${warnings.map(w => `<div class="warning-item ${w.type==='danger'?'danger':''}">${w.text}</div>`).join('')}
     </div>`;
   }
 
