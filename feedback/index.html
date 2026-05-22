@@ -75,65 +75,13 @@
 <div class="page">
 
   <div class="info-box">
-    <strong>Note:</strong> Feedback is submitted anonymously via a Google Form. You can also reach out directly on <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a>.
+    <strong>Note:</strong> Feedback is submitted via Google Forms. You can also reach out directly on <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a>.
   </div>
 
-  <div class="feedback-form">
-
-    <div class="form-group">
-      <label class="form-label">Type of Feedback</label>
-      <select class="form-select" id="feedback-type">
-        <option value="">— Select one —</option>
-        <option value="error">Error / Incorrect Information</option>
-        <option value="missing">Missing Content</option>
-        <option value="suggestion">Feature Suggestion</option>
-        <option value="general">General Feedback</option>
-        <option value="praise">Praise 🙏</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Page or Section (optional)</label>
-      <select class="form-select" id="feedback-page">
-        <option value="">— Select a page —</option>
-        <option value="home">Home</option>
-        <option value="beginner">Beginner Guide</option>
-        <option value="characters">Character Roster</option>
-        <option value="character-page">Individual Character Page</option>
-        <option value="weapons">Weapons</option>
-        <option value="tracker">Character Tracker</option>
-        <option value="squadmaker">Squad Maker</option>
-        <option value="banners">Banners</option>
-        <option value="limited">Limited Characters</option>
-        <option value="gameguide">Game Guide</option>
-        <option value="combat">Combat</option>
-        <option value="socials">Socials</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Overall Rating</label>
-      <div class="rating-group">
-        <button class="rating-btn good" data-val="great" onclick="selectRating(this)">👍 Great</button>
-        <button class="rating-btn mid" data-val="okay" onclick="selectRating(this)">🤔 Okay</button>
-        <button class="rating-btn" data-val="needs-work" onclick="selectRating(this)">👎 Needs Work</button>
-      </div>
-      <input type="hidden" id="rating-val" value="">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Your Feedback</label>
-      <textarea class="form-textarea" id="feedback-text" placeholder="Tell us what you think, what's wrong, or what you'd like to see..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Discord Username (optional — if you'd like a response)</label>
-      <input type="text" class="form-input" id="feedback-discord" placeholder="e.g. yourname">
-    </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
-    <div class="success-msg" id="success-msg">// FEEDBACK RECEIVED — THANK YOU!</div>
+  <div style="background:var(--panel);border:1px solid var(--border);overflow:hidden;">
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdlONogssTHQBe5TSSrffI9AUzpk_RRG6tfvPqjEUHLiNfzGw/viewform?embedded=true"
+      width="100%" height="717" frameborder="0" marginheight="0" marginwidth="0"
+      style="display:block;">Loading…</iframe>
   </div>
 
 </div>
@@ -145,48 +93,6 @@
   <p style="margin-top:.5rem;"><a href="https://kj8-thegame.com/en/" target="_blank">Official Site</a> &nbsp;·&nbsp; <a href="https://store.steampowered.com/app/3393070/" target="_blank">Steam</a> &nbsp;·&nbsp; <a href="https://gamewith.net/kj8-thegame/" target="_blank">GameWith Wiki</a></p>
 </footer>
 
-<script>
-function selectRating(btn) {
-  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('rating-val').value = btn.dataset.val;
-}
 
-function submitFeedback() {
-  const type = document.getElementById('feedback-type').value;
-  const text = document.getElementById('feedback-text').value.trim();
-
-  if (!type) { alert('Please select a feedback type.'); return; }
-  if (!text) { alert('Please enter your feedback.'); return; }
-
-  const page = document.getElementById('feedback-page').value;
-  const rating = document.getElementById('rating-val').value;
-  const discord = document.getElementById('feedback-discord').value.trim();
-
-  // Build Google Form URL — replace FORM_ID and entry IDs with your actual form
-  const FORM_URL = 'https://docs.google.com/forms/d/e/FORM_ID/formResponse';
-  const params = new URLSearchParams({
-    'entry.TYPE': type,
-    'entry.PAGE': page,
-    'entry.RATING': rating,
-    'entry.FEEDBACK': text,
-    'entry.DISCORD': discord,
-  });
-
-  // Submit silently via fetch (no redirect)
-  fetch(`${FORM_URL}?${params}`, { method: 'POST', mode: 'no-cors' })
-    .catch(() => {}); // ignore CORS error — form still submits
-
-  // Show success regardless
-  document.getElementById('submit-btn').disabled = true;
-  document.getElementById('submit-btn').textContent = 'Submitted!';
-  document.getElementById('success-msg').style.display = 'block';
-
-  // Save to localStorage as backup
-  const entries = JSON.parse(localStorage.getItem('kn8_feedback') || '[]');
-  entries.push({ type, page, rating, text, discord, date: new Date().toISOString() });
-  localStorage.setItem('kn8_feedback', JSON.stringify(entries));
-}
-</script>
 </body>
 </html>
