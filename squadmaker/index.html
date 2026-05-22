@@ -153,6 +153,7 @@
   <div class="squad-manager">
     <div class="squad-tabs" id="squad-tabs"></div>
     <button class="new-squad-btn" id="new-squad-btn">+ New Squad</button>
+    <button class="delete-squad-btn" id="clear-squad-btn">Clear</button>
     <button class="delete-squad-btn" id="delete-squad-btn">Delete</button>
   </div>
 
@@ -696,6 +697,15 @@ document.getElementById('new-squad-btn').addEventListener('click', () => {
   activeSlot = null;
   saveSquads();
   render();
+});
+
+document.getElementById('clear-squad-btn').addEventListener('click', () => {
+  if (confirm(`Clear all slots in "${squads[activeSquad].name}"?`)) {
+    squads[activeSquad].slots = [null,null,null,null];
+    activeSlot = null;
+    saveSquads();
+    render();
+  }
 });
 
 document.getElementById('delete-squad-btn').addEventListener('click', () => {
