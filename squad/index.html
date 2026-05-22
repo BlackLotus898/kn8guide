@@ -32,7 +32,7 @@
   .squad-name-input:focus { border-color: var(--cyan); }
 
   /* LAYOUT: SLOTS + ANALYSIS SIDE BY SIDE */
-  .builder-layout { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; align-items: start; }
+  .builder-layout { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; align-items: start; }
   @media (max-width: 900px) { .builder-layout { grid-template-columns: 1fr; } }
 
   /* SLOT PAIRS */
@@ -94,7 +94,7 @@
   /* ANALYSIS PANEL */
   .analysis-panel { background: var(--panel); border: 1px solid var(--border); overflow: hidden; position: sticky; top: 1rem; }
   .analysis-header { padding: .8rem 1rem; background: var(--dark); border-bottom: 1px solid var(--border); font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #fff; }
-  .analysis-body { padding: 1rem; }
+  .analysis-body { padding: 1rem; max-height: 80vh; overflow-y: auto; }
   .analysis-empty { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: #333; text-align: center; padding: 2rem 1rem; }
 
   .analysis-section { margin-bottom: 1.2rem; }
@@ -556,6 +556,14 @@ function renderAnalysis() {
   // ── BUILD HTML ──
   let html = '';
 
+  // Warnings FIRST
+  if (warnings.length > 0) {
+    html += `<div class="analysis-section">
+      <div class="analysis-section-title">⚠ Warnings</div>
+      ${warnings.map(w => `<div class="warning-item ${w.type==='danger'?'danger':''}">${w.text}</div>`).join('')}
+    </div>`;
+  }
+
   // Role breakdown
   html += `<div class="analysis-section">
     <div class="analysis-section-title">Role Breakdown</div>
@@ -670,14 +678,6 @@ function renderAnalysis() {
       <div class="buff-list">
         ${debuffs.map(b => `<div class="buff-item debuff"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc}</div></div>`).join('')}
       </div>
-    </div>`;
-  }
-
-  // Warnings
-  if (warnings.length > 0) {
-    html += `<div class="analysis-section">
-      <div class="analysis-section-title">Warnings</div>
-      ${warnings.map(w => `<div class="warning-item ${w.type==='danger'?'danger':''}">${w.text}</div>`).join('')}
     </div>`;
   }
 

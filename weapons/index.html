@@ -361,7 +361,7 @@ function starStr(n) {
 
 function userTagHTML(name) {
   const id = charIds[name];
-  if (id) return `<a href="${id}.html" class="user-tag">${name}</a>`;
+  if (id) return `<a href="../characters/${id}/" class="user-tag">${name}</a>`;
   return `<span class="user-tag">${name}</span>`;
 }
 
