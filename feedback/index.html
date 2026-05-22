@@ -13,77 +13,98 @@
   .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
   .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
   .page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 6rem; }
-
   .feedback-form { background: var(--panel); border: 1px solid var(--border); padding: 2rem; margin-bottom: 1.5rem; }
-
   .form-group { margin-bottom: 1.4rem; }
   .form-label { font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--red); display: block; margin-bottom: .5rem; }
-  .form-input, .form-select, .form-textarea {
-    width: 100%; padding: .7rem 1rem;
-    background: var(--dark); border: 1px solid var(--border);
-    color: var(--text); font-family: 'Rajdhani', sans-serif; font-size: 1rem;
-    outline: none; transition: border-color .2s; box-sizing: border-box;
-  }
+  .form-input, .form-select, .form-textarea { width: 100%; padding: .7rem 1rem; background: var(--dark); border: 1px solid var(--border); color: var(--text); font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none; transition: border-color .2s; box-sizing: border-box; }
   .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--cyan); }
   .form-select option { background: var(--dark); }
   .form-textarea { resize: vertical; min-height: 120px; }
   .form-input::placeholder, .form-textarea::placeholder { color: #333; }
-
   .rating-group { display: flex; gap: .5rem; }
-  .rating-btn {
-    flex: 1; padding: .6rem; text-align: center;
-    background: var(--dark); border: 1px solid var(--border);
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px;
-    color: var(--muted); cursor: pointer; transition: all .2s;
-  }
-  .rating-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-  .rating-btn.selected { background: var(--red); border-color: var(--red); color: #fff; }
-  .rating-btn.selected.good { background: #40d080; border-color: #40d080; }
-  .rating-btn.selected.mid { background: var(--gold); border-color: var(--gold); color: #000; }
-
-  .submit-btn {
-    width: 100%; padding: .8rem;
-    background: var(--red); border: none; color: #fff;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px;
-    cursor: pointer; transition: background .2s;
-  }
+  .rating-btn { flex: 1; padding: .6rem; text-align: center; background: var(--dark); border: 1px solid var(--border); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .rating-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .rating-btn.selected { background: var(--gold); border-color: var(--gold); color: #000; }
+  .submit-btn { width: 100%; padding: .8rem; background: var(--red); border: none; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; cursor: pointer; transition: background .2s; margin-top: .5rem; }
   .submit-btn:hover { background: #c0001a; }
   .submit-btn:disabled { background: #333; color: #555; cursor: not-allowed; }
-
   .success-msg { display: none; background: var(--dark); border: 1px solid #40d080; border-left: 3px solid #40d080; padding: 1rem 1.2rem; font-family: 'Share Tech Mono', monospace; font-size: .8rem; letter-spacing: 1px; color: #40d080; margin-top: 1rem; }
-
   .info-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--cyan); padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: .95rem; color: var(--muted); line-height: 1.6; }
   .info-box strong { color: var(--cyan); }
   .info-box a { color: var(--cyan); }
-
-  .char-checkboxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .3rem; max-height: 200px; overflow-y: auto; padding: .5rem; background: var(--dark); border: 1px solid var(--border); }
-  .char-checkbox-label { display: flex; align-items: center; gap: .5rem; font-size: .88rem; color: var(--muted); cursor: pointer; padding: .2rem .3rem; transition: color .15s; }
-  .char-checkbox-label:hover { color: var(--text); }
-  .char-checkbox-label input { accent-color: var(--red); }
 </style>
 </head>
 <body>
 <nav id="main-nav"></nav>
 <script src="../nav.js"></script>
-
 <div class="page-header">
   <p class="page-label">// Community</p>
   <h1 class="page-title">Feedback</h1>
   <p class="page-desc">Help improve K8GUIDE! Share your thoughts, report errors, or suggest what to add next.</p>
 </div>
-
 <div class="page">
-
   <div class="info-box">
-    <strong>Note:</strong> Feedback is submitted via Google Forms. You can also reach out directly on <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a>.
+    <strong>Note:</strong> Feedback is submitted anonymously. You can also reach out directly on <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a>.
   </div>
+  <div class="feedback-form">
 
-  <div style="background:var(--panel);border:1px solid var(--border);overflow:hidden;">
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdlONogssTHQBe5TSSrffI9AUzpk_RRG6tfvPqjEUHLiNfzGw/viewform?embedded=true"
-      width="100%" height="717" frameborder="0" marginheight="0" marginwidth="0"
-      style="display:block;">Loading…</iframe>
+    <div class="form-group">
+      <label class="form-label">Type of Feedback</label>
+      <select class="form-select" id="f-type">
+        <option value="">— Select one —</option>
+        <option value="Error / Incorrect Information">Error / Incorrect Information</option>
+        <option value="Missing Content">Missing Content</option>
+        <option value="Feature Suggestion">Feature Suggestion</option>
+        <option value="General Feedback">General Feedback</option>
+        <option value="Praise">Praise 🙏</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Page or Section (optional)</label>
+      <select class="form-select" id="f-page">
+        <option value="">— Select a page —</option>
+        <option value="Home">Home</option>
+        <option value="Beginner Guide">Beginner Guide</option>
+        <option value="Character Roster">Character Roster</option>
+        <option value="Individual Character Page">Individual Character Page</option>
+        <option value="Weapons">Weapons</option>
+        <option value="Character Tracker">Character Tracker</option>
+        <option value="Squad Maker">Squad Maker</option>
+        <option value="Banners">Banners</option>
+        <option value="Limited Characters">Limited Characters</option>
+        <option value="Game Guide">Game Guide</option>
+        <option value="Combat">Combat</option>
+        <option value="Socials">Socials</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Rating</label>
+      <div class="rating-group">
+        <button class="rating-btn" data-val="1" onclick="selectRating(this)">1</button>
+        <button class="rating-btn" data-val="2" onclick="selectRating(this)">2</button>
+        <button class="rating-btn" data-val="3" onclick="selectRating(this)">3</button>
+        <button class="rating-btn" data-val="4" onclick="selectRating(this)">4</button>
+        <button class="rating-btn" data-val="5" onclick="selectRating(this)">5</button>
+      </div>
+      <input type="hidden" id="f-rating" value="">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Your Feedback</label>
+      <textarea class="form-textarea" id="f-feedback" placeholder="Tell us what you think, what's wrong, or what you'd like to see..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Discord Username (optional)</label>
+      <input type="text" class="form-input" id="f-discord" placeholder="e.g. yourname">
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
+    <div class="success-msg" id="success-msg">// FEEDBACK RECEIVED — THANK YOU!</div>
   </div>
-
 </div>
 
 <footer>
@@ -93,6 +114,37 @@
   <p style="margin-top:.5rem;"><a href="https://kj8-thegame.com/en/" target="_blank">Official Site</a> &nbsp;·&nbsp; <a href="https://store.steampowered.com/app/3393070/" target="_blank">Steam</a> &nbsp;·&nbsp; <a href="https://gamewith.net/kj8-thegame/" target="_blank">GameWith Wiki</a></p>
 </footer>
 
+<script>
+function selectRating(btn) {
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('f-rating').value = btn.dataset.val;
+}
 
+function submitFeedback() {
+  const type     = document.getElementById('f-type').value;
+  const page     = document.getElementById('f-page').value;
+  const rating   = document.getElementById('f-rating').value;
+  const feedback = document.getElementById('f-feedback').value.trim();
+  const discord  = document.getElementById('f-discord').value.trim();
+
+  if (!feedback) { alert('Please enter your feedback!'); return; }
+
+  const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdlONogssTHQBe5TSSrffI9AUzpk_RRG6tfvPqjEUHLiNfzGw/formResponse';
+  const params = new URLSearchParams({
+    'entry.581064088':  type,
+    'entry.946913177':  page,
+    'entry.1604334495': rating,
+    'entry.1828430239': feedback,
+    'entry.1648291027': discord,
+  });
+
+  fetch(`${FORM}?${params}`, { method: 'POST', mode: 'no-cors' }).catch(() => {});
+
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-btn').textContent = 'Submitted!';
+  document.getElementById('success-msg').style.display = 'block';
+}
+</script>
 </body>
 </html>
