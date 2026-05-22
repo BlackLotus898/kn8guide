@@ -114,6 +114,17 @@
   <p style="margin-top:.5rem;"><a href="https://kj8-thegame.com/en/" target="_blank">Official Site</a> &nbsp;·&nbsp; <a href="https://store.steampowered.com/app/3393070/" target="_blank">Steam</a> &nbsp;·&nbsp; <a href="https://gamewith.net/kj8-thegame/" target="_blank">GameWith Wiki</a></p>
 </footer>
 
+<!-- Hidden iframe for form submission -->
+<iframe name="hidden-submit" style="display:none;"></iframe>
+<form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdlONogssTHQBe5TSSrffI9AUzpk_RRG6tfvPqjEUHLiNfzGw/formResponse" method="POST" target="hidden-submit" style="display:none;">
+  <input type="text" name="entry.581064088" id="g-type">
+  <input type="text" name="entry.946913177" id="g-page">
+  <input type="text" name="entry.1604334495" id="g-rating">
+  <input type="text" name="entry.1828430239" id="g-feedback">
+  <input type="text" name="entry.1648291027" id="g-discord">
+  <button type="submit" id="g-submit"></button>
+</form>
+
 <script>
 function selectRating(btn) {
   document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
@@ -122,25 +133,20 @@ function selectRating(btn) {
 }
 
 function submitFeedback() {
-  const type     = document.getElementById('f-type').value;
-  const page     = document.getElementById('f-page').value;
-  const rating   = document.getElementById('f-rating').value;
   const feedback = document.getElementById('f-feedback').value.trim();
-  const discord  = document.getElementById('f-discord').value.trim();
-
   if (!feedback) { alert('Please enter your feedback!'); return; }
 
-  const FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdlONogssTHQBe5TSSrffI9AUzpk_RRG6tfvPqjEUHLiNfzGw/formResponse';
-  const params = new URLSearchParams({
-    'entry.581064088':  type,
-    'entry.946913177':  page,
-    'entry.1604334495': rating,
-    'entry.1828430239': feedback,
-    'entry.1648291027': discord,
-  });
+  // Copy values to hidden form
+  document.getElementById('g-type').value     = document.getElementById('f-type').value;
+  document.getElementById('g-page').value     = document.getElementById('f-page').value;
+  document.getElementById('g-rating').value   = document.getElementById('f-rating').value;
+  document.getElementById('g-feedback').value = feedback;
+  document.getElementById('g-discord').value  = document.getElementById('f-discord').value.trim();
 
-  fetch(`${FORM}?${params}`, { method: 'POST', mode: 'no-cors' }).catch(() => {});
+  // Submit hidden form
+  document.getElementById('g-submit').click();
 
+  // Show success
   document.getElementById('submit-btn').disabled = true;
   document.getElementById('submit-btn').textContent = 'Submitted!';
   document.getElementById('success-msg').style.display = 'block';
