@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achievements — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: '›'; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .highlight-box a { color: var(--cyan); }
+  .warning-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .warning-box strong { color: var(--red); }
+  .achievement-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .achievement-table th { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: .6rem 1rem; background: var(--dark); border: 1px solid var(--border); text-align: left; }
+  .achievement-table td { padding: .7rem 1rem; border: 1px solid var(--border); font-size: .9rem; color: var(--muted); vertical-align: middle; line-height: 1.5; }
+  .achievement-table tr:hover td { background: rgba(0,212,255,.03); }
+  .achievement-table td strong { color: var(--text); }
+  .achievement-table td.unknown { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: #555; }
+  .reward-tag { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; padding: .15rem .5rem; border: 1px solid rgba(240,180,0,.3); color: var(--gold); background: rgba(240,180,0,.05); white-space: nowrap; }
+  .special-req-tag { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; padding: .15rem .5rem; border: 1px solid rgba(0,212,255,.3); color: var(--cyan); background: rgba(0,212,255,.05); white-space: nowrap; }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Achievements</h1>
+  <p class="page-desc">Complete specific conditions to earn Dimensional Crystals and unlock Special Requests. Some conditions are hidden until completed.</p>
+</div>
+<div class="page">
+
+  <div class="section-nav">
+    <a href="../">Game Guide</a>
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
+    <a href="../spec-ops/">Spec-Ops Rank</a>
+    <a href="../progression/">Character Progression</a>
+    <a href="../achievements/" class="active">Achievements</a>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🏆</span>
+      <span class="guide-section-title">What Are Achievements?</span>
+      <span class="guide-section-tag">// Overview</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Achievements are one-time goals that reward <strong>Dimensional Crystals</strong> for completing specific conditions. Some also unlock <strong>Special Requests</strong> — additional missions with large Crystal payouts. They unlock after clearing Main Story Chapter 0-7.</p>
+      <ul class="guide-list">
+        <li><strong>How to access:</strong> Home → Menu (top right) → Achievements</li>
+        <li><strong>How to claim:</strong> Tap any box with a yellow dot in the top right corner to collect your reward.</li>
+        <li>Some achievements have <strong>hidden conditions</strong> — the unlock requirement is only revealed after you complete it.</li>
+        <li>Some achievements unlock <strong>Special Requests</strong> when completed. A "Special Request Unlocked" pop-up appears at the top of the screen when this happens.</li>
+        <li><strong>Always read Special Request messages to the end</strong> — both the unlock message and the post-clear message each reward Dimensional Crystals ×20.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>For unknown achievements</strong> and a full list, check our <a href="https://docs.google.com/document/d/1TnMlcO6eiBvkIMpnQWCcfN6sdxr15XNprMv2EOm105g/edit" target="_blank">community tracking document</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWN ACHIEVEMENTS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">📋</span>
+      <span class="guide-section-title">Known Achievements</span>
+      <span class="guide-section-tag">// How to Complete</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <table class="achievement-table">
+        <tr>
+          <th style="width:200px;">Achievement</th>
+          <th>How to Complete</th>
+          <th style="width:140px;">Rewards</th>
+        </tr>
+        <tr>
+          <td><strong>Fighting Alone</strong></td>
+          <td>Clear any Training stage with only Kafka Hibino (The Man Who Became a Kaiju) in your squad. Use the lowest difficulty Training stage. The 5-star Kaiju No. 8 unit does NOT count — must be Kafka.</td>
+          <td><span class="reward-tag">Crystals</span></td>
+        </tr>
+        <tr>
+          <td><strong>With My Own Strength</strong></td>
+          <td>Clear 10 battles with Kafka Hibino alive and without him transforming (don't use his Ultimate). Any stage counts including Training. Disable Ultimate in AUTO settings to be safe.</td>
+          <td><span class="reward-tag">Crystals</span></td>
+        </tr>
+        <tr>
+          <td><strong>This Is Who I Am Right Now</strong></td>
+          <td>Defeat Myxogasterocarp using Mina Ashiro's Ultimate. Recommended stage: Memories 2-10, where a Lv.40 guest Mina is available. Weaken the boss with Normal Attacks first, then finish with her Ultimate.</td>
+          <td><span class="reward-tag">Crystals</span> <span class="special-req-tag">Special Request</span></td>
+        </tr>
+        <tr>
+          <td><strong>Same Aspirations</strong></td>
+          <td>Clear Training: Honju Neutralization Difficulty 2 or higher with Kafka Hibino and Mina Ashiro as Battle Buddies. Requires Spec-Ops Rank 2 to unlock Honju Neutralization. They just need to be in the squad — defeat doesn't matter as long as you clear the stage.</td>
+          <td><span class="reward-tag">Crystals</span> <span class="special-req-tag">Special Request — Strength (×200 + ×20 Crystals)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Efficient Neutralization</strong></td>
+          <td>Also obtained in Memories 2-10 using the same strategy as "This Is Who I Am Right Now." Completing both in one run is possible.</td>
+          <td><span class="reward-tag">Crystals</span></td>
+        </tr>
+      </table>
+
+      <div class="warning-box">
+        <strong>More achievements are being tracked.</strong> Some conditions are still unknown. Check the <a href="https://docs.google.com/document/d/1TnMlcO6eiBvkIMpnQWCcfN6sdxr15XNprMv2EOm105g/edit" target="_blank" style="color:var(--cyan);">community document</a> for the latest updates.
+      </div>
+    </div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>

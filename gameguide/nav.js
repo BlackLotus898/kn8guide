@@ -66,6 +66,7 @@
       <li><a href="${base}gameguide/synthesis/">Material Synthesis</a></li>
       <li><a href="${base}gameguide/spec-ops/">Spec-Ops Rank</a></li>
       <li><a href="${base}gameguide/progression/">Character Progression</a></li>
+      <li><a href="${base}gameguide/achievements/">Achievements</a></li>
     </ul>
   </li>
   <li class="nav-dropdown">
