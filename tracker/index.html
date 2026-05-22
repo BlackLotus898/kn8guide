@@ -86,6 +86,23 @@
   .card-variant { font-family: 'Share Tech Mono', monospace; font-size: .5rem; letter-spacing: .5px; color: var(--muted); line-height: 1.2; margin-top: .1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card-stars { font-size: .55rem; color: var(--gold); letter-spacing: 1px; }
 
+  /* ASCENSION NODES */
+  .card-ascension { display: flex; gap: 2px; padding: .3rem .4rem .4rem; background: var(--dark); }
+  .asc-node {
+    flex: 1; height: 10px; border: 1px solid var(--border);
+    background: var(--panel); cursor: pointer;
+    transition: background .15s, border-color .15s;
+    position: relative;
+  }
+  .asc-node:hover { border-color: var(--gold); }
+  .asc-node.unlocked { background: var(--gold); border-color: var(--gold); }
+  .asc-node.unlocked:hover { background: #c89000; }
+  .asc-label { display: flex; justify-content: space-between; padding: 0 .4rem .3rem; }
+  .asc-label span { font-family: 'Share Tech Mono', monospace; font-size: .42rem; letter-spacing: .5px; color: var(--muted); }
+
+  /* STATS */
+  .stats-bar .stat-cell .val.small { font-size: 1.3rem; }
+
   /* HIDDEN */
   .hidden { display: none !important; }
 </style>
@@ -98,7 +115,7 @@
 <div class="page-header">
   <p class="page-label">Collection</p>
   <h1 class="page-title">Character Tracker</h1>
-  <p class="page-desc">Click a character to mark them as owned. Your progress is saved automatically.</p>
+  <p class="page-desc">Click a character to mark them as owned. Click the ascension nodes (A1–A6) to track ascension progress. All data is saved automatically.</p>
 </div>
 
 <div class="page">
@@ -108,6 +125,7 @@
     <div class="stat-cell"><span class="val" id="total-count">0</span><span class="lbl">Total</span></div>
     <div class="stat-cell"><span class="val" id="pct-count">0%</span><span class="lbl">Complete</span></div>
     <div class="stat-cell"><span class="val" id="missing-count">0</span><span class="lbl">Missing</span></div>
+    <div class="stat-cell"><span class="val small" id="fully-asc-count">0</span><span class="lbl">Fully Ascended</span></div>
   </div>
 
   <div class="progress-wrap">
@@ -135,6 +153,12 @@
 
 <script>
 const IMG = '../Kn8 Characters/';
+
+// Ascension storage key
+const ASC_KEY = 'kn8tracker_ascension_v1';
+let ascension = {};
+try { ascension = JSON.parse(localStorage.getItem(ASC_KEY)) || {}; } catch(e) { ascension = {}; }
+function saveAscension() { try { localStorage.setItem(ASC_KEY, JSON.stringify(ascension)); } catch(e) {} }
 
 const characters = [
   // ★5
@@ -203,10 +227,12 @@ function updateStats() {
   const total = characters.length;
   const ownedCount = owned.size;
   const pct = total ? Math.round(ownedCount / total * 100) : 0;
+  const fullyAscended = Object.values(ascension).filter(v => v === 6).length;
   document.getElementById('owned-count').textContent = ownedCount;
   document.getElementById('total-count').textContent = total;
   document.getElementById('pct-count').textContent = pct + '%';
   document.getElementById('missing-count').textContent = total - ownedCount;
+  document.getElementById('fully-asc-count').textContent = fullyAscended;
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-label-right').textContent = `${ownedCount} / ${total}`;
 }
@@ -260,15 +286,24 @@ function buildTracker() {
         ? `<img src="${IMG}${c.img}" alt="${c.name}" loading="lazy">`
         : `<div class="placeholder-img">👤</div>`;
 
+      const ascLevel = ascension[c.id] || 0;
+      const nodes = [1,2,3,4,5,6].map(n =>
+        `<div class="asc-node ${ascLevel >= n ? 'unlocked' : ''}" data-char="${c.id}" data-node="${n}"></div>`
+      ).join('');
+
       card.innerHTML = `
         <div class="card-overlay">✓</div>
         <div class="card-photo">${photoHTML}</div>
         <div class="card-info">
           <div class="card-name">${c.name}</div>
           <div class="card-variant">${c.variant}</div>
-        </div>`;
+        </div>
+        <div class="asc-label"><span>A1</span><span>A6</span></div>
+        <div class="card-ascension">${nodes}</div>`;
 
-      card.addEventListener('click', () => {
+      // Click on card body = toggle owned
+      card.querySelector('.card-photo').addEventListener('click', (e) => {
+        e.stopPropagation();
         if (owned.has(c.id)) {
           owned.delete(c.id);
           card.classList.remove('owned');
@@ -281,6 +316,40 @@ function buildTracker() {
         save();
         updateStats();
         if (currentFilter !== 'all') applyFilter();
+      });
+
+      card.querySelector('.card-info').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (owned.has(c.id)) {
+          owned.delete(c.id);
+          card.classList.remove('owned');
+          card.classList.add('not-owned');
+        } else {
+          owned.add(c.id);
+          card.classList.add('owned');
+          card.classList.remove('not-owned');
+        }
+        save();
+        updateStats();
+        if (currentFilter !== 'all') applyFilter();
+      });
+
+      // Click on ascension nodes
+      card.querySelectorAll('.asc-node').forEach(node => {
+        node.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const charId = node.dataset.char;
+          const n = parseInt(node.dataset.node);
+          const cur = ascension[charId] || 0;
+          // Click same level = deselect down by 1, else set to that level
+          ascension[charId] = (cur === n) ? n - 1 : n;
+          // Re-render nodes
+          card.querySelectorAll('.asc-node').forEach(nd => {
+            nd.classList.toggle('unlocked', ascension[charId] >= parseInt(nd.dataset.node));
+          });
+          saveAscension();
+          updateStats();
+        });
       });
 
       grid.appendChild(card);
