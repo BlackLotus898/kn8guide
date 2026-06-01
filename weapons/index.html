@@ -226,7 +226,7 @@ const weaponData = [
       { stars: 5, name: 'GS-Amatsu Mikaboshi', users: [] },
       { stars: 5, name: 'GS-Takamimusubi', users: [] },
       { stars: 5, name: 'GS-3305', users: ['Gen Narumi (Japan\'s Strongest Combatant)'] },
-      { stars: 4, name: 'GS-Walrus 92', users: ['Gen Narumi (Sky-Piercing Bolt)'] },
+      { stars: 4, name: 'GS-Walrus 92', users: [] },
       { stars: 4, name: 'GS-Orca', users: [] },
       { stars: 3, name: 'Standard Gunsword', users: [] },
     ]
@@ -318,6 +318,7 @@ const charIds = {
   'Gen Narumi (Future Sight)': 'char-gen-narumi-fs',
   "Gen Narumi (Japan's Strongest Combatant)": 'char-gen-narumi-jsc',
   "Gen Narumi (Japan's Strongest Santa)": 'char-gen-narumi-jss',
+  'Gen Narumi (Sky-Piercing Bolt)': 'char-gen-narumi-spb',
   'Hakua Igarashi (Sincerity and Potential)': 'char-hakua-igarashi-sp',
   'Haruichi Izumo (Calculated Choice)': 'char-haruichi-izumo-cc',
   'Haruichi Izumo (The Clean-Cut Elite)': 'char-haruichi-izumo-tcce',
@@ -346,6 +347,7 @@ const charIds = {
   'Ryo Ikaruga (Passion and Responsibility)': 'char-ryo-ikaruga-pr',
   'Sagan Shinomiya (Dimensionally Distorted Destiny)': 'char-sagan-shinomiya-ddd',
   'Sagan Shinomiya (Over Limit)': 'char-sagan-shinomiya-ol',
+  'Soichiro Hoshina (Keystone of Western Japan)': 'char-soichiro-hoshina-kowj',
   'Soshiro Hoshina (Ax Technique Proficiency)': 'char-soshiro-hoshina-atp',
   'Soshiro Hoshina (Blade Specialist)': 'char-soshiro-hoshina-bs',
   'Soshiro Hoshina (Hoshina-Style Sword-Slay Technique)': 'char-soshiro-hoshina-hssst',
@@ -363,7 +365,7 @@ function starStr(n) {
 
 function userTagHTML(name) {
   const id = charIds[name];
-  if (id) return `<a href="../characters/${id}/" class="user-tag">${name}</a>`;
+  if (id) return `<a href="../Characters/${id.replace('char-', '')}/" class="user-tag">${name}</a>`;
   return `<span class="user-tag">${name}</span>`;
 }
 
