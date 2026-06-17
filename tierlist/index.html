@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tier List Maker — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1300px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 600px; }
+  .page { max-width: 1300px; margin: 0 auto; padding: 1.5rem 2rem 6rem; }
+
+  /* TOOLBAR */
+  .tl-toolbar { display: flex; gap: .6rem; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .tl-name-input { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: .2rem .5rem; flex: 1; min-width: 200px; max-width: 360px; outline: none; }
+  .tl-name-input:focus { border-color: var(--cyan); }
+  .tl-btn { padding: .5rem 1.1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .tl-btn:hover { color: var(--text); border-color: var(--text); }
+  .tl-btn.primary { color: var(--cyan); border-color: rgba(0,212,255,.3); }
+  .tl-btn.primary:hover { border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .tl-btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+  /* TIER ROWS */
+  .tier-board { display: flex; flex-direction: column; gap: 2px; margin-bottom: 1.5rem; border: 1px solid var(--border); }
+  .tier-row { display: grid; grid-template-columns: 90px 1fr 44px; min-height: 96px; }
+  .tier-label-cell { display: flex; align-items: center; justify-content: center; position: relative; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: #08090c; cursor: default; user-select: none; }
+  .tier-label-text { pointer-events: none; }
+  .tier-drop-cell { background: var(--panel); display: flex; flex-wrap: wrap; align-content: flex-start; gap: .5rem; padding: .6rem; border-left: 1px solid var(--border); border-right: 1px solid var(--border); transition: background .15s; }
+  .tier-drop-cell.drag-over { background: rgba(0,212,255,.06); }
+  .tier-controls-cell { background: var(--dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; padding: .4rem; }
+  .tier-ctrl-btn { width: 28px; height: 22px; display: flex; align-items: center; justify-content: center; background: var(--panel); border: 1px solid var(--border); color: var(--muted); font-size: .7rem; cursor: pointer; transition: all .15s; }
+  .tier-ctrl-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+  .tier-ctrl-btn.remove:hover { color: var(--red); border-color: var(--red); }
+
+  /* CHARACTER CHIP (used in tiers and pool) */
+  .char-chip { width: 64px; cursor: grab; position: relative; text-align: center; }
+  .char-chip:active { cursor: grabbing; }
+  .char-chip.dragging { opacity: .35; }
+  .char-chip-photo { width: 64px; height: 64px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); background: var(--dark); }
+  .char-chip-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .char-chip-name { font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: .5px; color: var(--muted); margin-top: .25rem; line-height: 1.2; max-height: 2.4em; overflow: hidden; }
+  .empty-tier-msg { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 1px; color: #3a4a5c; align-self: center; padding: 0 .4rem; }
+
+  /* TIER OPTIONS POPUP */
+  .tier-options-popup { position: absolute; top: 100%; left: 0; z-index: 50; background: var(--panel); border: 1px solid var(--border); padding: .8rem; width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,.5); display: none; }
+  .tier-options-popup.open { display: block; }
+  .tier-options-popup label { display: block; font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; margin-top: .7rem; }
+  .tier-options-popup label:first-child { margin-top: 0; }
+  .tier-options-popup input[type="text"] { width: 100%; background: var(--dark); border: 1px solid var(--border); color: var(--text); padding: .4rem .5rem; font-family: 'Rajdhani', sans-serif; font-size: .9rem; outline: none; }
+  .tier-options-popup input[type="text"]:focus { border-color: var(--cyan); }
+  .swatch-row { display: flex; gap: .35rem; flex-wrap: wrap; }
+  .swatch { width: 22px; height: 22px; border: 2px solid transparent; cursor: pointer; }
+  .swatch.selected { border-color: #fff; }
+
+  /* CHARACTER POOL */
+  .pool-section { border: 1px solid var(--border); background: var(--panel); }
+  .pool-header { display: flex; align-items: center; gap: .8rem; padding: .8rem 1rem; border-bottom: 1px solid var(--border); background: var(--dark); flex-wrap: wrap; }
+  .pool-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; }
+  .pool-search { flex: 1; min-width: 160px; background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: .4rem .7rem; font-family: 'Rajdhani', sans-serif; font-size: .9rem; outline: none; }
+  .pool-search:focus { border-color: var(--cyan); }
+  .pool-filter-btns { display: flex; gap: .3rem; }
+  .pool-filter-btn { padding: .35rem .7rem; font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .pool-filter-btn:hover { color: var(--text); }
+  .pool-filter-btn.active { color: var(--cyan); border-color: var(--cyan); }
+  .pool-grid { display: flex; flex-wrap: wrap; gap: .6rem; padding: 1rem; min-height: 110px; }
+  .pool-empty-msg { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: var(--muted); letter-spacing: 1px; padding: 1rem; }
+
+  @media (max-width: 700px) {
+    .tier-row { grid-template-columns: 56px 1fr 36px; min-height: 80px; }
+    .tier-label-cell { font-size: 1.3rem; }
+    .char-chip, .char-chip-photo { width: 50px; }
+    .char-chip-photo { height: 50px; }
+  }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Tools</p>
+  <h1 class="page-title">Tier List Maker</h1>
+  <p class="page-desc">Drag characters into tiers to build your own ranking. Customize tier labels and colors, add or remove rows, and export an image when you're done. Saved automatically on this device.</p>
+</div>
+<div class="page">
+
+  <div class="tl-toolbar">
+    <input type="text" class="tl-name-input" id="tlName" value="My Tier List" maxlength="40">
+    <button class="tl-btn primary" id="exportBtn">Export Image</button>
+    <button class="tl-btn" id="addTierBtn">+ Add Tier</button>
+    <button class="tl-btn danger" id="resetBtn">Reset All</button>
+  </div>
+
+  <div class="tier-board" id="tierBoard"></div>
+
+  <div class="pool-section">
+    <div class="pool-header">
+      <span class="pool-title">CHARACTER POOL</span>
+      <input type="text" class="pool-search" id="poolSearch" placeholder="Search characters...">
+      <div class="pool-filter-btns" id="poolFilters">
+        <button class="pool-filter-btn active" data-role="all">All</button>
+        <button class="pool-filter-btn" data-role="Attacker">Attacker</button>
+        <button class="pool-filter-btn" data-role="Defender">Defender</button>
+        <button class="pool-filter-btn" data-role="Supporter">Supporter</button>
+      </div>
+    </div>
+    <div class="pool-grid" id="poolGrid"></div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+const IMG = '../Kn8 Characters/';
+const STORAGE_KEY = 'kn8_tierlist_v1';
+
+const CHARACTERS = [
+  { id:'akari-minase-fc', name:'Akari Minase', variant:'Festive Christmas', stars:5, role:'Attacker', img:'AkariMinase-FC.png' },
+  { id:'akari-minase-hc', name:'Akari Minase', variant:'Heart of Compassion', stars:4, role:'Defender', img:'AkariMinase-HC.png' },
+  { id:'akari-minase-sa', name:'Akari Minase', variant:'Synchro Aptitude', stars:5, role:'Defender', img:'AkariMinase-SA.png' },
+  { id:'aoi-kaguragi-fd', name:'Aoi Kaguragi', variant:'Fruits of Diligence', stars:5, role:'Defender', img:'AoiKaguragi-FD.png' },
+  { id:'aoi-kaguragi-tprs', name:'Aoi Kaguragi', variant:'The Promising Rising Star', stars:4, role:'Attacker', img:'AoiKaguragi-TPRS.png' },
+  { id:'chester-tar', name:'Chester', variant:'The All-Rounder', stars:5, role:'Supporter', img:'Chester-TAR.png' },
+  { id:'eiji-hasegawa-rhms', name:'Eiji Hasegawa', variant:'Right-Hand Man of the Strongest', stars:4, role:'Attacker', img:'EijiHasegawa-RHMS.png' },
+  { id:'gen-narumi-fs', name:'Gen Narumi', variant:'Future Sight', stars:5, role:'Attacker', img:'GenNarumi-FS.png' },
+  { id:'gen-narumi-jsc', name:'Gen Narumi', variant:'Japan\'s Strongest Combatant', stars:5, role:'Attacker', img:'GenNarumi-JSC.png' },
+  { id:'hikari-shinomiya-tv', name:'Hikari Shinomiya', variant:'The Valkyrie', stars:5, role:'Attacker', img:'HikariShinomiya-TV.png' },
+  { id:'gen-narumi-jss', name:'Gen Narumi', variant:'Japan\'s Strongest Santa', stars:5, role:'Attacker', img:'GenNarumi-JSS.png' },
+  { id:'gen-narumi-spb', name:'Gen Narumi', variant:'Sky-Piercing Bolt', stars:5, role:'Defender', img:'GenNarumi-SPB.png' },
+  { id:'hakua-igarashi-sp', name:'Hakua Igarashi', variant:'Sincerity and Potential', stars:4, role:'Defender', img:'HakuaIgarashi-SP.png' },
+  { id:'haruichi-izumo-cc', name:'Haruichi Izumo', variant:'Calculated Choice', stars:5, role:'Supporter', img:'HaruichiIzumo-CC.png' },
+  { id:'haruichi-izumo-tcce', name:'Haruichi Izumo', variant:'The Clean-Cut Elite', stars:4, role:'Supporter', img:'HaruichiIzumo-TCCE.png' },
+  { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi', variant:'Latent Talent', stars:4, role:'Supporter', img:'IharuFuruhashi-LT.png' },
+  { id:'isao-shinomiya-pf', name:'Isao Shinomiya', variant:'Prime Fist', stars:5, role:'Attacker', img:'IsaoShinomiya-PF.png' },
+  { id:'isao-shinomiya-tuiw', name:'Isao Shinomiya', variant:'The Unbreakable Iron Wall', stars:5, role:'Defender', img:'IsaoShinomiya-TUIW.png' },
+  { id:'jura-igarashi-gd', name:'Jura Igarashi', variant:'Grit and Duty', stars:5, role:'Supporter', img:'JuraIgarashi-GD.png' },
+  { id:'kafka-hibino-tmwbk', name:'Kafka Hibino', variant:'The Man Who Became a Kaiju', stars:4, role:'Attacker', img:'KafkaHibino-TMWBK.png' },
+  { id:'kafka-hibino-tmwbr', name:'Kafka Hibino', variant:'The Man Who Became a Reindeer', stars:4, role:'Supporter', img:'KafkaHibino-TMWBR.png' },
+  { id:'keiji-itami-cq', name:'Keiji Itami', variant:'Calm and Quiet', stars:4, role:'Supporter', img:'KeijiItami-CQ.png' },
+  { id:'kikoru-shinomiya-ev', name:'Kikoru Shinomiya', variant:'Evolving Talent', stars:5, role:'Attacker', img:'KikoruShinomiya-EV.png' },
+  { id:'kikoru-shinomiya-fpc', name:'Kikoru Shinomiya', variant:'Full-Power Christmas', stars:5, role:'Defender', img:'KikoruShinomiya-FPC.png' },
+  { id:'kikoru-shinomiya-glf', name:'Kikoru Shinomiya', variant:'Guiding Light of the Future', stars:5, role:'Attacker', img:'KikoruShinomiya-GLF.png' },
+  { id:'kikoru-shinomiya-tiw', name:'Kikoru Shinomiya', variant:'The Inherited Will', stars:5, role:'Attacker', img:'KikoruShinomiya-TIW.png' },
+  { id:'kikoru-shinomiya-tmbp', name:'Kikoru Shinomiya', variant:'The Mission to Be Perfect', stars:4, role:'Attacker', img:'KikoruShinomiya-TMBP.png' },
+  { id:'kn8-f98', name:'Kaiju No. 8', variant:'Fortitude 9.8', stars:5, role:'Attacker', img:'KN8-F98.png' },
+  { id:'kn8-sv', name:'Kaiju No. 8', variant:'Scorching Variant', stars:5, role:'Attacker', img:'KN8-SV.png' },
+  { id:'kota-tachibana-fdff', name:'Kota Tachibana', variant:'First Division\'s Feral Force', stars:4, role:'Defender', img:'KotaTachibana-FDFF.png' },
+  { id:'mina-ashiro-agh', name:'Mina Ashiro', variant:'Aiming for Greater Heights', stars:4, role:'Supporter', img:'MinaAshiro-AGH.png' },
+  { id:'mina-ashiro-os', name:'Mina Ashiro', variant:'Off the Scale', stars:5, role:'Attacker', img:'MinaAshiro-OS.png' },
+  { id:'mina-ashiro-sc', name:'Mina Ashiro', variant:'Superb Combination', stars:5, role:'Attacker', img:'MinaAshiro-SC.png' },
+  { id:'reno-ichikawa-sa', name:'Reno Ichikawa', variant:'Signs of Awakening', stars:4, role:'Attacker', img:'RenoIchikawa-SA.png' },
+  { id:'reno-ichikawa-tcu', name:'Reno Ichikawa', variant:'The Compatible User', stars:5, role:'Attacker', img:'RenoIchikawa-TCU.png' },
+  { id:'rin-shinonome-ah', name:'Rin Shinonome', variant:'Aspiration and Honor', stars:5, role:'Attacker', img:'RinShinonome-AH.png' },
+  { id:'rin-shinonome-cfr', name:'Rin Shinonome', variant:'Cross-Forged Refinement', stars:5, role:'Attacker', img:'RinShinonome-CFR.png' },
+  { id:'ryo-ikaruga-pr', name:'Ryo Ikaruga', variant:'Passion and Responsibility', stars:4, role:'Supporter', img:'RyoIkaruga-PR.png' },
+  { id:'sagan-shinomiya-ddd', name:'Sagan Shinomiya', variant:'Dimensionally Distorted Destiny', stars:5, role:'Defender', img:'SaganShinomiya-DDD.png' },
+  { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya', variant:'Over Limit', stars:5, role:'Attacker', img:'SaganShinomiya-OL.png' },
+  { id:'soichiro-hoshina-kowj', name:'Soichiro Hoshina', variant:'Keystone of Western Japan', stars:5, role:'Supporter', img:'SoichiroHoshina-KOWJ.png' },
+  { id:'soshiro-hoshina-atp', name:'Soshiro Hoshina', variant:'Ax Technique Proficiency', stars:5, role:'Supporter', img:'SoshiroHoshina-ATP.png' },
+  { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina', variant:'Blade Specialist', stars:4, role:'Supporter', img:'SoshiroHoshina-BS.png' },
+  { id:'soshiro-hoshina-hssst', name:'Soshiro Hoshina', variant:'Hoshina-Style Sword-Slay Technique', stars:5, role:'Attacker', img:'SoshiroHoshina-HSSST.png' },
+  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina', variant:'New Possibilities', stars:5, role:'Attacker', img:'SoshiroHoshina-NP.png' },
+  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina', variant:'United Front', stars:5, role:'Attacker', img:'SoshiroHoshina-UF.png' },
+  { id:'suited-uc', name:'Suited', variant:'Unbridled Curiosity', stars:5, role:'Attacker', img:'Suited-UC.png' },
+  { id:'tae-nakanoshima-tkepl', name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader', stars:4, role:'Attacker', img:'TaeNakanoshima-TKEPL.png' },
+  { id:'wang-meixing-nwc', name:'Wang Meixing', variant:'Negotiator of Wit and Charm', stars:5, role:'Supporter', img:'WangMeixing-NWC.png' },
+  { id:'zoee-wanderfalke-twu', name:'Zoee Wanderfalke', variant:'The Weapon Unsealed', stars:5, role:'Attacker', img:'ZoeeWanderfalke-TWU.png' },
+];
+
+const SWATCHES = ['#e8001a','#f0b400','#40d080','#00d4ff','#a040f0','#4d9fff','#ff8c40','#c8a0ff','#ff6090','#888888'];
+
+const DEFAULT_TIERS = [
+  { id:'t1', label:'S', color:'#e8001a', charIds:[] },
+  { id:'t2', label:'A', color:'#f0b400', charIds:[] },
+  { id:'t3', label:'B', color:'#40d080', charIds:[] },
+  { id:'t4', label:'C', color:'#00d4ff', charIds:[] },
+  { id:'t5', label:'D', color:'#888888', charIds:[] },
+];
+
+let state = loadState();
+let draggedCharId = null;
+let openPopupTierId = null;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.tiers && parsed.tiers.length) return parsed;
+    }
+  } catch (e) {}
+  return { name: 'My Tier List', tiers: JSON.parse(JSON.stringify(DEFAULT_TIERS)) };
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function getCharById(id) { return CHARACTERS.find(c => c.id === id); }
+
+function getPlacedIds() {
+  const placed = new Set();
+  state.tiers.forEach(t => t.charIds.forEach(id => placed.add(id)));
+  return placed;
+}
+
+function charChipHTML(char, draggable) {
+  return `<div class="char-chip" draggable="${draggable}" data-char-id="${char.id}">
+    <div class="char-chip-photo"><img src="${IMG}${char.img}" alt="${char.name}" loading="lazy"></div>
+    <div class="char-chip-name">${char.name}${char.variant ? ' ('+char.variant+')' : ''}</div>
+  </div>`;
+}
+
+function renderBoard() {
+  const board = document.getElementById('tierBoard');
+  board.innerHTML = state.tiers.map(tier => {
+    const chars = tier.charIds.map(getCharById).filter(Boolean);
+    const chipsHTML = chars.length
+      ? chars.map(c => charChipHTML(c, true)).join('')
+      : `<span class="empty-tier-msg">Drop characters here</span>`;
+    return `
+    <div class="tier-row" data-tier-id="${tier.id}">
+      <div class="tier-label-cell" style="background:${tier.color};" data-tier-id="${tier.id}">
+        <span class="tier-label-text">${escapeHTML(tier.label)}</span>
+        <div class="tier-options-popup" data-popup-for="${tier.id}">
+          <label>Tier Label</label>
+          <input type="text" class="tier-label-input" data-tier-id="${tier.id}" value="${escapeHTML(tier.label)}" maxlength="12">
+          <label>Tier Color</label>
+          <div class="swatch-row">
+            ${SWATCHES.map(sw => `<div class="swatch ${sw === tier.color ? 'selected' : ''}" style="background:${sw};" data-tier-id="${tier.id}" data-color="${sw}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="tier-drop-cell" data-tier-id="${tier.id}">${chipsHTML}</div>
+      <div class="tier-controls-cell">
+        <button class="tier-ctrl-btn" data-action="up" data-tier-id="${tier.id}" title="Move tier up">▲</button>
+        <button class="tier-ctrl-btn" data-action="options" data-tier-id="${tier.id}" title="Edit tier">⋯</button>
+        <button class="tier-ctrl-btn remove" data-action="remove" data-tier-id="${tier.id}" title="Remove tier">✕</button>
+        <button class="tier-ctrl-btn" data-action="down" data-tier-id="${tier.id}" title="Move tier down">▼</button>
+      </div>
+    </div>`;
+  }).join('');
+  attachBoardEvents();
+}
+
+function escapeHTML(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderPool() {
+  const grid = document.getElementById('poolGrid');
+  const placed = getPlacedIds();
+  const search = document.getElementById('poolSearch').value.trim().toLowerCase();
+  const activeFilter = document.querySelector('.pool-filter-btn.active').dataset.role;
+
+  let pool = CHARACTERS.filter(c => !placed.has(c.id));
+  if (activeFilter !== 'all') pool = pool.filter(c => c.role === activeFilter);
+  if (search) {
+    pool = pool.filter(c =>
+      c.name.toLowerCase().includes(search) ||
+      c.variant.toLowerCase().includes(search)
+    );
+  }
+
+  if (!pool.length) {
+    grid.innerHTML = `<div class="pool-empty-msg">// NO CHARACTERS MATCH — all placed or filtered out</div>`;
+    return;
+  }
+  grid.innerHTML = pool.map(c => charChipHTML(c, true)).join('');
+  attachPoolDragEvents();
+}
+
+function attachPoolDragEvents() {
+  document.querySelectorAll('#poolGrid .char-chip').forEach(chip => {
+    chip.addEventListener('dragstart', onDragStart);
+    chip.addEventListener('dragend', onDragEnd);
+  });
+}
+
+function attachBoardEvents() {
+  document.querySelectorAll('.tier-drop-cell .char-chip').forEach(chip => {
+    chip.addEventListener('dragstart', onDragStart);
+    chip.addEventListener('dragend', onDragEnd);
+  });
+  document.querySelectorAll('.tier-drop-cell').forEach(cell => {
+    cell.addEventListener('dragover', e => { e.preventDefault(); cell.classList.add('drag-over'); });
+    cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
+    cell.addEventListener('drop', onDropOnTier);
+  });
+  document.querySelectorAll('.tier-ctrl-btn').forEach(btn => {
+    btn.addEventListener('click', onTierControlClick);
+  });
+  document.querySelectorAll('.tier-label-cell').forEach(cell => {
+    cell.addEventListener('click', e => {
+      if (e.target.closest('.tier-options-popup')) return;
+      togglePopup(cell.dataset.tierId);
+    });
+  });
+  document.querySelectorAll('.tier-label-input').forEach(input => {
+    input.addEventListener('input', e => {
+      const tier = state.tiers.find(t => t.id === e.target.dataset.tierId);
+      if (tier) {
+        tier.label = e.target.value;
+        const labelCell = document.querySelector(`.tier-label-cell[data-tier-id="${tier.id}"] .tier-label-text`);
+        if (labelCell) labelCell.textContent = tier.label;
+        saveState();
+      }
+    });
+    input.addEventListener('click', e => e.stopPropagation());
+  });
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.addEventListener('click', e => {
+      e.stopPropagation();
+      const tier = state.tiers.find(t => t.id === e.target.dataset.tierId);
+      if (tier) {
+        tier.color = e.target.dataset.color;
+        saveState();
+        renderBoard();
+        openPopupTierId = tier.id;
+        const popup = document.querySelector(`.tier-options-popup[data-popup-for="${tier.id}"]`);
+        if (popup) popup.classList.add('open');
+      }
+    });
+  });
+  // Re-open popup if it was open before re-render
+  if (openPopupTierId) {
+    const popup = document.querySelector(`.tier-options-popup[data-popup-for="${openPopupTierId}"]`);
+    if (popup) popup.classList.add('open');
+  }
+}
+
+function togglePopup(tierId) {
+  const isOpen = openPopupTierId === tierId;
+  openPopupTierId = isOpen ? null : tierId;
+  document.querySelectorAll('.tier-options-popup').forEach(p => p.classList.remove('open'));
+  if (!isOpen) {
+    const popup = document.querySelector(`.tier-options-popup[data-popup-for="${tierId}"]`);
+    if (popup) popup.classList.add('open');
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.tier-label-cell')) {
+    openPopupTierId = null;
+    document.querySelectorAll('.tier-options-popup').forEach(p => p.classList.remove('open'));
+  }
+});
+
+function onTierControlClick(e) {
+  e.stopPropagation();
+  const action = e.currentTarget.dataset.action;
+  const tierId = e.currentTarget.dataset.tierId;
+  const idx = state.tiers.findIndex(t => t.id === tierId);
+  if (idx === -1) return;
+
+  if (action === 'up' && idx > 0) {
+    [state.tiers[idx-1], state.tiers[idx]] = [state.tiers[idx], state.tiers[idx-1]];
+  } else if (action === 'down' && idx < state.tiers.length - 1) {
+    [state.tiers[idx+1], state.tiers[idx]] = [state.tiers[idx], state.tiers[idx+1]];
+  } else if (action === 'remove') {
+    if (state.tiers.length <= 1) { alert('You need at least one tier.'); return; }
+    if (state.tiers[idx].charIds.length && !confirm('This tier has characters in it. Remove anyway? They will return to the pool.')) return;
+    state.tiers.splice(idx, 1);
+  } else if (action === 'options') {
+    togglePopup(tierId);
+    return;
+  }
+  saveState();
+  renderBoard();
+  renderPool();
+}
+
+function onDragStart(e) {
+  draggedCharId = e.currentTarget.dataset.charId;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', draggedCharId);
+}
+
+function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  draggedCharId = null;
+}
+
+function onDropOnTier(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const charId = e.dataTransfer.getData('text/plain') || draggedCharId;
+  if (!charId) return;
+  const targetTierId = e.currentTarget.dataset.tierId;
+
+  // Remove from any tier it's currently in
+  state.tiers.forEach(t => { t.charIds = t.charIds.filter(id => id !== charId); });
+  // Add to target tier
+  const targetTier = state.tiers.find(t => t.id === targetTierId);
+  if (targetTier) targetTier.charIds.push(charId);
+
+  saveState();
+  renderBoard();
+  renderPool();
+}
+
+// Allow dropping back into the pool to remove from tiers
+document.getElementById('poolGrid').addEventListener('dragover', e => e.preventDefault());
+document.getElementById('poolGrid').addEventListener('drop', e => {
+  e.preventDefault();
+  const charId = e.dataTransfer.getData('text/plain') || draggedCharId;
+  if (!charId) return;
+  state.tiers.forEach(t => { t.charIds = t.charIds.filter(id => id !== charId); });
+  saveState();
+  renderBoard();
+  renderPool();
+});
+
+document.getElementById('tlName').addEventListener('input', e => {
+  state.name = e.target.value;
+  saveState();
+});
+
+document.getElementById('poolSearch').addEventListener('input', renderPool);
+
+document.getElementById('poolFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.pool-filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.pool-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPool();
+});
+
+document.getElementById('addTierBtn').addEventListener('click', () => {
+  const newId = 't' + Date.now();
+  state.tiers.push({ id: newId, label: 'New', color: '#888888', charIds: [] });
+  saveState();
+  renderBoard();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('Reset the entire tier list? This clears all placements and restores S/A/B/C/D tiers.')) return;
+  state = { name: 'My Tier List', tiers: JSON.parse(JSON.stringify(DEFAULT_TIERS)) };
+  document.getElementById('tlName').value = state.name;
+  saveState();
+  renderBoard();
+  renderPool();
+});
+
+document.getElementById('exportBtn').addEventListener('click', exportImage);
+
+async function exportImage() {
+  const exportBtn = document.getElementById('exportBtn');
+  exportBtn.textContent = 'Generating...';
+  exportBtn.disabled = true;
+
+  try {
+    const ROW_H = 110;
+    const LABEL_W = 110;
+    const PADDING = 24;
+    const TITLE_H = 64;
+    const CHIP_W = 84;
+    const CHIP_GAP = 10;
+
+    const canvasWidth = 1000;
+    const rowContentWidth = canvasWidth - LABEL_W - PADDING * 2;
+    const chipsPerRow = Math.max(1, Math.floor((rowContentWidth + CHIP_GAP) / (CHIP_W + CHIP_GAP)));
+
+    // Pre-calc row heights based on how many chip-rows are needed
+    const rowHeights = state.tiers.map(tier => {
+      const n = tier.charIds.length;
+      const lines = n === 0 ? 1 : Math.ceil(n / chipsPerRow);
+      return Math.max(ROW_H, lines * (CHIP_W + 34) + 20);
+    });
+
+    const totalHeight = TITLE_H + rowHeights.reduce((a,b) => a+b, 0) + PADDING * 2;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasWidth;
+    canvas.height = totalHeight;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#080b10';
+    ctx.fillRect(0, 0, canvasWidth, totalHeight);
+
+    // Title
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 32px Rajdhani, sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillText(state.name || 'My Tier List', PADDING, PADDING);
+    ctx.fillStyle = '#5a7090';
+    ctx.font = '11px monospace';
+    ctx.fillText('K8GUIDE.COM — TIER LIST MAKER', PADDING, PADDING + 38);
+
+    // Pre-load all images used
+    const allCharIds = state.tiers.flatMap(t => t.charIds);
+    const imageCache = {};
+    await Promise.all(allCharIds.map(id => new Promise(resolve => {
+      const char = getCharById(id);
+      if (!char) return resolve();
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => { imageCache[id] = img; resolve(); };
+      img.onerror = () => resolve();
+      img.src = IMG + char.img;
+    })));
+
+    let y = TITLE_H + PADDING;
+    state.tiers.forEach((tier, i) => {
+      const rowH = rowHeights[i];
+      // Label cell
+      ctx.fillStyle = tier.color;
+      ctx.fillRect(PADDING, y, LABEL_W, rowH);
+      ctx.fillStyle = '#08090c';
+      ctx.font = '700 28px "Rajdhani", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(tier.label, PADDING + LABEL_W/2, y + rowH/2);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+
+      // Drop cell background
+      ctx.fillStyle = '#0d1220';
+      ctx.fillRect(PADDING + LABEL_W, y, rowContentWidth, rowH);
+      ctx.strokeStyle = '#1e2d45';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(PADDING + LABEL_W, y, rowContentWidth, rowH);
+
+      // Chips
+      let cx = PADDING + LABEL_W + 12;
+      let cy = y + 10;
+      let col = 0;
+      tier.charIds.forEach(id => {
+        const char = getCharById(id);
+        const img = imageCache[id];
+        if (img) {
+          ctx.drawImage(img, cx, cy, CHIP_W, CHIP_W);
+        } else {
+          ctx.fillStyle = '#1e2d45';
+          ctx.fillRect(cx, cy, CHIP_W, CHIP_W);
+        }
+        ctx.strokeStyle = '#1e2d45';
+        ctx.strokeRect(cx, cy, CHIP_W, CHIP_W);
+
+        if (char) {
+          ctx.fillStyle = '#c8d8ea';
+          ctx.font = '9px monospace';
+          ctx.textAlign = 'center';
+          const label = char.name.length > 14 ? char.name.slice(0,13)+'…' : char.name;
+          ctx.fillText(label, cx + CHIP_W/2, cy + CHIP_W + 6);
+          ctx.textAlign = 'left';
+        }
+
+        col++;
+        if (col >= chipsPerRow) {
+          col = 0;
+          cx = PADDING + LABEL_W + 12;
+          cy += CHIP_W + 34;
+        } else {
+          cx += CHIP_W + CHIP_GAP;
+        }
+      });
+
+      y += rowH;
+    });
+
+    const link = document.createElement('a');
+    link.download = (state.name || 'tier-list').replace(/[^a-z0-9\-_ ]/gi,'').trim().replace(/\s+/g,'-') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong generating the image. Try again, or screenshot the page instead.');
+  } finally {
+    exportBtn.textContent = 'Export Image';
+    exportBtn.disabled = false;
+  }
+}
+
+renderBoard();
+renderPool();
+</script>
+</body>
+</html>
