@@ -1,6 +1,16 @@
 {
-  "lastUpdated": "2026-06-18",
+  "lastUpdated": "2026-06-19",
   "announcements": [
+    {
+      "id": "2026-06-19-x-coming-soon-kaijuno8-k8game",
+      "date": "2026-06-19",
+      "type": "game",
+      "title": "COMING SOON...\n\n#KaijuNo8 #K8Game",
+      "summary": "COMING SOON... #KaijuNo8 #K8Game",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2067895164178407893#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2067895164178407893#m",
+      "autoAdded": true
+    },
     {
       "id": "2026-06-18-rin-cfr-live",
       "date": "2026-06-18",
@@ -10,12 +20,60 @@
       "link": "banners/"
     },
     {
+      "id": "2026-06-18-x-new-character-skill-showcase-the-resurgent-command",
+      "date": "2026-06-18",
+      "type": "game",
+      "title": "◤　New Character \n　　Skill Showcase 　◢\n\n[The Resurgent Commander] Sagan Shinomiya joins t...",
+      "summary": "◤ New Character Skill Showcase ◢ [The Resurgent Commander] Sagan Shinomiya joins the fight on June 20 JST (UTC+9)! Check out her skill showcase video! With her Ultimate, she enters Command state and boosts all allies' CRIT Rate! She is a Support whose Extra Attacks can additional",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2067532773565546738#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2067532773565546738#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/amplify_video_thumb%2F2067118287004262400%2Fimg%2FIgfrflnvIH2us0lt.jpg",
+      "category": "character"
+    },
+    {
+      "id": "2026-06-18-x-kaijuno8thegame-content-schedule-a-new-character-i",
+      "date": "2026-06-18",
+      "type": "game",
+      "title": "◤　#KaijuNo8THEGAME\n　  　 Content Schedule  　 ◢\n\nA new character is scheduled to arrive o...",
+      "summary": "◤ #KaijuNo8THEGAME Content Schedule ◢ A new character is scheduled to arrive on June 20 JST (UTC+9)! A Special Event covering the early days of CLOZER will also launch simultaneously! Plus, Total War arrives on June 24 JST (UTC+9)! Train your squad and get ready for the challenge",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2067457273727734003#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2067457273727734003#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHK_y6g6bUAAj_b-.jpg",
+      "category": "event"
+    },
+    {
+      "id": "2026-06-18-x-data-update-notice-a-data-update-is-scheduled-for-",
+      "date": "2026-06-18",
+      "type": "game",
+      "title": "[ Data Update Notice ]\n\nA data update is scheduled for the following time:\n\n■ Jun 20, 1...",
+      "summary": "[ Data Update Notice ] A data update is scheduled for the following time: ■ Jun 20, 12:00 PM JST (UTC+9) *When the data update is applied, you will be returned to the title screen. Please rest assured that your game progress will not be lost during this process. Check the link be",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2067445949270724703#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2067445949270724703#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHK_pXRFa0AAP0qT.jpg",
+      "category": "update"
+    },
+    {
       "id": "2026-06-17-narumi-jsc-up",
       "date": "2026-06-17",
       "type": "site",
       "title": "Gen Narumi (Japan's Strongest Combatant) Unlocked Potential Added",
       "summary": "Full UP1–UP5 data added to his character page, plus a new Unlocked Potential hub under Game Guide.",
       "link": "characters/gen-narumi-jsc/"
+    },
+    {
+      "id": "2026-06-17-x-the-resurgent-commander-sagan-shinomiya-coming-jun",
+      "date": "2026-06-17",
+      "type": "game",
+      "title": "◤  [The Resurgent Commander] \n 　 　 　 Sagan Shinomiya\n　        　 Coming June 20 　　 　 ◢\n\n...",
+      "summary": "◤ [The Resurgent Commander] Sagan Shinomiya Coming June 20 ◢ [The Resurgent Commander] Sagan Shinomiya will be added to the game in the upcoming update on June 20 JST (UTC+9)! The detailed skill showcase for Sagan in her prototype suit will be revealed on June 18 JST (UTC+9)! #K8",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2067170392607736224#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2067170392607736224#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHK58YLDaAAA73Mu.jpg",
+      "category": "character"
     },
     {
       "id": "2026-06-16-sagan-rc-announced",
