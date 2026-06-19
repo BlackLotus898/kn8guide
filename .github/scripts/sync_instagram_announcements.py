@@ -40,6 +40,24 @@ from pathlib import Path
 import requests
 
 IG_USERNAME = "kaijuno8_thegame_en"
+
+CATEGORY_KEYWORDS = {
+    "gacha": ["pickup gacha", "gacha", "pickup character", "pickup banner"],
+    "event": ["special event", "event trailer", "large conquest", "conquest", "campaign", "rewards campaign"],
+    "update": ["data update", "content schedule", "uniparts added", "training &", "patch notes"],
+    "character": ["character skill showcase", "character trailer", "new character", "character voice clip", "skill showcase"],
+}
+
+def detect_category(title, summary):
+    """Best-effort keyword match against post text. Returns None if no
+    keyword matches, so callers can fall back to a generic 'news' bucket
+    rather than guessing wrong."""
+    text = f"{title} {summary}".lower()
+    for category, keywords in CATEGORY_KEYWORDS.items():
+        for kw in keywords:
+            if kw in text:
+                return category
+    return None
 ANNOUNCEMENTS_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "announcements.json"
 
 # Instagram's unofficial public web profile endpoint. This URL pattern
@@ -143,6 +161,7 @@ def main():
         title = caption if len(caption) <= 90 else caption[:87] + "..."
         # Collapse newlines so the card/list summary doesn't break layout
         summary = re.sub(r"\s+", " ", caption).strip()[:280]
+        category = detect_category(title, summary)
 
         new_entry = {
             "id": slugify_id(date_str, caption or post["shortcode"]),
@@ -157,6 +176,8 @@ def main():
         }
         if post.get("image"):
             new_entry["image"] = post["image"]
+        if category:
+            new_entry["category"] = category
 
         data["announcements"].append(new_entry)
         existing_links.add(post["link"])

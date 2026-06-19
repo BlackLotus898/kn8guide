@@ -136,6 +136,25 @@ def clean_html_summary(raw_html):
     return text
 
 
+CATEGORY_KEYWORDS = {
+    "gacha": ["pickup gacha", "gacha", "pickup character", "pickup banner"],
+    "event": ["special event", "event trailer", "large conquest", "conquest", "campaign", "rewards campaign"],
+    "update": ["data update", "content schedule", "uniparts added", "training &", "patch notes"],
+    "character": ["character skill showcase", "character trailer", "new character", "character voice clip", "skill showcase"],
+}
+
+def detect_category(title, summary):
+    """Best-effort keyword match against post text. Returns None if no
+    keyword matches, so callers can fall back to a generic 'news' bucket
+    rather than guessing wrong."""
+    text = f"{title} {summary}".lower()
+    for category, keywords in CATEGORY_KEYWORDS.items():
+        for kw in keywords:
+            if kw in text:
+                return category
+    return None
+
+
 def main():
     feed = fetch_feed()
     if feed is None:
@@ -171,6 +190,8 @@ def main():
         summary = clean_html_summary(raw_summary)
         image_url = extract_image_url(entry)
 
+        category = detect_category(title, summary)
+
         new_entry = {
             "id": slugify_id(date_str, raw_title),
             "date": date_str,
@@ -183,6 +204,8 @@ def main():
         }
         if image_url:
             new_entry["image"] = image_url
+        if category:
+            new_entry["category"] = category
 
         data["announcements"].append(new_entry)
         existing_links.add(link)
