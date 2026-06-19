@@ -32,8 +32,12 @@
   `;
   document.head.appendChild(style);
 
-  // Base path - hardcoded for this repo
-  const base = '/kn8guide/';
+  // Base path - dynamically detected so this works on any repo/clone
+  // (e.g. the live site at /kn8guide/, a staging copy at /kn8-test-/, etc.)
+  // GitHub Pages project sites always serve from /<repo-name>/, so we grab
+  // the first path segment from the current URL instead of hardcoding it.
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const base = pathParts.length > 0 ? '/' + pathParts[0] + '/' : '/';
 
   const NAV_HTML = `
 <a href="${base}" class="nav-logo">K8<span>GUIDE</span></a>
@@ -82,6 +86,7 @@
       <li><a href="${base}combat/uniparts/">Uniparts &amp; Set Effects</a></li>
     </ul>
   </li>
+  <a href="${base}announcements/">Announcements</a>
   <a href="${base}socials/">Socials</a>
   <a href="${base}feedback/">Feedback</a>
 </ul>`;

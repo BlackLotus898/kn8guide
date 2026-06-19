@@ -1,0 +1,54 @@
+name: Sync Social Announcements
+
+# Checks the official Kaiju No. 8 The Game X and Instagram accounts for
+# new posts and appends them to data/announcements.json as "game" type
+# entries.
+#
+# IMPORTANT — both steps below are experimental/fragile:
+# Neither X nor Instagram offer a free, official way to read a public
+# account's posts. This workflow relies on unofficial bridges/endpoints
+# that can break or get blocked at any time with no warning. X is the
+# primary source (slightly more mature workaround ecosystem via Nitter);
+# Instagram is a secondary, even less reliable attempt. If either step
+# starts failing in the Actions tab, check the comments at the top of
+# the relevant script in .github/scripts/ for details on why and what
+# to check first.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:        # allows manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests feedparser
+
+      - name: Run X sync script
+        run: python .github/scripts/sync_x_announcements.py
+        continue-on-error: true
+
+      - name: Run Instagram sync script
+        run: python .github/scripts/sync_instagram_announcements.py
+        continue-on-error: true
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "kn8guide-bot"
+          git config user.email "actions@github.com"
+          git add data/announcements.json
+          git diff --staged --quiet || git commit -m "Auto-update: new social announcements"
+          git push

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 600px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  .filter-row { display: flex; gap: .4rem; margin-bottom: 1.5rem; }
+  .filter-btn { padding: .45rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .filter-btn:hover { color: var(--text); }
+  .filter-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+
+  .ann-list { display: flex; flex-direction: column; gap: 1rem; }
+  .ann-card { display: block; text-decoration: none; border: 1px solid var(--border); background: var(--panel); padding: 1.2rem 1.4rem; transition: border-color .2s; position: relative; overflow: hidden; }
+  .ann-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .ann-card.type-game::before { background: var(--cyan); }
+  .ann-card.type-site::before { background: var(--gold); }
+  .ann-card:hover { border-color: var(--text); }
+  .ann-card-layout { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .ann-card-img { width: 140px; height: 90px; object-fit: cover; flex-shrink: 0; background: var(--dark); border: 1px solid var(--border); }
+  .ann-card-body { flex: 1; min-width: 0; }
+  @media (max-width: 560px) { .ann-card-layout { flex-direction: column; } .ann-card-img { width: 100%; height: 160px; } }
+  .ann-meta { display: flex; align-items: center; gap: .7rem; margin-bottom: .5rem; }
+  .ann-date { font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px; color: var(--muted); }
+  .ann-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; text-transform: uppercase; padding: .15rem .5rem; border: 1px solid; }
+  .ann-tag.type-game { color: var(--cyan); border-color: rgba(0,212,255,.4); }
+  .ann-tag.type-site { color: var(--gold); border-color: rgba(240,180,0,.4); }
+  .ann-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; color: #fff; margin-bottom: .4rem; }
+  .ann-summary { font-size: .95rem; color: var(--muted); line-height: 1.5; }
+  .ann-empty { text-align: center; padding: 3rem; font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); letter-spacing: 1px; }
+  .ann-loading { text-align: center; padding: 3rem; font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// News</p>
+  <h1 class="page-title">Announcements</h1>
+  <p class="page-desc">Site updates and official game news, all in one place.</p>
+</div>
+<div class="page">
+
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="game">Game News</button>
+    <button class="filter-btn" data-filter="site">Site Updates</button>
+  </div>
+
+  <div class="ann-list" id="annList">
+    <div class="ann-loading">// LOADING...</div>
+  </div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+let allAnnouncements = [];
+let activeFilter = 'all';
+
+fetch('../data/announcements.json')
+  .then(r => r.json())
+  .then(data => {
+    allAnnouncements = (data.announcements || []).sort((a,b) => b.date.localeCompare(a.date));
+    render();
+  })
+  .catch(() => {
+    document.getElementById('annList').innerHTML = '<div class="ann-empty">// COULD NOT LOAD ANNOUNCEMENTS</div>';
+  });
+
+function formatDate(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function render() {
+  const list = document.getElementById('annList');
+  const filtered = activeFilter === 'all' ? allAnnouncements : allAnnouncements.filter(a => a.type === activeFilter);
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="ann-empty">// NO ANNOUNCEMENTS YET</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(a => `
+    <a href="${a.link || '#'}" class="ann-card type-${a.type}" target="${a.autoAdded ? '_blank' : '_self'}">
+      <div class="ann-card-layout">
+        ${a.image ? `<img class="ann-card-img" src="${a.image}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+        <div class="ann-card-body">
+          <div class="ann-meta">
+            <span class="ann-date">${formatDate(a.date)}</span>
+            <span class="ann-tag type-${a.type}">${a.type === 'game' ? 'Game News' : 'Site Update'}</span>
+          </div>
+          <div class="ann-title">${a.title}</div>
+          <p class="ann-summary">${a.summary}</p>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+document.getElementById('filterRow').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  render();
+});
+</script>
+</body>
+</html>

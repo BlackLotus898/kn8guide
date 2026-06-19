@@ -348,6 +348,32 @@
   }
   footer a { color: var(--muted); text-decoration: none; }
   footer a:hover { color: var(--cyan); }
+
+  /* ANNOUNCEMENTS BANNER */
+  .ann-banner { display: none; background: linear-gradient(90deg, rgba(0,212,255,.08), rgba(0,212,255,.02)); border-bottom: 1px solid rgba(0,212,255,.25); }
+  .ann-banner.show { display: block; }
+  .ann-banner-inner { max-width: 1200px; margin: 0 auto; padding: .7rem 2rem; display: flex; align-items: center; gap: .9rem; }
+  .ann-banner-tag { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; color: var(--cyan); border: 1px solid rgba(0,212,255,.4); padding: .15rem .5rem; white-space: nowrap; }
+  .ann-banner-text { font-size: .92rem; color: var(--text); flex: 1; }
+  .ann-banner-text a { color: var(--cyan); text-decoration: none; }
+  .ann-banner-text a:hover { text-decoration: underline; }
+  .ann-banner-close { background: none; border: none; color: var(--muted); font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 .3rem; }
+  .ann-banner-close:hover { color: var(--text); }
+
+  /* LATEST NEWS SECTION */
+  .news-section { padding: 3rem 0; border-bottom: 1px solid var(--border); }
+  .news-header-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.4rem; flex-wrap: wrap; gap: .6rem; }
+  .news-view-all { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--cyan); text-decoration: none; }
+  .news-view-all:hover { text-decoration: underline; }
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .news-card { display: block; text-decoration: none; border: 1px solid var(--border); background: var(--panel); padding: 1.1rem 1.3rem; transition: border-color .2s; position: relative; overflow: hidden; }
+  .news-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .news-card.type-game::before { background: var(--cyan); }
+  .news-card.type-site::before { background: var(--gold); }
+  .news-card:hover { border-color: var(--text); }
+  .news-card-date { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; color: var(--muted); margin-bottom: .5rem; display: block; }
+  .news-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: .5px; color: #fff; line-height: 1.2; }
+  .news-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; margin-bottom: .7rem; background: var(--dark); border: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -355,6 +381,15 @@
 <!-- NAV -->
 <nav id="main-nav"></nav>
 <script src="nav.js"></script>
+
+<!-- ANNOUNCEMENTS BANNER -->
+<div class="ann-banner" id="annBanner">
+  <div class="ann-banner-inner">
+    <span class="ann-banner-tag" id="annBannerTag">News</span>
+    <span class="ann-banner-text" id="annBannerText"></span>
+    <button class="ann-banner-close" id="annBannerClose" title="Dismiss">✕</button>
+  </div>
+</div>
 
 <!-- HERO -->
 <header class="hero">
@@ -376,6 +411,22 @@
     </div>
   </div>
 </header>
+
+<!-- LATEST NEWS -->
+<section class="news-section">
+  <div class="container">
+    <div class="news-header-row">
+      <div>
+        <p class="section-label">// Latest News</p>
+        <h2 class="section-title" style="margin:0;">What's New</h2>
+      </div>
+      <a href="announcements/" class="news-view-all">View All →</a>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted);">// LOADING...</div>
+    </div>
+  </div>
+</section>
 
 <hr class="rule">
 
@@ -488,6 +539,58 @@
   <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
   <p style="margin-top:.5rem;"><a href="https://kj8-thegame.com/en/" target="_blank">Official Site</a> &nbsp;·&nbsp; <a href="https://store.steampowered.com/app/3393070/" target="_blank">Steam</a> &nbsp;·&nbsp; <a href="https://gamewith.net/kj8-thegame/" target="_blank">GameWith Wiki</a></p>
 </footer>
+
+<script>
+const ANN_DISMISS_KEY = 'kn8_ann_dismissed_id';
+
+fetch('data/announcements.json')
+  .then(r => r.json())
+  .then(data => {
+    const items = (data.announcements || []).sort((a,b) => b.date.localeCompare(a.date));
+    renderBanner(items);
+    renderNewsGrid(items);
+  })
+  .catch(() => {
+    document.getElementById('newsGrid').innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:.8rem;color:var(--muted);">// COULD NOT LOAD NEWS</div>';
+  });
+
+function formatDate(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function renderBanner(items) {
+  if (!items.length) return;
+  const latest = items[0];
+  const dismissedId = localStorage.getItem(ANN_DISMISS_KEY);
+  if (dismissedId === latest.id) return;
+
+  document.getElementById('annBannerTag').textContent = latest.type === 'game' ? 'Game News' : 'Site Update';
+  document.getElementById('annBannerText').innerHTML = `<a href="${latest.link || 'announcements/'}">${latest.title}</a>`;
+  document.getElementById('annBanner').classList.add('show');
+
+  document.getElementById('annBannerClose').addEventListener('click', () => {
+    localStorage.setItem(ANN_DISMISS_KEY, latest.id);
+    document.getElementById('annBanner').classList.remove('show');
+  });
+}
+
+function renderNewsGrid(items) {
+  const grid = document.getElementById('newsGrid');
+  const top3 = items.slice(0, 3);
+  if (!top3.length) {
+    grid.innerHTML = '<div style="font-family:\'Share Tech Mono\',monospace;font-size:.8rem;color:var(--muted);">// NO ANNOUNCEMENTS YET</div>';
+    return;
+  }
+  grid.innerHTML = top3.map(a => `
+    <a href="${a.link || 'announcements/'}" class="news-card type-${a.type}" target="${a.autoAdded ? '_blank' : '_self'}">
+      ${a.image ? `<img class="news-card-img" src="${a.image}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+      <span class="news-card-date">${formatDate(a.date)} &nbsp;·&nbsp; ${a.type === 'game' ? 'GAME NEWS' : 'SITE UPDATE'}</span>
+      <div class="news-card-title">${a.title}</div>
+    </a>
+  `).join('');
+}
+</script>
 
 </body>
 </html>
