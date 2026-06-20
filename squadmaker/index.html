@@ -34,6 +34,7 @@
   /* LAYOUT: SLOTS + ANALYSIS SIDE BY SIDE */
   .builder-layout { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; align-items: start; }
   @media (max-width: 900px) { .builder-layout { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .slot-row { grid-template-columns: 1fr; } }
 
   /* SLOT PAIRS */
   .slot-pairs { display: flex; flex-direction: column; gap: 1rem; }
@@ -305,6 +306,9 @@ const CHARACTERS = [
     buddyBuffs:[], debuffs:[] },
   { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya',  variant:'Over Limit',                      stars:5, role:'Attacker',  types:['Slash','Fire'],   img:'SaganShinomiya-OL.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'CRIT DMG +11% (3 turns) to all allies'}, {scope:'all', desc:'Ultimate DMG dealt +3.3% to all allies (max 5 stacks)'}, {scope:'all', desc:'After Enhanced Normal Attack: all allies\' Ultimate Gauge +27'}, {scope:'conditional', desc:'While in Ardor state: all allies\' DEF PEN Rate +24%'} ],
+    buddyBuffs:[], debuffs:[] },
+  { id:'sagan-shinomiya-rc', name:'Sagan Shinomiya',  variant:'The Resurgent Commander',          stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'SaganShinomiya-RC.png', subRoles:['Buffer'],
+    teamBuffs:[ {scope:'all', desc:'DMG dealt +21.6% and Extra Attack DMG dealt +21.6% (3 turns) to all allies'}, {scope:'all', desc:'While in Command: all allies\' CRIT Rate +32%, CRIT DMG +32%, Extra Attack CRIT DMG +32%'}, {scope:'all', desc:'Advances all other allies\' Action Order by 50% on Ultimate'}, {scope:'conditional', desc:'While in Command: all allies\' DEF PEN Rate +24%'} ],
     buddyBuffs:[], debuffs:[] },
   { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',     stars:5, role:'Supporter', types:['Shot','Slash'],   img:'SoichiroHoshina-KOWJ.png', subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'Buffs and debuffs enemies to boost team\'s damage output'} ],
