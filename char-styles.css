@@ -96,7 +96,7 @@ nav { position: sticky; top: 0; z-index: 900; background: rgba(8,11,16,.92); bac
 .skill-body { padding: 1rem; }
 .skill-desc { font-size: .97rem; color: var(--text); margin-bottom: .8rem; line-height: 1.6; }
 .skill-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .4rem; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid var(--border); }
-.skill-stat { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: var(--muted); }
+.skill-stat { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: var(--muted); white-space: nowrap; }
 .skill-stat strong { color: var(--text); }
 .sub-skill { margin-top: .8rem; padding: .8rem 1rem; border-left: 3px solid var(--gold); background: rgba(240,180,0,.04); }
 .sub-skill-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--gold); margin-bottom: .3rem; }
@@ -155,3 +155,45 @@ footer a:hover { color: var(--cyan); }
 }
 .dropdown-menu li:last-child a { border-bottom: none; }
 .dropdown-menu li a:hover { color: var(--cyan); background: rgba(0,212,255,.05); padding-left: 1.6rem; }
+
+/* ── MOBILE PASS ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page { padding: 1.2rem 1rem 4rem; }
+  .breadcrumb { padding: 0 1rem; font-size: .62rem; letter-spacing: 1px; }
+
+  .char-hero { padding: 1.2rem; gap: 1.2rem; }
+  .char-photo { width: 100%; max-width: 260px; margin: 0 auto; }
+  .char-meta { gap: .5rem; }
+  .meta-grid { grid-template-columns: 1fr 1fr; gap: .4rem; }
+  .meta-item { padding: .45rem .6rem; }
+  .meta-item .val { font-size: .9rem; }
+
+  .section-block-header { padding: .7rem 1rem; gap: .6rem; flex-wrap: wrap; }
+  .section-block-header h2 { font-size: 1.1rem; }
+  .section-body { padding: 1rem; }
+
+  .weapon-item { padding: .6rem .8rem; gap: .7rem; flex-wrap: wrap; }
+  .weapon-rank { min-width: 50px; font-size: .9rem; }
+  .weapon-name { font-size: .9rem; }
+
+  .skill-stats { grid-template-columns: 1fr; }
+  .skill-header { padding: .5rem .8rem; flex-wrap: wrap; gap: .4rem; }
+  .skill-header h3 { font-size: 1rem; }
+  .skill-body { padding: .8rem; }
+  .skill-desc { font-size: .9rem; }
+  .sub-skill { padding: .6rem .8rem; }
+
+  .ascension-item { grid-template-columns: 60px 1fr; }
+  .ascension-label { padding: .6rem .3rem; }
+  .a-id { font-size: 1.1rem; }
+  .a-name { font-size: .92rem; }
+  .ascension-content { padding: .6rem .8rem; }
+  .ascension-content p { font-size: .88rem; }
+
+  .special-status-item { padding: .6rem .8rem; }
+  .bullet-list li { font-size: .9rem; }
+
+  .tag { font-size: .58rem; padding: .12rem .4rem; margin-right: .15rem; margin-bottom: .2rem; }
+
+  footer { padding: 2rem 1.2rem; font-size: .62rem; }
+}
