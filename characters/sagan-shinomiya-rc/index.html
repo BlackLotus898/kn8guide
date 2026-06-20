@@ -28,11 +28,11 @@
     <div class="char-meta">
       <div>
         <div class="char-name">Sagan Shinomiya<br><span class="char-variant">The Resurgent Commander</span></div>
-        <div class="char-stars">—</div>
+        <div class="char-stars">★★★★★</div>
       </div>
       <div class="meta-grid">
-        <div class="meta-item"><span class="lbl">Role</span><span class="val">—</span></div>
-        <div class="meta-item"><span class="lbl">Attack Type</span><span class="val">—</span></div>
+        <div class="meta-item"><span class="lbl">Role</span><span class="val"><span class="tag tag-supporter">Supporter</span></span></div>
+        <div class="meta-item"><span class="lbl">Attack Type</span><span class="val"><span class="tag tag-blunt">Blunt</span> <span class="tag tag-fire">Fire</span></span></div>
         <div class="meta-item"><span class="lbl">Inflicted Ailment</span><span class="val">—</span></div>
         <div class="meta-item"><span class="lbl">Exploit Medal</span><span class="val">—</span></div>
       </div>
@@ -43,7 +43,7 @@
     <div class="section-block-header"><span class="section-tag">// Loadout</span><h2>Best Weapons</h2></div>
     <div class="section-body">
       <div class="weapon-list">
-        <div class="weapon-item"><div class="weapon-rank best">BEST</div><div class="weapon-name">—</div></div>
+        <div class="weapon-item"><div class="weapon-rank best">BEST</div><div class="weapon-name">SH-Nahallud</div></div>
         <div class="weapon-item"><div class="weapon-rank second">2ND</div><div class="weapon-name">—</div></div>
         <div class="weapon-item"><div class="weapon-rank">3RD</div><div class="weapon-name">—</div></div>
       </div>
@@ -64,11 +64,11 @@
     <div class="section-block-header"><span class="section-tag">// Progression</span><h2>Skill Upgrade Priority</h2></div>
     <div class="section-body">
       <div class="skill-priority-list">
-        <div class="skill-priority-item"><span class="skill-name">Combat Skill</span><span class="skill-stars">—</span></div>
-        <div class="skill-priority-item"><span class="skill-name">Ultimate</span><span class="skill-stars">—</span></div>
-        <div class="skill-priority-item"><span class="skill-name">Passive Skill</span><span class="skill-stars">—</span></div>
-        <div class="skill-priority-item"><span class="skill-name">Follow-Up Skill</span><span class="skill-stars">—</span></div>
-        <div class="skill-priority-item"><span class="skill-name">Normal Attack</span><span class="skill-stars">—</span></div>
+        <div class="skill-priority-item"><span class="skill-name">Combat Skill</span><span class="skill-stars">★★★★★</span></div>
+        <div class="skill-priority-item"><span class="skill-name">Ultimate</span><span class="skill-stars">★★★★<span class="empty">☆</span></span></div>
+        <div class="skill-priority-item"><span class="skill-name">Passive Skill</span><span class="skill-stars">★★★★<span class="empty">☆</span></span></div>
+        <div class="skill-priority-item"><span class="skill-name">Follow-Up Skill</span><span class="skill-stars">★<span class="empty">☆☆☆☆</span></span></div>
+        <div class="skill-priority-item"><span class="skill-name">Normal Attack</span><span class="skill-stars">★<span class="empty">☆☆☆☆</span></span></div>
       </div>
     </div>
   </div>
@@ -76,18 +76,120 @@
   <div class="section-block">
     <div class="section-block-header"><span class="section-tag">// Abilities</span><h2>Skills</h2></div>
     <div class="section-body">
-      <p class="tbd-note" style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted);font-style:italic;padding:.5rem 0;">
-        Full kit pending official release on June 20. Check back once skill data is available.
-      </p>
+      <!-- NORMAL ATTACK -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Normal Attack</span><h3>Shield Strike</h3></div>
+        <div class="skill-body">
+          <p class="skill-desc">Deals Blunt and Fire DMG equal to 34% of this unit's ATK to a single Kaiju.</p>
+          <div class="skill-stats">
+            <div class="skill-stat"><strong>Ultimate Gauge Charge:</strong> 60</div>
+            <div class="skill-stat"><strong>Attack Type:</strong> Blunt / Fire</div>
+            <div class="skill-stat"><strong>Attack Range:</strong> Single Target</div>
+          </div>
+        </div>
+      </div>
+      <!-- COMBAT SKILL -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Combat Skill</span><h3>Vanguard Initiative</h3></div>
+        <div class="skill-body">
+          <p class="skill-desc">Applies DMG dealt +21.6% (3 turns) and Extra Attack DMG dealt +21.6% (3 turns) to all allies.</p>
+          <div class="skill-stats">
+            <div class="skill-stat"><strong>SP Cost:</strong> 1</div>
+            <div class="skill-stat"><strong>Ultimate Gauge Charge:</strong> 90</div>
+          </div>
+        </div>
+      </div>
+      <!-- ULTIMATE -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Ultimate</span><h3>Ardent Command</h3></div>
+        <div class="skill-body">
+          <ul class="bullet-list">
+            <li>Advances all other allies' Action Order by 50%.</li>
+            <li>Applies <strong>Command</strong> (3 turns) to this unit. After this unit's turn arrives, turn duration of Command -1.</li>
+          </ul>
+          <div class="skill-stats">
+            <div class="skill-stat"><strong>Ultimate Gauge Limit:</strong> 300</div>
+          </div>
+          <div class="sub-skill">
+            <div class="sub-skill-name">Command</div>
+            <p>All allies' CRIT Rate +32%, CRIT DMG +32%, and Extra Attack CRIT DMG +32%.</p>
+          </div>
+        </div>
+      </div>
+      <!-- FOLLOW-UP SKILL -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Follow-Up Skill</span><h3>Flame Bash</h3></div>
+        <div class="skill-body">
+          <p class="skill-desc">Deals Blunt and Fire DMG equal to 77% of this unit's ATK to a single Kaiju.</p>
+          <div class="skill-stats">
+            <div class="skill-stat"><strong>Ultimate Gauge Charge:</strong> 60</div>
+            <div class="skill-stat"><strong>Attack Type:</strong> Blunt / Fire</div>
+            <div class="skill-stat"><strong>Attack Range:</strong> Single Target</div>
+          </div>
+        </div>
+      </div>
+      <!-- PASSIVE SKILL -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Passive Skill</span><h3>Hidden Thermal Surge</h3></div>
+        <div class="skill-body">
+          <ul class="bullet-list">
+            <li>After an ally attacks, applies 1 stack of Zeal to this unit. Max 15 stacks.</li>
+            <li>If Zeal is at 10 or more stacks, after this unit activates Normal Attack, Combat Skill, or Ultimate, activates Extra Attack.</li>
+          </ul>
+          <div class="sub-skill">
+            <div class="sub-skill-name">Extra Attack Effects</div>
+            <ul class="bullet-list">
+              <li>Deals Blunt and Fire DMG equal to 176% of this unit's ATK to all Kaiju.</li>
+              <li>After attacking, applies ATK +16.6% (2 turns) and Extra Attack ATK +16.6% (2 turns) to all allies.</li>
+              <li>After attacking, consumes 10 stacks of Zeal and randomly destroys 1 of the target's Elemental PLT.</li>
+              <li>This effect can destroy Elemental or Common PLT, but cannot destroy Physical PLT.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- ADDITIONAL PASSIVE SKILLS -->
+      <div class="skill-block">
+        <div class="skill-header"><span class="skill-type">Additional Passive Skills</span><h3>—</h3></div>
+        <div class="skill-body">
+          <ul class="bullet-list">
+            <li><strong>Red-Hot Advance (Req. Lv. 40):</strong> At the start of battle, advances this unit's next Action Order by 25%.</li>
+            <li><strong>Blazing Tenacity (Req. Lv. 60):</strong> While in Command state, all allies' Follow-Up Skill and Extra Attack CRIT DMG +20%.</li>
+            <li><strong>Flaring Intensity (Req. Lv. 80):</strong> After activating Normal Attack, this unit's Ultimate Gauge +20.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
   <!-- ASCENSION -->
   <div class="section-block">
     <div class="section-block-header"><span class="section-tag">// Ascension</span><h2>Ascension Nodes</h2></div>
     <div class="section-body">
-      <p class="tbd-note" style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted);font-style:italic;padding:.5rem 0;">
-        Ascension data pending official release.
-      </p>
+      <div class="ascension-list">
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A1</div><div class="a-stars">★<span class="empty">☆☆☆☆</span></div></div>
+          <div class="ascension-content"><div class="a-name">Resolve to Lead</div><ul class="bullet-list"><li>While in Command state, all allies' DEF PEN Rate +24%.</li><li>This unit's Extra Attack DMG Multiplier +100%.</li></ul></div>
+        </div>
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A2</div><div class="a-stars">★★<span class="empty">☆☆☆</span></div></div>
+          <div class="ascension-content"><div class="a-name">Fervent Impact</div><ul class="bullet-list"><li>After activating Combat Skill, applies Blunt DMG dealt +40% (3 turns) to this unit.</li><li>Applies DMG Taken Reduction +15% (3 turns) to all allies.</li><li>After an ally attacks, additionally applies 1 stack of Zeal to this unit.</li></ul></div>
+        </div>
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A3</div><div class="a-stars">★★★<span class="empty">☆☆</span></div></div>
+          <div class="ascension-content"><div class="a-name">Ash and Ruin</div><ul class="bullet-list"><li>Normal Attack, Passive Skill Lv. +2.</li><li>Normal Attack, Passive Skill max Lv. +2.</li></ul></div>
+        </div>
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A4</div><div class="a-stars">★★★★<span class="empty">☆</span></div></div>
+          <div class="ascension-content"><div class="a-name">Hellfire Roar</div><p>Number of Elemental PLT destroyed with Extra Attack's effect +1.</p></div>
+        </div>
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A5</div><div class="a-stars">★★★★★</div></div>
+          <div class="ascension-content"><div class="a-name">Call to Onslaught</div><ul class="bullet-list"><li>Combat Skill, Ultimate, Follow-Up Skill Lv. +2.</li><li>Combat Skill, Ultimate, Follow-Up Skill max Lv. +2.</li></ul></div>
+        </div>
+        <div class="ascension-item">
+          <div class="ascension-label"><div class="a-id">A6</div><div class="a-stars">★★★★★</div></div>
+          <div class="ascension-content"><div class="a-name">New Bonds</div><ul class="bullet-list"><li>The "Extra Attack ATK buff" applied by Extra Attack becomes an "ATK buff."</li><li>The "Extra Attack DMG dealt buff" applied by Combat Skill becomes a "DMG dealt buff."</li></ul></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
