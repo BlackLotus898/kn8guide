@@ -98,6 +98,16 @@
   .col-header:nth-child(2) { border-right: 1px solid var(--border); }
 
   .hidden { display: none; }
+
+  @media (max-width: 600px) {
+    .weapon-col-headers { display: none; }
+    .weapon-row {
+      grid-template-columns: 1fr; padding: .6rem .8rem; gap: .3rem;
+    }
+    .weapon-star-col { justify-self: start; padding: 0; }
+    .weapon-name-col { padding: 0; }
+    .weapon-users-col { padding: 0; }
+  }
 </style>
 </head>
 <body>
@@ -276,8 +286,10 @@ const weaponData = [
   {
     type: 'Shield', icon: '🛡️',
     weapons: [
+      { stars: 5, name: 'SH-Nahallud', users: ['Sagan Shinomiya (The Resurgent Commander)'] },
       { stars: 5, name: 'SH-Xnihps', users: [] },
       { stars: 5, name: 'SH-luggnil', users: ['Sagan Shinomiya (Dimensionally Distorted Destiny)'] },
+      { stars: 4, name: 'SH-Ratscrew', users: ['Sagan Shinomiya (The Resurgent Commander)'] },
       { stars: 4, name: 'SH-Euchre', users: [] },
       { stars: 3, name: 'Heavy Duty Shield', users: [] },
     ]
