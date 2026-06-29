@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-24",
+  "lastUpdated": "2026-06-29",
   "announcements": [
     {
       "id": "2026-06-24-x-kaijuno8thegame-total-war-kaiju-no-10-giant-form-n",
@@ -361,6 +361,16 @@
       "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2064251350733688931#m",
       "autoAdded": true,
       "image": "https://nitter.net/pic/media%2FHKQaA0uaEAAYHag.jpg"
+    },
+    {
+      "id": "1971-01-01-x-rss-reader-not-yet-whitelisted",
+      "date": "1971-01-01",
+      "type": "game",
+      "title": "RSS reader not yet whitelisted!",
+      "summary": "RSS reader not yet whitelist! Plain request with just the ID will be ignored! Please send an email rss [AT] xcancel [DOT] com with the reason why you want your RSS feed reader to be whitelist and this ID: bebbd13bce0453a392d0fc1da319b69f40c3b938fe4854d59e806d597e4965b04ef11b6dc50",
+      "link": "https://rss.xcancel.com/kj8_TheGame_EN/rss",
+      "sourceLink": "https://rss.xcancel.com/kj8_TheGame_EN/rss",
+      "autoAdded": true
     }
   ]
 }
