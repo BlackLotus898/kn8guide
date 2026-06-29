@@ -49,9 +49,11 @@ ANNOUNCEMENTS_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "a
 # Add or remove instances here as needed; the script tries each in order
 # and uses the first one that returns a valid feed.
 BRIDGE_INSTANCES = [
-    "https://nitter.net/{user}/rss",
-    "https://nitter.privacydev.net/{user}/rss",
+    "https://xcancel.com/{user}/rss",
     "https://nitter.poast.org/{user}/rss",
+    "https://nitter.privacyredirect.com/{user}/rss",
+    "https://nitter.tiekoetter.com/{user}/rss",
+    "https://nitter.net/{user}/rss",
 ]
 
 REQUEST_TIMEOUT = 10
