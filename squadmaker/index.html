@@ -101,6 +101,8 @@
   .roster-filter { display: flex; gap: .3rem; padding: .5rem 1rem; background: var(--dark); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
   .roster-filter-btn { padding: .25rem .6rem; font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .2s; }
   .roster-filter-btn:hover, .roster-filter-btn.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .roster-subrole-btn { padding: .25rem .6rem; font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .2s; }
+  .roster-subrole-btn:hover, .roster-subrole-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(224,176,32,.08); }
   .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: .4rem; padding: .8rem; max-height: 320px; overflow-y: auto; }
   .roster-char { cursor: pointer; border: 1px solid var(--border); background: var(--dark); overflow: hidden; transition: border-color .2s, transform .15s; }
   .roster-char:hover { border-color: var(--cyan); transform: translateY(-2px); }
@@ -1092,6 +1094,8 @@ function renderSlot(idx) {
         e.stopPropagation();
         activeSlot = parseInt(btn.dataset.idx);
         rosterRole = btn.dataset.role;
+        rosterSubRole = 'all';
+        rosterFilter = 'all';
         renderRoster();
         render();
       });
@@ -1103,6 +1107,8 @@ function renderSlot(idx) {
 // ── RENDER ROSTER PICKER ──────────────────────────────────────────────────────
 let rosterRole = 'Attacker';
 let rosterFilter = 'all';
+let rosterSubRole = 'all';
+const SUB_ROLES = ['Buffer', 'Debuffer', 'Tank', 'Healer', 'PLT Breaker', 'Reviver'];
 
 function renderRoster() {
   const container = document.getElementById('roster-picker-container');
@@ -1113,6 +1119,7 @@ function renderRoster() {
     if (rosterRole !== 'All' && c.role !== rosterRole) return false;
     if (rosterFilter === '5') return c.stars === 5;
     if (rosterFilter === '4') return c.stars === 4;
+    if (rosterSubRole !== 'all' && !(c.subRoles||[]).includes(rosterSubRole)) return false;
     return true;
   });
 
@@ -1127,6 +1134,10 @@ function renderRoster() {
         <button class="roster-filter-btn ${rosterFilter==='5'?'active':''}" data-f="5">★5</button>
         <button class="roster-filter-btn ${rosterFilter==='4'?'active':''}" data-f="4">★4</button>
       </div>
+      <div class="roster-filter">
+        <button class="roster-subrole-btn ${rosterSubRole==='all'?'active':''}" data-sr="all">Any Role</button>
+        ${SUB_ROLES.map(sr => `<button class="roster-subrole-btn ${rosterSubRole===sr?'active':''}" data-sr="${sr}">${sr}</button>`).join('')}
+      </div>
       <div class="roster-grid">
         ${chars.map(c => `
           <div class="roster-char ${inSquad.includes(c.id)?'in-squad':''}" data-id="${c.id}">
@@ -1140,6 +1151,9 @@ function renderRoster() {
   document.getElementById('roster-close').addEventListener('click', () => { activeSlot = null; render(); });
   container.querySelectorAll('.roster-filter-btn').forEach(btn => {
     btn.addEventListener('click', () => { rosterFilter = btn.dataset.f; renderRoster(); });
+  });
+  container.querySelectorAll('.roster-subrole-btn').forEach(btn => {
+    btn.addEventListener('click', () => { rosterSubRole = btn.dataset.sr; renderRoster(); });
   });
   container.querySelectorAll('.roster-char:not(.in-squad)').forEach(el => {
     el.addEventListener('click', () => {
