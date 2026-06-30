@@ -78,6 +78,12 @@
   .slot-tag.debuffer { color: #ff9060; border-color: #804020; background: rgba(255,120,60,.1); }
   .slot-tag.tank     { color: #4d9fff; border-color: #1a4080; background: rgba(0,80,200,.1); }
   .slot-tag.plt      { color: #c8a0ff; border-color: #5a3080; background: rgba(160,64,240,.1); }
+  .slot-ascension { margin-top: .5rem; padding-top: .4rem; border-top: 1px solid var(--border); }
+  .slot-ascension-label { font-family: 'Share Tech Mono', monospace; font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: #555; display: block; margin-bottom: .3rem; }
+  .slot-ascension-toggles { display: flex; flex-wrap: wrap; gap: .25rem; }
+  .a-toggle-btn { font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: .5px; padding: .15rem .4rem; border: 1px solid var(--border); color: #555; cursor: pointer; user-select: none; transition: all .15s; }
+  .a-toggle-btn:hover { border-color: #888; color: #aaa; }
+  .a-toggle-btn.active { border-color: var(--red); color: var(--red); background: rgba(232,0,26,.1); }
   .slot-remove { position: absolute; top: .4rem; right: .4rem; width: 18px; height: 18px; background: var(--dark); border: 1px solid var(--border); color: var(--muted); font-size: .6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
   .slot-remove:hover { color: var(--red); border-color: var(--red); }
 
@@ -200,142 +206,602 @@ const STORAGE_KEY = 'kn8_squads_v1';
 // ── CHARACTER DATA ──────────────────────────────────────────────────────────
 const CHARACTERS = [
   { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',               stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'AkariMinase-FC.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Smooth Execution', effect:"After applying a status ailment, applies DMG dealt +15% (2 turns) to this unit."},
+      {id:'A2', name:'Tactful Action', effect:"At the start of battle, applies DoT DMG Multiplier +50% (1 turn) to this unit. At the start of wave, has a 100% base chance to apply Burn (3 turns), that is the same as Ultimate, to all Kaiju."},
+      {id:'A3', name:'Third Division Helper', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Overflowing Energy', effect:"Before activating Combat Skill, applies Fire DMG dealt +20% (1 turn) to this unit. After activating Ultimate, applies Ultimate Gauge Charge Rate +15% (2 turns) to this unit."},
+      {id:'A5', name:'Cheerful Santa Claus', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Beacon of the Holy Night', effect:"This unit\'s DoT DMG Multiplier +80%."},
+    ],
+    },
   { id:'akari-minase-hc',    name:'Akari Minase',     variant:'Heart of Compassion',             stars:4, role:'Defender',  types:['Shot'],           img:'AkariMinase-HC.png', subRoles:['Healer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Recovers all allies HP equal to 9.5% of this unit\'s Max HP +77'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Gradual Preparation', effect:"Effect RES (%) +15%."},
+      {id:'A2', name:'Practical Experience', effect:"After activating Ultimate, applies Healing Multiplier +15% (2 turns) to this unit."},
+      {id:'A3', name:'Teachings of the Third Division', effect:"Normal Attack, Ultimate Lv. +2. Normal Attack, Ultimate max Lv. +2."},
+      {id:'A4', name:'Advantage from Adversity', effect:"After receiving an attack, this unit\'s Ultimate Gauge +15."},
+      {id:'A5', name:'Overflowing Affinity', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Miracle of Compassion', effect:"If an ally other than this unit becomes incapacitated, recovers the target\'s HP equal to 10% of Max HP and revives them. Can be activated 1 time per battle."},
+    ],
+    },
   { id:'akari-minase-sa',    name:'Akari Minase',     variant:'Synchro Aptitude',                stars:5, role:'Defender',  types:['Shot','Slash'],   img:'AkariMinase-SA.png', subRoles:['Healer', 'Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Applies CRIT DMG +33% (3 turns) for Follow-Up, Extra Attack, and Overflow Attack to all allies'}, {scope:'all', desc:'After Overflow Attack: DEF PEN Rate +20% (2 turns) to all allies'} ],
-    buddyBuffs:[], debuffs:[ {desc:'Applies Surveillance to all allies (enemy debuff-tracking effect)'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'Applies Surveillance to all allies (enemy debuff-tracking effect)'} ],
+        ascension:[
+      {id:'A1', name:'Vanguard Wings', effect:"If an ally other than this unit becomes incapacitated, recovers HP equal to 30% of Max HP and revives them. 1 time per battle. After activating Overflow Attack, applies DEF PEN Rate +20% (2 turns) to all allies."},
+      {id:'A2', name:'Predatory Bird\'s-Eye View', effect:"Patrol max stack count -1. After activating Combat Skill, applies DMG dealt +30% (2 turns) to the target."},
+      {id:'A3', name:'Rekindled Purpose', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Compassionate Overwatch', effect:"DMG Dealt +30%. CRIT DMG +60%. Healing Multiplier +30%."},
+      {id:'A5', name:'Connected Souls', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Synchro Mastery', effect:"The CRIT DMG buff applied before Extra Attack will stack up to 2 stacks. After activating Ultimate, applies CRIT DMG +50% (3 turns) to this unit."},
+    ],
+    },
   { id:'aoi-kaguragi-fd',    name:'Aoi Kaguragi',     variant:'Fruits of Diligence',             stars:5, role:'Defender',  types:['Blunt'],          img:'AoiKaguragi-FD.png', subRoles:['Tank', 'Debuffer', 'Healer'],
     teamBuffs:[ {scope:'all', desc:'Shield equal to 11.6% of this unit\'s DEF +11 to all allies (3 turns)'}, {scope:'all', desc:'After Ultimate: recovers all allies\' HP by 200'} ],
-    buddyBuffs:[], debuffs:[ {desc:'Applies Wound to enemies — increases enemy DMG Taken and boosts ally DMG dealt to Wounded Kaiju'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'Applies Wound to enemies — increases enemy DMG Taken and boosts ally DMG dealt to Wounded Kaiju'} ],
+        ascension:[
+      {id:'A1', name:'Indomitable Will', effect:"After an ally attacks a Kaiju in Wound state, it applies DMG dealt +15% (1 turn) and CRIT DMG +20% (1 turn) to the attacker."},
+      {id:'A2', name:'Steadfast Support', effect:"At the start of battle, applies a Shield (3 turns) to all allies, the same as Combat Skill\'s. Wound: In addition, if the target is Core Exposed, the target\'s DMG Taken Increase +20%."},
+      {id:'A3', name:'Absolute Composure', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Impenetrable Guard', effect:"After activating Ultimate, has a 200% base chance to apply Taunt (2 turns) to the target."},
+      {id:'A5', name:'Proven Results', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Accumulated Might', effect:"Unyielding max stack count -5. After activating Ultimate, recovers all allies\' HP by 200."},
+    ],
+    },
   { id:'aoi-kaguragi-tprs',  name:'Aoi Kaguragi',     variant:'The Promising Rising Star',       stars:4, role:'Attacker',  types:['Shot','Wind'],    img:'AoiKaguragi-TPRS.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Cautious Movements', effect:"After attacking, has a 50% fixed chance to apply ATK +10% (2 turns) to this unit."},
+      {id:'A2', name:'Unflinching Integrity', effect:"After activating Combat Skill, randomly removes 1 of this unit\'s debuffs."},
+      {id:'A3', name:'Young Rising Star', effect:"Normal Attack, Ultimate Lv. +2. Normal Attack, Ultimate max Lv. +2."},
+      {id:'A4', name:'Unassuming Assurance', effect:"After activating Combat Skill, applies Effect RES +20% (2 turns) to this unit."},
+      {id:'A5', name:'Mature Spirit', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Exceptional Stamina', effect:"After defeating a Kaiju with Ultimate, applies Ultimate Gauge Charge Rate +30% (2 turns) to this unit."},
+    ],
+    },
   { id:'chester-tar',        name:'Chester',           variant:'The All-Rounder',                 stars:5, role:'Supporter', types:['Shot'],           img:'Chester-TAR.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'ATK boost to all other allies equal to 19.2% of Chester\'s own ATK'}, {scope:'all', desc:'DMG dealt +13.7% and CRIT Rate +12.6% (2 turns) to all allies'}, {scope:'all', desc:'Advances all other allies\' next Action Order by 10.5%'}, {scope:'all', desc:'After Ultimate: DEF PEN Rate +20% (2 turns) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Ultimate Wit and Courage', effect:"While an ally is in Field Ops state, their DMG dealt +30%."},
+      {id:'A2', name:'Offensive Formation', effect:"After activating Ultimate, applies DEF PEN Rate +20% (2 turns) to all allies."},
+      {id:'A3', name:'CLOZER\'s Paragon', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Battle-Forged Veteran', effect:"After receiving an attack, applies DEF +20% (2 turns) and DMG Taken Reduction +15% (2 turns) to this unit."},
+      {id:'A5', name:'Versatile Operative', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Flawless Execution', effect:"Turn duration of DMG dealt buff applied by Ultimate +1. Additional DMG Multiplier caused by Passive Skill +50%."},
+    ],
+    },
   { id:'eiji-hasegawa-rhms', name:'Eiji Hasegawa',    variant:'Right-Hand Man of the Strongest', stars:4, role:'Attacker',  types:['Blunt','Shot'],   img:'EijiHasegawa-RHMS.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    ascension:[
+      {id:'A1', name:'Rapid Advance', effect:"Each time this unit destroys a PLT, Ultimate Gauge +15."},
+      {id:'A2', name:'Command Multitasking', effect:"After activating Combat Skill, has a 50% fixed chance of SP +1."},
+      {id:'A3', name:'Acting Captain Duties', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Frontline Deployment', effect:"Progress max stack count -1. Progress: Increases this unit\'s CRIT Rate and CRIT DMG after reaching max stacks."},
+      {id:'A5', name:'First Division\'s Hard Worker', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Solid Competence', effect:"After activating Follow-Up Skill, advances this unit\'s next Action Order by 50%."},
+    ], },
   { id:'gen-narumi-fs',      name:'Gen Narumi',        variant:'Future Sight',                    stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-FS.png', subRoles:['PLT Breaker', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'At start of battle: Increase Ultimate Gauge When Turn Starts (1 turn) to all allies'} ],
-    buddyBuffs:[], debuffs:[ {desc:'PLT reduction — reduces enemy Plates on attack'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'PLT reduction — reduces enemy Plates on attack'} ],
+        ascension:[
+      {id:'A1', name:'Overwhelming Pride', effect:"After activating Combat Skill, this unit\'s Ultimate Gauge +30."},
+      {id:'A2', name:'Unbreakable Stratagem', effect:"After attacking a Kaiju in Seen Through state, applies Combat Skill DMG Multiplier +25% to this unit. Max 3 stacks."},
+      {id:'A3', name:'User of the Oldest Power', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Preemptive Onslaught', effect:"When attacking a Core Exposed Kaiju, this unit\'s DEF PEN Rate +24%."},
+      {id:'A5', name:'Cultivated Power', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Tenacious Ace in the Hole', effect:"After activating Ultimate, advances this unit\'s next Action Order by 50%."},
+    ],
+    },
   { id:'gen-narumi-jsc',     name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-JSC.png', subRoles:['PLT Breaker', 'Buffer'],
     teamBuffs:[ {scope:'all', desc:'Increases ATK of all allies when using Combat Skill'} ],
-    buddyBuffs:[], debuffs:[ {desc:'PLT reduction on multiple targets'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'PLT reduction on multiple targets'} ],
+        ascension:[
+      {id:'A1', name:'Brilliant Combat', effect:"This unit\'s Combat Skill DMG dealt +20%."},
+      {id:'A2', name:'Unstoppable Advantage', effect:"After activating Combat Skill, applies CRIT Rate +10% to this unit. Max 3 stacks."},
+      {id:'A3', name:'Will to Surpass the Wall', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Greater Advancement', effect:"After defeating a Kaiju, this unit\'s Ultimate Gauge +45."},
+      {id:'A5', name:'Strength Comes First', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'The Essence of His Genius', effect:"After activating Combat Skill, applies Combat Skill DMG Multiplier +5% to this unit. Max 3 stacks."},
+    ],
+    },
   { id:'hikari-shinomiya-tv', name:'Hikari Shinomiya', variant:'The Valkyrie',                    stars:5, role:'Attacker',  types:['Wind','Slash'],   img:'HikariShinomiya-TV.png', subRoles:['PLT Breaker'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Swift Spearwork', effect:"This unit\'s DEF PEN Rate +16%."},
+      {id:'A2', name:'Swift as Light', effect:"While in Acceleration state, this unit\'s CRIT DMG +24%. Turn duration of Acceleration applied by Passive Skill +1."},
+      {id:'A3', name:'Unmatched Kill Count', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Relentless Chase', effect:"Each time this unit destroys a PLT, applies Slash DMG dealt +6% (2 turns) to this unit. Max 3 stacks."},
+      {id:'A5', name:'For the Family', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Preemptive Move', effect:"Before activating Ultimate, applies Forestalled (1 turn) to the target. After the applier attacks a Kaiju in Forestalled state, deals Slash Additional DMG equal to 100% of this unit\'s ATK."},
+    ],
+    },
   { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, role:'Attacker',  types:['Slash','Ice'],    img:'GenNarumi-JSS.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Successful Promotion', effect:"After activating Combat Skill, applies CRIT Rate +5% to this unit. Max 3 stacks."},
+      {id:'A2', name:'In the Spotlight', effect:"Before activating Combat Skill, applies DEF PEN Rate +15% (2 turns) to this unit."},
+      {id:'A3', name:'Calculated Demeanor', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Smart Neutralization', effect:"When remaining HP is 50% or more, this unit\'s Ultimate Gauge Charge Rate +16%."},
+      {id:'A5', name:'Carefree Santa Claus', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Peak Performance', effect:"Hyped max stack count +4. Will apply 2 stacks of Hyped after activating Combat Skill or Ultimate."},
+    ],
+    },
   { id:'gen-narumi-spb',     name:'Gen Narumi',        variant:'Sky-Piercing Bolt',                stars:5, role:'Defender',  types:['Slash','Lightning'], img:'GenNarumi-SPB.png', subRoles:['Tank','Buffer','Reviver'],
     teamBuffs:[
       {scope:'all', desc:'All allies CRIT DMG +16% while Prestige is active'},
       {scope:'other', desc:'Shield equal to 7.5% Max HP (3 turns) to all allies via Combat Skill'},
       {scope:'other', desc:'DMG Taken Reduction +19.2% (2 turns) to all other allies'},
-      {scope:'all', desc:'While Prestige: all allies\' DMG from Additional DMG +40% (Lv.60)'},
-      {scope:'all', desc:'While Prestige: all allies\' DMG dealt +24% (A2)'},
-      {scope:'all', desc:'After Ultimate: recovers all allies\' HP equal to 10% Max HP (A4)'},
       {scope:'all', desc:'Additional DMG CRIT Rate +16.5% (2 turns) to all allies at max Sass stacks'},
     ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+    ascension:[
+      {id:'A1', name:'Unspoken Conviction', effect:"At battle start: Applies Prestige (3 turns) + Shield (same as Combat Skill) to self. Applies Shield to all allies. All allies\' CRIT DMG from Additional DMG +40%."},
+      {id:'A2', name:'Eloquent Command', effect:"While in Prestige, all allies\' DMG dealt +24%. If an ally is incapacitated: revive with 30% Max HP (1× per battle)."},
+      {id:'A3', name:'Will to Triumph', effect:"Ultimate, Passive Skill Lv. +2. Ultimate, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Japan\'s Strongest Division', effect:"After Ultimate, recovers all allies\' HP equal to 10% Max HP."},
+      {id:'A5', name:'Invincible Readiness', effect:"Normal Attack, Combat Skill, Follow-Up Skill Lv. +2. Normal Attack, Combat Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'The Strongest\'s Prowess', effect:"When Sass is at max stacks, additionally applies DMG dealt +80% (3 turns) + Additional DMG Multiplier +100% (3 turns) to self."},
+    ], },
   { id:'hakua-igarashi-sp', dotEffects:[ {type:'burn',desc:'Fire DoT (via Patience)'} ],  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot','Fire'],    img:'HakuaIgarashi-SP.png', subRoles:['Buffer', 'Healer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Applies Patience (2 turns) to all allies'}, {scope:'all', desc:'All allies\' Fire DMG dealt +16.5%'}, {scope:'all', desc:'All allies\' Blast Attack and AoE Attack DMG +10%'}, {scope:'all', desc:'Randomly removes 1 debuff from all allies after Combat Skill'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (2 turns) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Exceptional Toughness', effect:"After turn arrives, this unit\'s Ultimate Gauge +15."},
+      {id:'A2', name:'Unwavering Patience', effect:"After activating Ultimate, applies DMG Taken Reduction +10% (2 turns) to all allies."},
+      {id:'A3', name:'Sincere Nature', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Tenacious Spirit', effect:"While an ally is in Patience state, their Ultimate DMG dealt +15%."},
+      {id:'A5', name:'Glimmer of Talent', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Culminated Effort', effect:"Fire DMG dealt buff applied by Passive Skill +20%."},
+    ],
+    },
   { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot'],    img:'HaruichiIzumo-CC.png', subRoles:['Buffer'],
     teamBuffs:[], 
-    buddyBuffs:[ {desc:'Battle Buddy\'s All-Attribute DMG dealt +19.2%'}, {desc:'After Combat Skill: ATK +26.4% (2 turns) to Battle Buddy'}, {desc:'After Combat Skill: ST Attack and Blast Attack DMG +30% (1 turn) to Battle Buddy'}, {desc:'A4: All-Attribute DMG buff extends to all allies'} ], debuffs:[] },
+    buddyBuffs:[ {desc:'Battle Buddy\'s All-Attribute DMG dealt +19.2%'}, {desc:'After Combat Skill: ATK +26.4% (2 turns) to Battle Buddy'}, {desc:'After Combat Skill: ST Attack and Blast Attack DMG +30% (1 turn) to Battle Buddy'} ], debuffs:[],
+    ascension:[
+      {id:'A1', name:'Flawless Arrangements', effect:"True Potential: In addition, target\'s CRIT Rate +20% and DMG dealt +20%."},
+      {id:'A2', name:'Keen Suppression', effect:"After activating Ultimate, applies CRIT DMG +80% (3 turns) to this unit."},
+      {id:'A3', name:'Superior Judgment', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Essence of Archery', effect:"Target of the All-Attribute DMG dealt buff from Assistance becomes all allies."},
+      {id:'A5', name:'The Path Discovered', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Distinguished Choice', effect:"Turn duration of DMG dealt, SPD, and True Potential buffs applied by Combat Skill +1."},
+    ], },
   { id:'haruichi-izumo-tcce',name:'Haruichi Izumo',   variant:'The Clean-Cut Elite',             stars:4, role:'Supporter', types:['Shot'],           img:'HaruichiIzumo-TCCE.png', subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'All allies\' Effect RES +10%'}, {scope:'single', desc:'After Follow-Up Skill: removes 1 debuff from a single ally'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Synchronized Breathing', effect:"Each time a Kaiju is defeated, this unit\'s Ultimate Gauge +15."},
+      {id:'A2', name:'Sharp-Witted Nature', effect:"All allies\' Effect RES +10%."},
+      {id:'A3', name:'Neutralization University Valedictorian', effect:"Normal Attack, Ultimate Lv. +2. Normal Attack, Ultimate max Lv. +2."},
+      {id:'A4', name:'Finishing Blow', effect:"After attacking a Kaiju that already has a debuff, deals Shot Additional DMG equal to 20% of this unit\'s ATK."},
+      {id:'A5', name:'Clean-Cut Powerhouse', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Solid Combat Style', effect:"For each debuff already applied to a Kaiju, this unit\'s DMG dealt to that Kaiju +5%. Max +25%."},
+    ],
+    },
   { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, role:'Supporter', types:['Shot','Lightning'],img:'IharuFuruhashi-LT.png', subRoles:['Debuffer'],
     teamBuffs:[ {scope:'all', desc:'All allies\' Effect Hit Rate +7%'}, {scope:'conditional', desc:'When ally attacks Kaiju with a debuff: Lightning DMG dealt +20%'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Direct Effort', effect:"Before activating Combat Skill, has a 100% base chance to apply Effect RES -10% (2 turns) to the target."},
+      {id:'A2', name:'Preemptive Intimidation', effect:"Turn duration of DEF debuff applied by Ultimate +1."},
+      {id:'A3', name:'Technical College Powerhouse Valedictorian', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Relentless Pursuit of Victory', effect:"Base chance of Shock applied by Combat Skill +35%."},
+      {id:'A5', name:'Spirit to Soar', effect:"Combat Skill, Ultimate Lv. +2. Combat Skill, Ultimate max Lv. +2."},
+      {id:'A6', name:'Awakening of Talent', effect:"DoT DMG Multiplier of Shock applied by Combat Skill +60%."},
+    ],
+    },
   { id:'isao-shinomiya-pf',  name:'Isao Shinomiya',   variant:'Prime Fist',                      stars:5, role:'Attacker',  types:['Blunt'],          img:'IsaoShinomiya-PF.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Flawless Combat Style', effect:"Before activating Ultimate, applies ATK +40% (1 turn) to this unit."},
+      {id:'A2', name:'Roaring Fist', effect:"When Valor is at 3 or more stacks, this unit\'s DMG dealt +20%."},
+      {id:'A3', name:'Peak Physique', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Technical Reinforcement', effect:"Each time this unit attacks a Kaiju, this unit\'s Ultimate Gauge +5."},
+      {id:'A5', name:'Strategic Prevision', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Overwhelming Destructive Power', effect:"Blunt Additional DMG from Passive Skill will activate 2 times."},
+    ],
+    },
   { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya',   variant:'The Unbreakable Iron Wall',       stars:5, role:'Defender',  types:['Blunt'],          img:'IsaoShinomiya-TUIW.png', subRoles:['Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Shield equal to 7.5% of DEF +33 to all allies (3 turns)'}, {scope:'conditional', desc:'For each ally with a Shield: all allies\' DMG dealt +3.2%'}, {scope:'all', desc:'After Combat Skill: Effect RES +15% (3 turns) to all allies'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (1 turn) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Preparation for a Prolonged Battle', effect:"After attacking, recovers this unit\'s HP equal to 5% of Max HP."},
+      {id:'A2', name:'Last Line of Defense', effect:"If incapacitated, recovers this unit\'s HP equal to 25% of Max HP and resurrects. Can be activated 1 time per battle."},
+      {id:'A3', name:'Resolve to Protect the Nation', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Perfectionism', effect:"At the start of battle, applies a Shield (3 turns) to all allies."},
+      {id:'A5', name:'Role to Fulfill', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Unified Offense and Defense', effect:"While having a Shield, this unit\'s Normal Attack and Ultimate DMG Multiplier +80%."},
+    ],
+    },
   { id:'jura-igarashi-gd', dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png', subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%', isDot:true}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
-    buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ],
+        ascension:[
+      {id:'A1', name:'Infectious Zeal', effect:"Afterburn Effect Multiplier +40%."},
+      {id:'A2', name:'Seething Hot Blood', effect:"At the start of wave, applies Afterburn (3 turns) to all Kaiju."},
+      {id:'A3', name:'Iron-Clad Trust', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'All at Once', effect:"Burn applied by Ultimate will apply to all Kaiju. At the start of wave, has a 65% base chance to apply Burn (3 turns) to all Kaiju."},
+      {id:'A5', name:'Strongest Big Sis', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Grit-Fueled Push', effect:"Afterburn applied by Passive Skill will apply to all Kaiju. When an ally attacks a Kaiju with a debuff or status ailment, the ally\'s ATK +30%."},
+    ],
+    },
   { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, role:'Attacker',  types:['Shot'],           img:'KafkaHibino-TMWBK.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Resolution of a Defense Officer', effect:"While in Kaiju form, this unit\'s ATK +10%."},
+      {id:'A2', name:'Strength Beyond Imagination', effect:"While in Kaiju form, this unit\'s Combat Skill DMG dealt +10%."},
+      {id:'A3', name:'Steady Training', effect:"Ultimate, Follow-Up Skill Lv. +2. Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Partial Transformation', effect:"At the start of battle, applies Ultimate Gauge Charge Rate +20% (2 turns) to this unit."},
+      {id:'A5', name:'Promise of Childhood Days', effect:"Normal Attack, Combat Skill, Passive Skill Lv. +2. Normal Attack, Combat Skill, Passive Skill max Lv. +2."},
+      {id:'A6', name:'Mastered Strength', effect:"After activating Normal Attack or Combat Skill in Kaiju form, applies Blunt DMG dealt +5% to this unit. Max 3 stacks."},
+    ],
+    },
   { id:'kafka-hibino-tmwbr', name:'Kafka Hibino',     variant:'The Man Who Became a Reindeer',   stars:4, role:'Supporter', types:['Shot'],           img:'KafkaHibino-TMWBR.png', subRoles:['Buffer'],
-    teamBuffs:[ {scope:'single', desc:'Combat Skill: Combat Skill DMG dealt +25.6% (1 turn) to a single ally, applies Care Package'}, {scope:'single', desc:'Ultimate: applies Gift to a single ally — ATK +38.8% of this unit\'s ATK'} ], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[ {scope:'single', desc:'Combat Skill: Combat Skill DMG dealt +25.6% (1 turn) to a single ally, applies Care Package'}, {scope:'single', desc:'Ultimate: applies Gift to a single ally — ATK +38.8% of this unit\'s ATK'} ], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Generous Spirit', effect:"After activating Ultimate, randomly removes 1 of this unit\'s debuffs."},
+      {id:'A2', name:'Big Fat Gift', effect:"Turn duration of Gift applied by Ultimate +1."},
+      {id:'A3', name:'Approachable Air', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Life of the Party', effect:"After turn arrives, this unit\'s Ultimate Gauge +10."},
+      {id:'A5', name:'Reliable Reindeer', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Heartfelt Support', effect:"After activating Ultimate, target\'s Ultimate Gauge +25."},
+    ],
+    },
   { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, role:'Supporter', types:['Shot'],           img:'KeijiItami-CQ.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'} ], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'} ],
+        ascension:[
+      {id:'A1', name:'Habitual Procedure', effect:"While in Stealth state, SP will not be consumed."},
+      {id:'A2', name:'Smooth Progress', effect:"After defeating a Kaiju, this unit\'s Ultimate Gauge +35."},
+      {id:'A3', name:'Sharp Insight', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Setting Up the Next Move', effect:"After activating Ultimate, randomly removes 1 of the target\'s buffs."},
+      {id:'A5', name:'Linchpin of the Defense Force', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Seasoned Expertise', effect:"Before activating Combat Skill, has a 100% base chance to apply DMG Taken Increase +10% (2 turns) to the target."},
+    ],
+    },
   { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya', variant:'Evolving Talent',                 stars:5, role:'Attacker',  types:['Slash','Blunt'],  img:'KikoruShinomiya-EV.png', subRoles:[],
     teamBuffs:[ {scope:'all', desc:'Before attacking: DMG Taken Reduction +9.6% (1 turn) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Mastered Onslaught', effect:"After activating Normal Attack or Combat Skill, deals Slash Additional DMG equal to 30% of this unit\'s ATK to the target."},
+      {id:'A2', name:'Belligerent Stance', effect:"While in Bold state, this unit\'s CRIT DMG +35%."},
+      {id:'A3', name:'Substantial Growth', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Impenetrable Stance', effect:"After activating Extra Attack, applies DEF +20% (2 turns) and Effect RES +20% (2 turns) to this unit."},
+      {id:'A5', name:'Continuous Progress', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Seized Mastery', effect:"After defeating a Kaiju, applies 1 stack of Wrath to this unit. This unit\'s DMG dealt from Additional DMG +30% and CRIT DMG from Additional DMG +50%."},
+    ],
+    },
   { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',            stars:5, role:'Defender',  types:['Slash'],          img:'KikoruShinomiya-FPC.png', subRoles:['Healer', 'Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'After Normal Attack or Follow-Up Skill: DMG dealt +9.9% (1 turn) to all allies'}, {scope:'all', desc:'Recovers all allies\' HP equal to 7.3% of Max HP +42'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Selfless Focus', effect:"At the start of battle, applies Engrossed (1 turn) to all other allies."},
+      {id:'A2', name:'Insight in Crisis', effect:"When remaining HP is 30% or less, after activating Combat Skill, recovers this unit\'s HP equal to 10% of Max HP +300."},
+      {id:'A3', name:'All-Out Christmas', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Perfect Present', effect:"After activating Combat Skill, applies DMG Taken Reduction +10% (2 turns) and DMG dealt +10% (2 turns) to the target."},
+      {id:'A5', name:'Memories Recalled', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'True Essence of Christmas Eve', effect:"After activating Combat Skill or Ultimate, applies DMG dealt +40% (2 turns) to the target."},
+    ],
+    },
   { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',    stars:5, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-GLF.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Decisive Ax Strike', effect:"When attacking a Kaiju that already has a debuff, this unit\'s CRIT Rate +15%."},
+      {id:'A2', name:'Lasting Slash', effect:"Turn duration of DEF debuff applied by Ultimate +1."},
+      {id:'A3', name:'Outstanding Ability', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Aggressive Combat Style', effect:"Ultimate Gauge Charge Rate +10%."},
+      {id:'A5', name:'Light of Hope', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'On the Rise', effect:"After activating Ultimate, this unit\'s Tip-Top Shape will not be consumed."},
+    ],
+    },
   { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',             stars:5, role:'Attacker',  types:['Blunt'],          img:'KikoruShinomiya-TIW.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Natural Talent', effect:"After attacking a Kaiju that already has a debuff, applies Blunt DMG dealt +20% (1 turn) to this unit."},
+      {id:'A2', name:'Quintessential Inheritance', effect:"While in Inheritance state, this unit\'s Normal Attack DMG Multiplier +30% and Combat Skill DMG Multiplier +30%."},
+      {id:'A3', name:'Lofty Ideals', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Inherited Spirit', effect:"At the start of wave, has a 150% base chance to apply Effect RES -20% to all Kaiju."},
+      {id:'A5', name:'Pursuit of Ideals', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Strength to Uphold a Legacy', effect:"After activating Ultimate, applies Ultimate DMG Multiplier +130% (3 turns) to this unit. After performing Normal Attack while in Inheritance state, advances this unit\'s next Action Order by 20%."},
+    ],
+    },
   { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',     stars:4, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-TMBP.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Outstanding Talent', effect:"After activating Combat Skill against a Core Exposed Kaiju, this unit\'s Ultimate Gauge +30."},
+      {id:'A2', name:'Tireless Effort', effect:"When attacking a Core Exposed Kaiju, this unit\'s DMG dealt +20%."},
+      {id:'A3', name:'Discipline', effect:"Normal Attack, Follow-Up Skill Lv. +2. Normal Attack, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Pursuit of Perfection', effect:"Each time this unit destroys a PLT, applies ATK +6% to this unit. Max 5 stacks."},
+      {id:'A5', name:'Vow of the Past', effect:"Combat Skill, Ultimate, Passive Skill Lv. +2. Combat Skill, Ultimate, Passive Skill max Lv. +2."},
+      {id:'A6', name:'Accumulating Experience', effect:"This unit\'s Ultimate DMG dealt +20% and Slash Additional DMG Multiplier +50%."},
+    ],
+    },
   { id:'kikoru-shinomiya-wr',  name:'Kikoru Shinomiya',variant:'Waterside Respite',              stars:5, role:'Support',   types:['Slash','Water'],   img:'KikoruShinomiya-WR.png',  subRoles:['Buffer'],
-    teamBuffs:['DMG Dealt (All-Attribute)', 'CRIT DMG (High Summer)', 'CRIT Rate', 'SP Generation', 'DMG Taken Reduction'], buddyBuffs:['Combat Skill DMG Dealt', 'Action Order Advance'], debuffs:[] },
+    teamBuffs:['DMG Dealt (All-Attribute)', 'CRIT DMG (High Summer)', 'CRIT Rate', 'SP Generation', 'DMG Taken Reduction'], buddyBuffs:['Combat Skill DMG Dealt', 'Action Order Advance'], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Fleeting Coolness', effect:"While in High Summer state, all allies\' CRIT DMG +35%. Max stack count of All-Attribute DMG dealt buff applied by Passive Skill +10."},
+      {id:'A2', name:'Basking in the Sun', effect:"After an ally activates Combat Skill, applies CRIT DMG +12% (2 turns) to the activator. Max 5 stacks."},
+      {id:'A3', name:'Composed Look', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Tidal Pulse', effect:"After activating Ultimate: 1. Randomly destroys 1 of the target\'s PLT. 2. This unit\'s Ultimate Gauge +45."},
+      {id:'A5', name:'Season of Growth', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Fruitful Summer', effect:"The \"Combat Skill DMG dealt buff\" applied by Combat Skill becomes a \"DMG dealt buff.\" The \"Combat Skill CRIT DMG buff\" from High Summer state for all other allies becomes a \"CRIT DMG buff.\""},
+    ],
+    },
   { id:'kn8-f98',            name:'Kaiju No. 8',      variant:'Fortitude 9.8',                   stars:5, role:'Attacker',  types:['Blunt'],          img:'KN8-F98.png', subRoles:['Tank'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Kaiju Awakening', effect:"After activating Normal Attack, this unit\'s Ultimate Gauge +30."},
+      {id:'A2', name:'Weight of Fighting Spirit', effect:"After turn arrives, randomly removes 1 of this unit\'s debuffs."},
+      {id:'A3', name:'Don\'t Use This on People', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Kaiju-Derived Recovery', effect:"After activating Normal Attack, recovers this unit\'s HP equal to 10% of ATK."},
+      {id:'A5', name:'Daikaiju\'s True Power', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Overflowing Fighting Spirit', effect:"At the start of battle, applies 1 stack of Fighting Spirit to this unit. Fighting Spirit max stack count +2."},
+    ],
+    },
   { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Unwavering Readiness', effect:"This unit\'s Ultimate CRIT DMG +42%."},
+      {id:'A2', name:'Deep-Piercing Heat', effect:"After activating Ultimate, if 3 stacks of Resolve are consumed, applies DEF PEN Rate +18% (2 turns) to this unit. Combat Skill DMG Multiplier +30%."},
+      {id:'A3', name:'Unidentified Form', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Deepening Resolve', effect:"After activating Combat Skill or Follow-Up Skill, applies 1 stack of Resolve to this unit."},
+      {id:'A5', name:'Embers of Rage', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Thermal Overdrive', effect:"Resolve max stack count +2. Resolve: In addition, this unit\'s Ultimate DMG Multiplier +4%."},
+    ],
+    },
   { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",   stars:4, role:'Defender',  types:['Shot','Ice'],     img:'KotaTachibana-FDFF.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Feral Gaze', effect:"After activating Ultimate, recovers this unit\'s HP equal to 5% of Max HP."},
+      {id:'A2', name:'Mark of the Platoon Leader', effect:"Turn duration of Shield applied by Passive Skill +1."},
+      {id:'A3', name:'First Division\'s Pride', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Top-Tier Ability', effect:"Shield Application Multiplier +25%."},
+      {id:'A5', name:'Respect for the Strongest', effect:"Combat Skill, Ultimate Lv. +2. Combat Skill, Ultimate max Lv. +2."},
+      {id:'A6', name:'Unmatched Caliber', effect:"After receiving an attack, applies DMG Taken Reduction +5% to this unit. Max 5 stacks."},
+    ],
+    },
   { id:'mina-ashiro-agh',    name:'Mina Ashiro',      variant:'Aiming for Greater Heights',      stars:4, role:'Supporter', types:['Shot'],           img:'MinaAshiro-AGH.png', subRoles:['Buffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Continue the Operation', effect:"After defeating a Kaiju with Ultimate, advances this unit\'s next Action Order by 20%."},
+      {id:'A2', name:'Lingering Encouragement', effect:"Turn duration of ATK buff applied by Passive Skill +1."},
+      {id:'A3', name:'Artillery Talent', effect:"Normal Attack, Follow-Up Skill Lv. +2. Normal Attack, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Exceptional Willpower', effect:"Effect amount of DMG dealt and Combat Skill DMG dealt buffs applied by Morale +5%."},
+      {id:'A5', name:'Mission Engraved in the Heart', effect:"Combat Skill, Ultimate, Passive Skill Lv. +2. Combat Skill, Ultimate, Passive Skill max Lv. +2."},
+      {id:'A6', name:'Firing with Belief', effect:"While Morale is applied to an ally, this unit\'s Ultimate Shot DMG dealt +15%."},
+    ],
+    },
   { id:'mina-ashiro-os',     name:'Mina Ashiro',      variant:'Off the Scale',                   stars:5, role:'Attacker',  types:['Shot'],           img:'MinaAshiro-OS.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Declaration of Neutralization', effect:"After activating Ultimate, applies SPD +15% (2 turns) to this unit."},
+      {id:'A2', name:'Steadfast Spirit', effect:"After activating Combat Skill, randomly removes 1 of this unit\'s debuffs."},
+      {id:'A3', name:'Captain\'s Responsibility', effect:"Combat Skill, Ultimate Lv. +2. Combat Skill, Ultimate max Lv. +2."},
+      {id:'A4', name:'Unyielding Perseverance', effect:"After activating Combat Skill, applies Shot DMG dealt +20% (2 turns) to this unit."},
+      {id:'A5', name:'Hidden Tenderness', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Unparalleled Output', effect:"When Focus is at its max stacks, applies CRIT DMG +40% (1 turn) to this unit."},
+    ],
+    },
   { id:'mina-ashiro-sc',     name:'Mina Ashiro',      variant:'Superb Combination',              stars:5, role:'Attacker', types:['Shot'],           img:'MinaAshiro-SC.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'Boosts allies\' Ultimate DMG and charges Ultimate Gauges'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Exceptional Artillery Power', effect:"Before activating Combat Skill or Ultimate, applies CRIT DMG +30% (1 turn) to this unit."},
+      {id:'A2', name:'Combined Forces Maintained', effect:"Turn duration of Combined Forces applied by Ultimate +1. After this unit activates Extra Attack, applies DEF PEN Rate +4% to this unit. Max 5 stacks."},
+      {id:'A3', name:'Loyalty Beyond Species', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Firm Conviction', effect:"Shield Application Multiplier +50%."},
+      {id:'A5', name:'Back-to-Back Trust', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Perfected Snipe', effect:"Turn duration of CRIT Rate buff applied by Bakko +1. When this unit\'s HP is 70% or more, this unit\'s CRIT DMG +50%."},
+    ],
+    },
   { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Calm Demeanor', effect:"When remaining HP is 50% or less, this unit\'s DEF +20%."},
+      {id:'A2', name:'Passion Within', effect:"Passive Skill Shot Additional DMG Multiplier +20%."},
+      {id:'A3', name:'Rapidly Growing Talent', effect:"Combat Skill, Ultimate Lv. +2. Combat Skill, Ultimate max Lv. +2."},
+      {id:'A4', name:'Following in the Footsteps', effect:"After attacking a Kaiju in Gunshot Wound state, applies DMG dealt +15% (2 turns) to this unit."},
+      {id:'A5', name:'Resolute Action', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Latent Potential', effect:"Before activating Ultimate, has a 100% base chance to apply DMG Taken Increase +15% (1 turn) to the target."},
+    ],
+    },
   { id:'reno-ichikawa-tcu',  name:'Reno Ichikawa',    variant:'The Compatible User',             stars:5, role:'Attacker', types:['Shot','Ice'],     img:'RenoIchikawa-TCU.png', subRoles:['Debuffer', 'PLT Breaker'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies multiple elemental debuffs and Plate reduction'} ] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies multiple elemental debuffs and Plate reduction'} ],
+        ascension:[
+      {id:'A1', name:'Lingering Cold', effect:"Before activating Ultimate, applies CRIT DMG +30% (1 turn) to this unit."},
+      {id:'A2', name:'Bone-Chilling Frostbite', effect:"When attacking a Kaiju in Ice Crystal state, this unit\'s DEF PEN Rate +16%."},
+      {id:'A3', name:'Young Talent', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Restoration of Cold Energy', effect:"Each time Ice Additional DMG from Ice Crystal activates, this unit\'s Ultimate Gauge +2."},
+      {id:'A5', name:'Compatible with the Strongest Weapon', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Awakened Compatible User', effect:"Ice Additional DMG Multiplier caused by Ice Crystal +60%."},
+    ],
+    },
   { id:'rin-shinonome-ah',   name:'Rin Shinonome',    variant:'Aspiration and Honor',            stars:5, role:'Attacker',  types:['Shot'],           img:'RinShinonome-AH.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Skillful Coordination', effect:"After causing a Kaiju to be Core Exposed, applies CRIT Rate +20% (2 turns) to this unit."},
+      {id:'A2', name:'Will to Win', effect:"When attacking a Kaiju that has 50% or more remaining HP, this unit\'s DMG dealt +20%."},
+      {id:'A3', name:'Aspiration Born from Admiration', effect:"Passive Skill, Follow-Up Skill Lv. +2. Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Further Exertion', effect:"Max stack count of DMG dealt buff applied by Passive Skill +2."},
+      {id:'A5', name:'Hidden Feelings', effect:"Normal Attack, Combat Skill, Ultimate Lv. +2. Normal Attack, Combat Skill, Ultimate max Lv. +2."},
+      {id:'A6', name:'My Honor', effect:"After activating Combat Skill, applies CRIT DMG +20% (1 turn) to this unit. This unit\'s Ultimate Gauge +20."},
+    ],
+    },
   { id:'rin-shinonome-cfr',  name:'Rin Shinonome',    variant:'Cross-Forged Refinement',         stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'RinShinonome-CFR.png', subRoles:['Additional DMG'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Decisive Intent', effect:"While in Fury, before Combat Skill, applies Shot DMG dealt +24% (1 turn) to this unit. While in Pride, after Combat Skill, advances this unit\'s next Action Order by 20%."},
+      {id:'A2', name:'Accumulated Confidence', effect:"While in Pride, after Ultimate, deals Shot Additional DMG equal to 50% of this unit\'s ATK to the target, up to 5 times."},
+      {id:'A3', name:'Voracious Ambition', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Fearless Offensive', effect:"While in Fury, this unit\'s Ultimate Gauge Charge Rate +50%. This unit\'s Ultimate CRIT DMG +30%."},
+      {id:'A5', name:'Insatiable Zeal', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Indomitable Instinct', effect:"Activation count of Shot Additional DMG triggered by this unit\'s Passive Skill +4."},
+    ],
+    },
   { id:'ryo-ikaruga-pr',     name:'Ryo Ikaruga',      variant:'Passion and Responsibility',      stars:4, role:'Supporter', types:['Shot'],           img:'RyoIkaruga-PR.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'All other allies\' ATK +12.8%'}, {scope:'all', desc:'At start of wave: ATK +10% (2 turns) to all allies'}, {scope:'all', desc:'All allies\' DMG dealt +10%'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Good Start', effect:"At the start of battle, applies SPD +10% (2 turns) to this unit."},
+      {id:'A2', name:'Emphasis on Mobility', effect:"This unit\'s Normal Attack DMG Multiplier +20%."},
+      {id:'A3', name:'Overflowing Sense of Responsibility', effect:"Normal Attack, Ultimate Lv. +2. Normal Attack, Ultimate max Lv. +2."},
+      {id:'A4', name:'Overwhelming Enthusiasm', effect:"Turn duration of buff applied by Ultimate +1."},
+      {id:'A5', name:'Platoon Leader\'s Duty', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Frontline Command', effect:"All allies\' DMG dealt +10%."},
+    ],
+    },
   { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',  variant:'Dimensionally Distorted Destiny', stars:5, role:'Defender',  types:['Blunt','Fire'],   img:'SaganShinomiya-DDD.png', subRoles:['Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Before Ultimate: CRIT DMG +30% (2 turns) to all allies'}, {scope:'all', desc:'After Ultimate: Shield equal to 20% of DEF to all allies'}, {scope:'all', desc:'ATK +10.5% (2 turns) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Same Fighting Spirit', effect:"Before activating Ultimate, applies CRIT DMG +30% (2 turns) to all allies."},
+      {id:'A2', name:'Blazing Drive', effect:"If Inner Flame is at 1 or more stacks, after turn arrives, randomly removes 1 of this unit\'s debuffs."},
+      {id:'A3', name:'CLOZER Captain', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Smoldering Fate', effect:"Taunt duration +1. When attacking a Kaiju in Taunt state, this unit\'s CRIT Rate +15%."},
+      {id:'A5', name:'Pride of a Shinomiya', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Strong Will to Protect Allies', effect:"After activating Ultimate, applies a Shield (2 turns) equal to 20% of this unit\'s DEF to all allies."},
+    ],
+    },
   { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya',  variant:'Over Limit',                      stars:5, role:'Attacker',  types:['Slash','Fire'],   img:'SaganShinomiya-OL.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'CRIT DMG +11% (3 turns) to all allies'}, {scope:'all', desc:'Ultimate DMG dealt +3.3% to all allies (max 5 stacks)'}, {scope:'all', desc:'After Enhanced Normal Attack: all allies\' Ultimate Gauge +27'}, {scope:'conditional', desc:'While in Ardor state: all allies\' DEF PEN Rate +24%'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Rekindled Will', effect:"After activating Combat Skill, applies CRIT Rate +20% (2 turns) to this unit. DMG dealt from Enhanced Normal Attack and Ultimate +30%."},
+      {id:'A2', name:'Choice to Entrust', effect:"While in Ardor state, all allies\' DEF PEN Rate +24%."},
+      {id:'A3', name:'Recalled Ideals', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Blight Incineration', effect:"After activating Ultimate, removes all of this unit\'s and battle buddy\'s debuffs and status ailments."},
+      {id:'A5', name:'Victory for All', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Burning Vow of Protection', effect:"While in Blaze state, this unit\'s CRIT DMG from Enhanced Normal Attack and Ultimate +150%."},
+    ],
+    },
   { id:'sagan-shinomiya-rc', name:'Sagan Shinomiya',  variant:'The Resurgent Commander',          stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'SaganShinomiya-RC.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'DMG dealt +21.6% and Extra Attack DMG dealt +21.6% (3 turns) to all allies'}, {scope:'all', desc:'While in Command: all allies\' CRIT Rate +32%, CRIT DMG +32%, Extra Attack CRIT DMG +32%'}, {scope:'all', desc:'Advances all other allies\' Action Order by 50% on Ultimate'}, {scope:'conditional', desc:'While in Command: all allies\' DEF PEN Rate +24%'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Resolve to Lead', effect:"While in Command state, all allies\' DEF PEN Rate +24%. This unit\'s Extra Attack DMG Multiplier +100%."},
+      {id:'A2', name:'Fervent Impact', effect:"After activating Combat Skill, applies Blunt DMG dealt +40% (3 turns) to this unit. Applies DMG Taken Reduction +15% (3 turns) to all allies. After an ally attacks, additionally applies 1 stack of Zeal to this unit."},
+      {id:'A3', name:'Ash and Ruin', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'New Bonds', effect:"The \"Extra Attack ATK buff\" applied by Extra Attack becomes an \"ATK buff.\" The \"Extra Attack DMG dealt buff\" applied by Combat Skill becomes a \"DMG dealt buff.\""},
+      {id:'A5', name:'Call to Onslaught', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Hellfire Roar', effect:"Number of Elemental PLT destroyed with Extra Attack\'s effect +1."},
+    ],
+    },
   { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',     stars:5, role:'Supporter', types:['Shot','Slash'],   img:'SoichiroHoshina-KOWJ.png', subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'Buffs and debuffs enemies to boost team\'s damage output'} ],
-    buddyBuffs:[], debuffs:[ {desc:'Applies debuffs to reduce enemy resistance and boost ally ATK'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'Applies debuffs to reduce enemy resistance and boost ally ATK'} ],
+    ascension:[
+      {id:'A1', name:'Lucid Blade Path', effect:"Target of the CRIT Rate and CRIT DMG buffs from Mind\'s Eye becomes all allies. Turn duration +1."},
+      {id:'A2', name:'Relentless Pursuit', effect:"This unit\'s Follow-Up Skill DMG Multiplier +40%. Effect amount of DMG Taken Increase debuff applied by Follow-Up Skill +15%."},
+      {id:'A3', name:'Flowing Blade Work', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Hounding Swordplay', effect:"Turn duration of Mind\'s Eye +1. Effect amount of DEF debuff applied by Mind\'s Eye +20%."},
+      {id:'A5', name:'Eldest Brother\'s Resolve', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Bearer of the Hoshina Style', effect:"Target of the SPD and DMG Taken Increase debuffs applied by Follow-Up Skill becomes all Kaiju."},
+    ], },
   { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',  variant:'Ax Technique Proficiency',        stars:5, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-ATP.png', subRoles:['Buffer', 'Debuffer'],
     teamBuffs:[ {scope:'all', desc:'All allies\' DMG dealt +5.5%'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Manifestation of Might', effect:"Tremble: In addition, target\'s Effect RES -20%. Each time a Kaiju in Tremble state is defeated, this unit\'s Ultimate Gauge +10."},
+      {id:'A2', name:'Grasp of the Battlefield', effect:"Tremble: In addition, target\'s DMG Taken Increase from Additional DMG +30%."},
+      {id:'A3', name:'Proficiency in Application', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Unstoppable Advance', effect:"CRIT DMG of this unit\'s Additional DMG +46%."},
+      {id:'A5', name:'Art of Close Combat', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Overwhelming Battle Aura', effect:"Slash Additional DMG Multiplier for each stack of Fear +10%."},
+    ],
+    },
   { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina',  variant:'Blade Specialist',                stars:4, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-BS.png', subRoles:['Buffer'],
     teamBuffs:[],
-    buddyBuffs:[ {desc:'SPD +14.7% (2 turns) to Battle Buddy after attacking'}, {desc:'If SP ≤2: SPD +16% (2 turns) to Battle Buddy'}, {desc:'If SP ≤1: CRIT DMG +32% (2 turns) to Battle Buddy'}, {desc:'This unit\'s and Battle Buddy\'s Normal Attack DMG dealt +20%'}, {desc:'Randomly removes 1 debuff from Battle Buddy'} ], debuffs:[] },
+    buddyBuffs:[ {desc:'SPD +14.7% (2 turns) to Battle Buddy after attacking'}, {desc:'If SP ≤2: SPD +16% (2 turns) to Battle Buddy'}, {desc:'If SP ≤1: CRIT DMG +32% (2 turns) to Battle Buddy'}, {desc:'This unit\'s and Battle Buddy\'s Normal Attack DMG dealt +20%'}, {desc:'Randomly removes 1 debuff from Battle Buddy'} ], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Support Stance', effect:"Battle buddy\'s CRIT Rate +20%."},
+      {id:'A2', name:'Stance for Pursuit', effect:"All allies\' Follow-Up Skill DMG dealt +25%."},
+      {id:'A3', name:'Keen Observation', effect:"Normal Attack, Follow-Up Skill Lv. +2. Normal Attack, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Proficiency in Support', effect:"After activating Ultimate, battle buddy\'s Ultimate Gauge +25."},
+      {id:'A5', name:'Blade Talent', effect:"Combat Skill, Ultimate, Passive Skill Lv. +2. Combat Skill, Ultimate, Passive Skill max Lv. +2."},
+      {id:'A6', name:'Genuine Praise', effect:"After battle buddy defeats a Kaiju, applies SPD +20% (2 turns) to this unit."},
+    ],
+    },
   { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina',variant:'Hoshina-Style Sword-Slay Technique',stars:5,role:'Attacker', types:['Slash'],          img:'SoshiroHoshina-HSSST.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Steady Neutralization', effect:"When attacking a Kaiju that has 50% or less remaining HP, this unit\'s CRIT DMG +20%."},
+      {id:'A2', name:'Only Way to Leave a Mark', effect:"Slash DMG Dealt +15%."},
+      {id:'A3', name:'Fruitful Training', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Path-Carving Determination', effect:"After activating Ultimate, applies Ultimate Gauge Charge Rate +20% (2 turns) to this unit."},
+      {id:'A5', name:'Dedication to the Blade', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Unwavering Edge', effect:"While in Fierce state, this unit\'s DEF PEN Rate +25%."},
+    ],
+    },
   { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    ascension:[
+      {id:'A1', name:'Gale of the Kamaitachi', effect:"DEF PEN Rate +16%. At the start of wave, has a 100% base chance to apply Windbite (1 turn) to all Kaiju."},
+      {id:'A2', name:'Opening-Cleaving Blade', effect:"When activating Combat Skill against a Kaiju with 5 or more stacks of Opening, this unit\'s Combat Skill DMG dealt +30%."},
+      {id:'A3', name:'Proficiency in Shuriken', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Transition Energy Utilization', effect:"After activating Ultimate or Follow-Up Skill, applies SPD +12% (2 turns) to this unit."},
+      {id:'A5', name:'A New Horizon', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Realm of Masterful Art', effect:"After activating Combat Skill, applies 1 stack of Opening to the target. After attacking, applies Wind DMG dealt +7% to this unit. Max 5 stacks."},
+    ], },
   { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[], },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Polished Technique', effect:"Before activating Combat Skill, applies CRIT Rate +25% (1 turn) to this unit."},
+      {id:'A2', name:'Honed Senses', effect:"Before activating Ultimate or Follow-Up Skill, applies ATK +15% to this unit. Max 5 stacks."},
+      {id:'A3', name:'Unexpected Combination', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'The Path Forged', effect:"After defeating a Kaiju, this unit\'s Ultimate Gauge +45."},
+      {id:'A5', name:'Critical Realization', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Joy of Combat', effect:"After activating Ultimate, applies CRIT DMG +100% (2 turns) to this unit."},
+    ],
+    },
   { id:'suited-uc',          name:'Suited',            variant:'Unbridled Curiosity',             stars:5, role:'Attacker',  types:['Blunt'],          img:'Suited-UC.png', subRoles:['Buffer'],
     teamBuffs:[ {scope:'all', desc:'After Extra Attack: Follow-Up and Extra Attack DMG dealt +15% (2 turns) to all allies (max 3 stacks)'}, {scope:'all', desc:'After Extra Attack: CRIT DMG +25% (1 turn) to all allies'} ],
-    buddyBuffs:[], debuffs:[] },
+    buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Destructive Logic', effect:"When attacking a Kaiju in Mark state, this unit\'s DEF PEN Rate +26%."},
+      {id:'A2', name:'Eager Anticipation', effect:"After activating Extra Attack, applies CRIT DMG +25% (1 turn) to all allies."},
+      {id:'A3', name:'Theoretical Foundations', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'All-In', effect:"Before activating Ultimate, applies Combat Skill DMG Multiplier +25% (2 turns) and Extra Attack DMG Multiplier +70% (2 turns) to this unit."},
+      {id:'A5', name:'Endless Research', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Bursting Ambition', effect:"Chips max stack count +3. After activating Ultimate, additionally applies 3 stacks of Chips. This unit\'s Blunt DMG dealt from Extra Attack +25%."},
+    ],
+    },
   { id:'tae-nakanoshima-tkepl', dotEffects:[ {type:'burn',desc:'Fire debuffs'} ],name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',   stars:4, role:'Attacker',  types:['Shot','Fire'],    img:'TaeNakanoshima-TKEPL.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Fire debuffs on enemies'} ] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Fire debuffs on enemies'} ],
+        ascension:[
+      {id:'A1', name:'Ample Stamina', effect:"After activating Ultimate, applies Ultimate Gauge Charge Rate +20% (2 turns) to this unit."},
+      {id:'A2', name:'Penetrating Gaze', effect:"After attacking a Kaiju in Burn state, applies DMG dealt +20% (2 turns) to this unit."},
+      {id:'A3', name:'Cougar Mode', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A4', name:'Firm Stance', effect:"When failing to apply Burn with Combat Skill, applies Effect Hit Rate +40% (1 turn) to this unit. Activates 1 time every 2 turns."},
+      {id:'A5', name:'Platoon Leader\'s Pride', effect:"Combat Skill, Ultimate Lv. +2. Combat Skill, Ultimate max Lv. +2."},
+      {id:'A6', name:'Expanded Heatwave', effect:"After activating Ultimate, has a 65% base chance to apply Burn (2 turns) with the same effect as Combat Skill\'s to a single Kaiju and adjacent Kaiju."},
+    ],
+    },
   { id:'wang-meixing-nwc', dotEffects:[ {type:'shock',desc:'Shock Wire'} ],   name:'Wang Meixing',      variant:'Negotiator of Wit and Charm',     stars:5, role:'Supporter', types:['Shot','Lightning'],img:'WangMeixing-NWC.png', subRoles:['Debuffer', 'Buffer'],
     teamBuffs:[ {scope:'conditional', desc:'[4+ PLTs removed]: DoT DMG Multiplier +16.5% (1 turn) to all allies'}, {scope:'conditional', desc:'[6+ PLTs removed]: DEF PEN Rate +7.8% (1 turn) to all allies'}, {scope:'conditional', desc:'When ally attacks Kaiju in Shock Wire state: ally\'s DMG dealt +15%'} ],
-    buddyBuffs:[], debuffs:[ {desc:'Shock Wire — DEF reduction and DoT; triggers team DMG bonus'} ] },
+    buddyBuffs:[], debuffs:[ {desc:'Shock Wire — DEF reduction and DoT; triggers team DMG bonus'} ],
+        ascension:[
+      {id:'A1', name:'Electrifying Stratagem', effect:"After activating Ultimate, has a 100% base chance to apply ATK -15% (3 turns) to the target."},
+      {id:'A2', name:'Arrangements Complete', effect:"When an ally attacks a Kaiju in Shock Wire state, ally\'s DMG dealt +15%."},
+      {id:'A3', name:'CLOZER\'s Intel Specialist', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill Max Lv. +2."},
+      {id:'A4', name:'Plan in Orbit', effect:"Each time a Kaiju takes DoT, this unit\'s Ultimate Gauge +4."},
+      {id:'A5', name:'Unseen Effort', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
+      {id:'A6', name:'Exceeding Expectations', effect:"After activating Ultimate, has a 100% base chance to apply DEF -20% (3 turns) to the target. This unit\'s DoT DMG Multiplier +50%."},
+    ],
+    },
   { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, role:'Attacker',  types:['Shot','Slash'],   img:'ZoeeWanderfalke-TWU.png',
-    teamBuffs:[], buddyBuffs:[], debuffs:[] },
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Breakthrough Will', effect:"At the start of battle, this unit\'s Ultimate Gauge +90. Each time this unit loses a total of 20% of Max HP, applies CRIT DMG +10% to this unit. Max 5 stacks."},
+      {id:'A2', name:'Chain of Annihilation', effect:"After activating Enhanced Combat Skill, advances this unit\'s next Action Order by 50%. Activates 1 time every 2 turns."},
+      {id:'A3', name:'Battle-Hungry Instinct', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Absorbed Aggression', effect:"Shield Application Multiplier +50%. Turn duration of Shield applied by Ultimate +1."},
+      {id:'A5', name:'Berserker Unleashed', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Exultation in Extremis', effect:"Before activating Ultimate, applies Enhanced Combat Skill DMG Multiplier +30% (3 turns) and Ultimate DMG Multiplier +30% (3 turns) to this unit."},
+    ],
+    },
 ];
 
 // ── STORAGE ──────────────────────────────────────────────────────────────────
@@ -347,7 +813,9 @@ function saveSquads() {
 }
 
 // ── STATE ────────────────────────────────────────────────────────────────────
-let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null] }];
+let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null], ascendedNodes:[[],[],[],[]] }];
+// Backfill ascendedNodes for squads saved before this feature existed
+squads.forEach(s => { if (!s.ascendedNodes) s.ascendedNodes = [[],[],[],[]]; });
 let activeSquad = 0;
 let activeSlot = null; // index of slot currently picking
 
@@ -355,6 +823,13 @@ let activeSlot = null; // index of slot currently picking
 function getChar(id) { return id ? CHARACTERS.find(c => c.id === id) : null; }
 function currentSlots() { return squads[activeSquad].slots; }
 function slotChar(i) { return getChar(currentSlots()[i]); }
+function slotAscended(i) { return squads[activeSquad].ascendedNodes[i] || []; }
+function toggleAscension(slotIdx, nodeId) {
+  const arr = squads[activeSquad].ascendedNodes[slotIdx];
+  const pos = arr.indexOf(nodeId);
+  if (pos === -1) arr.push(nodeId); else arr.splice(pos, 1);
+  saveSquads(); renderSlots(); renderAnalysis();
+}
 function isBuddy(slotA, slotB) { return (slotA === 0 && slotB === 1) || (slotA === 1 && slotB === 0) || (slotA === 2 && slotB === 3) || (slotA === 3 && slotB === 2); }
 function buddyOf(slotIdx) { return slotIdx === 0 ? 1 : slotIdx === 1 ? 0 : slotIdx === 2 ? 3 : 2; }
 
@@ -414,6 +889,12 @@ function renderSlot(idx) {
           ${char.types.map(t => `<span class="slot-tag ${tagColor(t)}">${t}</span>`).join('')}
           ${(char.subRoles||[]).map(r => `<span class="slot-tag ${tagColor(r)}">${r}</span>`).join('')}
         </div>
+        ${char.ascension ? `<div class="slot-ascension">
+          <span class="slot-ascension-label">Ascension</span>
+          <div class="slot-ascension-toggles">
+            ${char.ascension.map(node => `<span class="a-toggle-btn${slotAscended(idx).includes(node.id)?' active':''}" data-slot="${idx}" data-node="${node.id}" title="${node.name}: ${node.effect.replace(/"/g,'&quot;')}">${node.id}</span>`).join('')}
+          </div>
+        </div>` : ''}
       </div>`;
     slot.querySelector('.slot-remove').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -421,6 +902,12 @@ function renderSlot(idx) {
       saveSquads();
       if (activeSlot === idx) activeSlot = null;
       render();
+    });
+    slot.querySelectorAll('.a-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAscension(+btn.dataset.slot, btn.dataset.node);
+      });
     });
   } else {
     slot.className = 'slot empty' + (activeSlot === idx ? ' picking' : '');
@@ -531,6 +1018,21 @@ function renderAnalysis() {
       f.char.buddyBuffs.forEach(b => {
         if (b.conditional) condBuffs.push({source: `${src} → ${buddyChar.name} (${buddyChar.variant})`, desc: b.desc, scope:'buddy', isBuddy:true});
         else buddyBuffs.push({source: `${src} → ${buddyChar.name} (${buddyChar.variant})`, desc: b.desc});
+      });
+    }
+
+    // Active ascension nodes — feed into the same aggregation so toggling
+    // a node actually changes stat totals / coverage / warnings below
+    if (f.char.ascension) {
+      const active = slotAscended(f.slotIdx);
+      f.char.ascension.filter(n => active.includes(n.id)).forEach(node => {
+        const effectLower = node.effect.toLowerCase();
+        const scope = effectLower.includes('all allies') ? 'all' : 'conditional';
+        if (scope === 'conditional') {
+          condBuffs.push({source: `${src} — ${node.id}`, desc: node.effect, isAscension:true});
+        } else {
+          teamBuffs.push({source: `${src} — ${node.id}`, scope:'all', desc: node.effect, isAscension:true});
+        }
       });
     }
   });
@@ -724,7 +1226,7 @@ document.getElementById('squad-name-input').addEventListener('input', (e) => {
 
 // ── NEW / DELETE SQUAD ────────────────────────────────────────────────────────
 document.getElementById('new-squad-btn').addEventListener('click', () => {
-  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null] });
+  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null], ascendedNodes:[[],[],[],[]] });
   activeSquad = squads.length - 1;
   activeSlot = null;
   saveSquads();
