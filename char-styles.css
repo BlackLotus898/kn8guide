@@ -72,7 +72,7 @@ nav { position: sticky; top: 0; z-index: 900; background: rgba(8,11,16,.92); bac
 .weapon-name { font-weight: 600; font-size: 1rem; color: var(--text); }
 
 /* TWO COL */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
 @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
 .info-box { background: var(--dark); border: 1px solid var(--border); padding: 1rem; }
 .info-box .lbl { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; margin-bottom: .4rem; display: block; }
