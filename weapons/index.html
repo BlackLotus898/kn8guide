@@ -45,7 +45,7 @@
 
   .weapon-row {
     display: grid;
-    grid-template-columns: 80px 1fr 1fr;
+    grid-template-columns: 80px 160px 1fr 1fr;
     border-bottom: 1px solid var(--border);
     transition: background .2s;
   }
@@ -72,7 +72,8 @@
     display: flex; align-items: center;
   }
   .weapon-name-text { font-weight: 600; font-size: .97rem; color: var(--text); }
-  .weapon-effect { margin-top: .35rem; display: flex; flex-direction: column; gap: .2rem; }
+  .weapon-effect-col { padding: .7rem 1.2rem; border-right: 1px solid var(--border); display: flex; align-items: flex-start; }
+  .weapon-effect { display: flex; flex-direction: column; gap: .25rem; }
   .weapon-effect-stat { font-family: 'Share Tech Mono', monospace; font-size: .72rem; color: var(--cyan); letter-spacing: .5px; }
   .weapon-effect-line { font-size: .82rem; color: var(--muted); line-height: 1.45; }
 
@@ -92,13 +93,14 @@
 
   /* COLUMN HEADERS */
   .weapon-col-headers {
-    display: grid; grid-template-columns: 80px 1fr 1fr;
+    display: grid; grid-template-columns: 80px 160px 1fr 1fr;
     padding: .4rem 0; background: rgba(255,255,255,.02);
     border-bottom: 1px solid var(--border);
   }
   .col-header { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 1.2rem; }
   .col-header:first-child { text-align: center; border-right: 1px solid var(--border); }
   .col-header:nth-child(2) { border-right: 1px solid var(--border); }
+  .col-header:nth-child(3) { border-right: 1px solid var(--border); }
 
   .hidden { display: none; }
 
@@ -109,6 +111,7 @@
     }
     .weapon-star-col { justify-self: start; padding: 0; }
     .weapon-name-col { padding: 0; }
+    .weapon-effect-col { padding: 0; border-right: none; }
     .weapon-users-col { padding: 0; }
   }
 </style>
@@ -403,7 +406,8 @@ function buildSection(cat) {
     const effectHTML = effectLines ? `<div class="weapon-effect">${effectLines}</div>` : '';
     return `<div class="weapon-row" data-stars="${w.stars}" data-name="${w.name.toLowerCase()}" data-users="${w.users.join(' ').toLowerCase()}">
       <div class="weapon-star-col"><span class="star-badge ${starClass}">${starStr(w.stars)}</span></div>
-      <div class="weapon-name-col"><span class="weapon-name-text">${w.name}</span>${effectHTML}</div>
+      <div class="weapon-name-col"><span class="weapon-name-text">${w.name}</span></div>
+      <div class="weapon-effect-col">${effectHTML}</div>
       <div class="weapon-users-col">${usersHTML}</div>
     </div>`;
   }).join('');
@@ -417,6 +421,7 @@ function buildSection(cat) {
     <div class="weapon-col-headers">
       <div class="col-header">Stars</div>
       <div class="col-header">Weapon</div>
+      <div class="col-header">Effect</div>
       <div class="col-header">Best User(s)</div>
     </div>
     <div class="weapon-list-inner">${rows}</div>
