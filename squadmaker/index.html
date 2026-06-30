@@ -1255,7 +1255,10 @@ function renderAnalysis() {
   const spdTotal   = extractStat(allBuffs, ['spd +']);
   const defPenTotal= extractStat(allBuffs, ['def pen rate +']);
   const dmgTotal   = extractStat(allBuffs, ['dmg dealt +']);
-  const hasHealing = [...teamBuffs,...buddyBuffs].some(b => b.desc.toLowerCase().includes('recover') || b.desc.toLowerCase().includes('hp'));
+  const hasHealing = [...teamBuffs,...buddyBuffs].some(b => {
+    const d = b.desc.toLowerCase();
+    return d.includes('recover') || d.includes('heal');
+  });
   const hasShield  = [...teamBuffs,...buddyBuffs].some(b => b.desc.toLowerCase().includes('shield'));
 
   // DoT coverage
