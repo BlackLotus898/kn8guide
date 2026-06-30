@@ -40,6 +40,10 @@
   .export-btn, .import-btn { padding: .4rem .9rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
   .export-btn:hover, .import-btn:hover { color: var(--cyan); border-color: var(--cyan); }
   .export-btn { margin-left: auto; }
+  .export-img-group { display: flex; gap: 0; }
+  .export-img-scope { font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: .5px; background: var(--dark); border: 1px solid var(--border); border-right: none; color: var(--muted); padding: .4rem .5rem; cursor: pointer; }
+  .export-img-btn { padding: .4rem .9rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .export-img-btn:hover { color: var(--gold); border-color: var(--gold); }
 
   /* RARITY SECTION */
   .rarity-section { margin-bottom: 2.5rem; }
@@ -145,6 +149,13 @@
     <button class="export-btn" id="export-btn">Export Data</button>
     <button class="import-btn" id="import-btn">Import Data</button>
     <input type="file" id="import-file-input" accept="application/json" style="display:none;">
+    <div class="export-img-group">
+      <select id="export-img-scope" class="export-img-scope">
+        <option value="owned">Owned Only</option>
+        <option value="all">Full Roster</option>
+      </select>
+      <button class="export-img-btn" id="export-img-btn">Export Image</button>
+    </div>
     <button class="reset-btn" id="reset-btn">Reset All</button>
   </div>
 
@@ -469,6 +480,152 @@ importFileInput.addEventListener('change', (e) => {
 
 buildTracker();
 updateStats();
+
+// ── IMAGE EXPORT ─────────────────────────────────────────────────────────────
+document.getElementById('export-img-btn').addEventListener('click', exportTrackerImage);
+
+async function exportTrackerImage() {
+  const btn = document.getElementById('export-img-btn');
+  const scope = document.getElementById('export-img-scope').value; // 'owned' or 'all'
+  btn.textContent = 'Generating...';
+  btn.disabled = true;
+
+  try {
+    const list = scope === 'owned' ? characters.filter(c => owned.has(c.id)) : characters;
+
+    if (scope === 'owned' && list.length === 0) {
+      alert('You don\'t have any characters marked as owned yet — nothing to show in an "Owned Only" export. Mark some characters owned first, or switch to "Full Roster".');
+      btn.textContent = 'Export Image';
+      btn.disabled = false;
+      return;
+    }
+
+    const PADDING = 24;
+    const TITLE_H = 80;
+    const CHIP_W = 96;
+    const CHIP_GAP = 12;
+    const LABEL_H = 34;
+    const CHIP_BLOCK_H = CHIP_W + LABEL_H;
+
+    const canvasWidth = 1100;
+    const contentWidth = canvasWidth - PADDING * 2;
+    const chipsPerRow = Math.max(1, Math.floor((contentWidth + CHIP_GAP) / (CHIP_W + CHIP_GAP)));
+    const rows = Math.ceil(list.length / chipsPerRow);
+    const gridHeight = rows * (CHIP_BLOCK_H + CHIP_GAP);
+
+    const totalHeight = TITLE_H + gridHeight + PADDING * 2;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasWidth;
+    canvas.height = totalHeight;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#080b10';
+    ctx.fillRect(0, 0, canvasWidth, totalHeight);
+
+    // Header
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 30px Rajdhani, sans-serif';
+    ctx.textBaseline = 'top';
+    ctx.fillText('Character Tracker', PADDING, PADDING);
+
+    const ownedCount = owned.size;
+    const totalCount = characters.length;
+    const pct = totalCount ? Math.round(ownedCount / totalCount * 100) : 0;
+    ctx.fillStyle = '#00d4ff';
+    ctx.font = '600 16px Rajdhani, sans-serif';
+    ctx.fillText(`${ownedCount} / ${totalCount} Owned — ${pct}% Complete`, PADDING, PADDING + 38);
+
+    ctx.fillStyle = '#5a7090';
+    ctx.font = '11px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('KN8GUIDE.XYZ', canvasWidth - PADDING, PADDING + 4);
+    ctx.textAlign = 'left';
+
+    // Preload images
+    const imageCache = {};
+    await Promise.all(list.map(c => new Promise(resolve => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => { imageCache[c.id] = img; resolve(); };
+      img.onerror = () => resolve();
+      img.src = IMG + c.img;
+    })));
+
+    let cx = PADDING;
+    let cy = TITLE_H + PADDING;
+    let col = 0;
+
+    list.forEach(c => {
+      const isOwned = owned.has(c.id);
+      const ascLevel = ascension[c.id] || 0;
+      const img = imageCache[c.id];
+
+      ctx.save();
+      if (!isOwned) ctx.globalAlpha = 0.35;
+
+      if (img) {
+        ctx.drawImage(img, cx, cy, CHIP_W, CHIP_W);
+      } else {
+        ctx.fillStyle = '#1e2d45';
+        ctx.fillRect(cx, cy, CHIP_W, CHIP_W);
+      }
+
+      ctx.strokeStyle = isOwned ? '#00d4ff' : '#1e2d45';
+      ctx.lineWidth = isOwned ? 2 : 1;
+      ctx.strokeRect(cx, cy, CHIP_W, CHIP_W);
+      ctx.restore();
+
+      // Ascension badge (only for owned characters with progress)
+      if (isOwned && ascLevel > 0) {
+        const badgeText = `A${ascLevel}`;
+        ctx.font = '700 11px monospace';
+        const badgeW = ctx.measureText(badgeText).width + 10;
+        ctx.fillStyle = '#e8b020';
+        ctx.fillRect(cx + CHIP_W - badgeW, cy, badgeW, 18);
+        ctx.fillStyle = '#08090c';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(badgeText, cx + CHIP_W - badgeW/2, cy + 9);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+      }
+
+      // Name label
+      ctx.fillStyle = isOwned ? '#c8d8ea' : '#4a5870';
+      ctx.font = '600 10px Rajdhani, sans-serif';
+      ctx.textAlign = 'center';
+      const name = c.name.length > 16 ? c.name.slice(0,15)+'…' : c.name;
+      ctx.fillText(name, cx + CHIP_W/2, cy + CHIP_W + 6);
+      ctx.font = '9px Rajdhani, sans-serif';
+      ctx.fillStyle = isOwned ? '#7e8a9a' : '#3a4658';
+      const variant = c.variant.length > 18 ? c.variant.slice(0,17)+'…' : c.variant;
+      ctx.fillText(variant, cx + CHIP_W/2, cy + CHIP_W + 18);
+      ctx.textAlign = 'left';
+
+      col++;
+      if (col >= chipsPerRow) {
+        col = 0;
+        cx = PADDING;
+        cy += CHIP_BLOCK_H + CHIP_GAP;
+      } else {
+        cx += CHIP_W + CHIP_GAP;
+      }
+    });
+
+    const link = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0,10);
+    link.download = `k8guide-tracker-${scope}-${dateStr}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong generating the image. Try again, or screenshot the page instead.');
+  } finally {
+    btn.textContent = 'Export Image';
+    btn.disabled = false;
+  }
+}
 </script>
 </body>
 </html>
