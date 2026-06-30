@@ -72,6 +72,9 @@
     display: flex; align-items: center;
   }
   .weapon-name-text { font-weight: 600; font-size: .97rem; color: var(--text); }
+  .weapon-effect { margin-top: .35rem; display: flex; flex-direction: column; gap: .2rem; }
+  .weapon-effect-stat { font-family: 'Share Tech Mono', monospace; font-size: .72rem; color: var(--cyan); letter-spacing: .5px; }
+  .weapon-effect-line { font-size: .82rem; color: var(--muted); line-height: 1.45; }
 
   .weapon-users-col { padding: .7rem 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; }
 
@@ -143,178 +146,180 @@ const weaponData = [
   {
     type: 'Assault Rifle', icon: '🔫',
     weapons: [
-      { stars: 5, name: 'AR-6710', users: ['Soichiro Hoshina (Keystone of Western Japan)'] },
-      { stars: 5, name: 'AR-Gnijiluh', users: ['Wang Meixing (Negotiator of Wit and Charm)'] },
-      { stars: 5, name: 'AR-Xmas25', users: ['Akari Minase (Festive Christmas)'] },
-      { stars: 5, name: 'AR-Anollococ', users: ['Chester (The All-Rounder)'] },
-      { stars: 5, name: 'AR-Boreas', users: ['Reno Ichikawa (The Compatible User)'] },
-      { stars: 5, name: 'AR-Cronus', users: [] },
-      { stars: 5, name: 'AR-Crius', users: ['Akari Minase (Heart of Compassion)'] },
-      { stars: 5, name: 'AR-Hyperion', users: ['Mina Ashiro (Aiming for Greater Heights)', 'Reno Ichikawa (Signs of Awakening)', 'Iharu Furuhashi (Latent Talent)', 'Haruichi Izumo (The Clean-Cut Elite)', 'Aoi Kaguragi (The Promising Rising Star)', 'Keiji Itami (Calm and Quiet)', 'Ryo Ikaruga (Passion and Responsibility)', 'Tae Nakanoshima (The Keen-Eyed Platoon Leader)'] },
-      { stars: 5, name: 'AR-Hgrumis', users: ['Akari Minase (Synchro Aptitude)'] },
-      { stars: 4, name: 'AR-Hound 64', users: [] },
-      { stars: 4, name: 'AR-Egret 12', users: [] },
-      { stars: 4, name: 'AR-Squid 62', users: ['Kota Tachibana (First Division\'s Feral Force)'] },
-      { stars: 4, name: 'AR-Honeybee 84', users: [] },
-      { stars: 4, name: 'AR-Panther 33', users: [] },
-      { stars: 4, name: 'AR-Octopus 58', users: [] },
-      { stars: 4, name: 'AR-Narwhal 59', users: [] },
-      { stars: 4, name: 'AR-Lynx 75', users: [] },
-      { stars: 4, name: 'AR-Allosaurus 77', users: ['Hakua Igarashi (Sincerity and Potential)'] },
-      { stars: 3, name: 'Sustained Combat Assault Rifle', users: [] },
-      { stars: 3, name: 'Heavy Duty Assault Rifle', users: [] },
-      { stars: 3, name: 'Standard Assault Rifle', users: [] },
+      { stars: 5, name: 'AR-6710', effect: 'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Follow-Up Skill, applies DMG dealt +15% (2 turn(s)) and DEF PEN Rate +10% (2 turn(s)) to all allies.', users: ['Soichiro Hoshina (Keystone of Western Japan)'] },
+      { stars: 5, name: 'AR-Gnijiluh', effect: 'Effect Hit Rate (%) +20%\nBefore the equipped unit activates Normal Attack or Combat Skill, applies Lightning DMG dealt +5% (2 turn(s)) to the equipped unit. Max 3 stack(s).\nAfter the equipped unit attacks, if there is any Kaiju target that already has a debuff, based on the number of Kaiju that receive DMG, applies DMG dealt +3% to the equipped unit. Max 6 stack(s).', users: ['Wang Meixing (Negotiator of Wit and Charm)'] },
+      { stars: 5, name: 'AR-Xmas25', effect: 'Fire DMG Dealt (%) +20%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nEach time a Kaiju receives DoT, applies ATK +4% to the equipped unit. Max 10 stack(s).', users: ['Akari Minase (Festive Christmas)'] },
+      { stars: 5, name: 'AR-Anollococ', effect: 'ATK +34%\nAfter the equipped unit activates Normal Attack, applies ATK +25% (2 turn(s)) to the equipped unit.\nAfter the equipped unit activates Combat Skill, applies DMG dealt +9% (3 turn(s)) to all other allies.', users: ['Chester (The All-Rounder)'] },
+      { stars: 5, name: 'AR-Boreas', effect: 'CRIT Rate (%) +24%\nAfter the equipped unit activates Combat Skill, applies Ice DMG dealt +8% (3 turn(s)) and Ultimate Gauge Charge Rate +7% (3 turn(s)) to the equipped unit. Max 2 stack(s).', users: ['Reno Ichikawa (The Compatible User)'] },
+      { stars: 5, name: 'AR-Cronus', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit activates Combat Skill, applies ATK +6% (2 turn(s)) to the equipped unit. Max 3 stack(s).', users: [] },
+      { stars: 5, name: 'AR-Crius', effect: 'HP +28%\nBefore the wielder uses a Combat Skill, grants the wielder +12%/1.2% Healing Multiplier for 2 turn(s).\nAfter the wielder uses an Ultimate, increases all allies\' Ultimate Gauge by +3/0.3.', users: ['Akari Minase (Heart of Compassion)'] },
+      { stars: 5, name: 'AR-Hyperion', effect: 'ATK +28%\nAt the start of battle, grants all allies +4%/0.4% SPD for 3 turn(s).\nAfter the wielder uses an Ultimate, grants all allies +6%/0.6% ATK for 2 turn(s).', users: ['Mina Ashiro (Aiming for Greater Heights)', 'Reno Ichikawa (Signs of Awakening)', 'Iharu Furuhashi (Latent Talent)', 'Haruichi Izumo (The Clean-Cut Elite)', 'Aoi Kaguragi (The Promising Rising Star)', 'Keiji Itami (Calm and Quiet)', 'Ryo Ikaruga (Passion and Responsibility)', 'Tae Nakanoshima (The Keen-Eyed Platoon Leader)'] },
+      { stars: 5, name: 'AR-Hgrumis', effect: 'HP +34%\nAfter the equipped unit activates Normal Attack or Extra Attack:\n1. Applies ATK +7% (2 turn(s)) to the equipped unit. Max 5 stack(s).\n2. Applies DMG dealt +3% (2 turn(s)) to all allies. Max 5 stack(s).', users: ['Akari Minase (Synchro Aptitude)'] },
+      { stars: 4, name: 'AR-Hound 64', effect: 'ATK +23%\nAfter the equipped unit activates Combat Skill targeting an ally, applies SPD +4% (2 turn(s)) to all allies.', users: [] },
+      { stars: 4, name: 'AR-Egret 12', effect: 'Effect Hit Rate (%) +14%\nAfter the equipped unit activates Follow-Up Skill, applies Slash DMG dealt +12% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 4, name: 'AR-Squid 62', effect: 'DEF +28%\nAt the start of battle, applies DMG Taken Reduction +5% (3 turn(s)) to all allies.', users: ['Kota Tachibana (First Division\'s Feral Force)'] },
+      { stars: 4, name: 'AR-Honeybee 84', effect: 'HP +28%\nBefore the equipped unit activates Ultimate, applies Healing Multiplier +21% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 4, name: 'AR-Panther 33', effect: 'Effect RES (%) +17%\nAfter the equipped unit activates Ultimate, applies DMG dealt +6% (2 turn(s)) to all allies.', users: [] },
+      { stars: 4, name: 'AR-Octopus 58', effect: 'Effect Hit Rate (%) +17%\nAfter the equipped unit attacks a Kaiju that already has a debuff or status ailment, the equipped unit\'s Ultimate Gauge +30.', users: [] },
+      { stars: 4, name: 'AR-Narwhal 59', effect: 'ATK +28%\nThe equipped unit\'s Combat Skill DMG dealt +21%.', users: [] },
+      { stars: 4, name: 'AR-Lynx 75', effect: 'ATK +28%\nAfter the equipped unit activates Normal Attack or Ultimate, applies DMG dealt +21% (1 turn(s)) to the equipped unit.', users: [] },
+      { stars: 4, name: 'AR-Allosaurus 77', effect: '', users: ['Hakua Igarashi (Sincerity and Potential)'] },
+      { stars: 3, name: 'Sustained Combat Assault Rifle', effect: 'HP +23%', users: [] },
+      { stars: 3, name: 'Heavy Duty Assault Rifle', effect: 'DEF +23%', users: [] },
+      { stars: 3, name: 'Standard Assault Rifle', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Ax', icon: '🪓',
     weapons: [
-      { stars: 5, name: 'Ax-0087', users: ['Soshiro Hoshina (Ax Technique Proficiency)'] },
-      { stars: 5, name: 'Ax-Xmas25', users: ['Kikoru Shinomiya (Full-Power Christmas)'] },
-      { stars: 5, name: 'Ax-Dellingr', users: ['Kikoru Shinomiya (The Mission to Be Perfect)'] },
-      { stars: 5, name: 'Ax-Var', users: [] },
-      { stars: 5, name: 'Ax-0112', users: ['Kikoru Shinomiya (Guiding Light of the Future)'] },
-      { stars: 4, name: 'Ax-Bison 91', users: [] },
-      { stars: 4, name: 'Ax-Mantis 21', users: [] },
-      { stars: 3, name: 'Standard Battle Ax', users: [] },
+      { stars: 5, name: 'Ax-0087', effect: 'CRIT DMG (%) +48%\nWhen the equipped unit\'s Effect Hit Rate is 30% or more, the equipped unit\'s Slash DMG dealt +15%.\nAfter the equipped unit activates Combat Skill, applies DMG dealt from Additional DMG +15% (2 turn(s)) to all allies.', users: ['Soshiro Hoshina (Ax Technique Proficiency)'] },
+      { stars: 5, name: 'Ax-Xmas25', effect: 'HP +34%\nAfter the equipped unit activates a recovery skill on an ally, applies ATK +15% (2 turn(s)) to the target.\nBefore the equipped unit activates Ultimate, applies Healing Multiplier +6% (1 turn(s)) to all allies.', users: ['Kikoru Shinomiya (Full-Power Christmas)'] },
+      { stars: 5, name: 'Ax-Dellingr', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies ATK +18% (2 turn(s)) to the equipped unit.', users: ['Kikoru Shinomiya (The Mission to Be Perfect)'] },
+      { stars: 5, name: 'Ax-Var', effect: 'Slash DMG Dealt +17%\nAfter the equipped unit attacks, applies ATK +7% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit causes a Kaiju to be Core Exposed, applies DMG dealt +12% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 5, name: 'Ax-0112', effect: 'Slash DMG Dealt +20%\nAfter the equipped unit activates Combat Skill, applies ATK +9% (2 turn(s)) to the equipped unit. Max 3 stack(s).\nBefore the equipped unit attacks a Kaiju that already has a debuff, applies DMG dealt +15% (2 turn(s)) to the equipped unit.', users: ['Kikoru Shinomiya (Guiding Light of the Future)'] },
+      { stars: 4, name: 'Ax-Bison 91', effect: 'Effect Hit Rate (%) +14%\nThe equipped unit\'s DMG dealt from Additional DMG +12%.', users: [] },
+      { stars: 4, name: 'Ax-Mantis 21', effect: 'ATK +28%\nWhen the equipped unit attacks a Core Exposed Kaiju, the equipped unit\'s DMG dealt +21%.', users: [] },
+      { stars: 3, name: 'Standard Battle Ax', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Bow', icon: '🏹',
     weapons: [
-      { stars: 5, name: 'AW-Kokyab', users: ['Haruichi Izumo (Calculated Choice)'] },
-      { stars: 4, name: 'AW-Scopone', users: [] },
-      { stars: 3, name: 'Standard Bow', users: [] },
+      { stars: 5, name: 'AW-Kokyab', effect: 'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, applies Adept (1 turn(s)) to the equipped unit.\nAdept: 1. Battle buddy\'s ST Attack and Blast Attack DMG dealt +23%. 2. Battle buddy\'s ST Attack and Blast Attack DEF PEN Rate +15%.', users: ['Haruichi Izumo (Calculated Choice)'] },
+      { stars: 4, name: 'AW-Scopone', effect: 'ATK +28%\nAfter the equipped unit activates Ultimate, advances all allies\' Action Order by 13%.', users: [] },
+      { stars: 3, name: 'Standard Bow', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Cannon', icon: '💣',
     weapons: [
-      { stars: 5, name: 'T-Dionysus', users: ['Mina Ashiro (Superb Combination)'] },
-      { stars: 5, name: 'T-Rhea', users: [] },
-      { stars: 5, name: 'T-Oceanus', users: [] },
-      { stars: 5, name: 'T-25101985', users: ['Mina Ashiro (Off the Scale)'] },
-      { stars: 4, name: 'T-Tiger 15', users: [] },
-      { stars: 3, name: 'Standard Cannon', users: [] },
+      { stars: 5, name: 'T-Dionysus', effect: 'CRIT Rate (%) +24%\nBefore the equipped unit activates Combat Skill, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nBefore the equipped unit activates Extra Attack, applies CRIT DMG +12% to the equipped unit. Max 3 stack(s).', users: ['Mina Ashiro (Superb Combination)'] },
+      { stars: 5, name: 'T-Rhea', effect: 'CRIT DMG (%) +33%\nWhen the equipped unit attacks a Kaiju that has 50% or less remaining HP, the equipped unit\'s DMG dealt +10%.', users: [] },
+      { stars: 5, name: 'T-Oceanus', effect: 'Shot DMG Dealt +17%\nAfter the equipped unit activates Ultimate, applies ATK +7% to the equipped unit. Max 3 stack(s).\nIf there are 2 or fewer Kaiju on the field, the equipped unit\'s DMG dealt +12%.', users: [] },
+      { stars: 5, name: 'T-25101985', effect: 'Shot DMG Dealt +20%\nBefore the equipped unit activates a Normal Attack, applies ATK +13% (2 turn(s)) and Ultimate Gauge Charge Rate +7% (2 turn(s)) to the equipped unit. Max 2 stack(s).', users: ['Mina Ashiro (Off the Scale)'] },
+      { stars: 4, name: 'T-Tiger 15', effect: 'ATK +28%\nAfter the equipped unit activates Combat Skill, applies Ultimate Gauge Charge Rate +19% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Standard Cannon', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Gatling Gun', icon: '🔩',
     weapons: [
-      { stars: 5, name: 'GG-Rinfaf', users: ['Rin Shinonome (Cross-Forged Refinement)'] },
-      { stars: 5, name: 'GG-Iapetus', users: [] },
-      { stars: 5, name: 'GG-5012', users: ['Rin Shinonome (Aspiration and Honor)'] },
-      { stars: 4, name: 'GG-Squirrel 02', users: [] },
-      { stars: 3, name: 'Standard Gatling Gun', users: [] },
+      { stars: 5, name: 'GG-Rinfaf', effect: 'CRIT Rate (%) +24%\nThe equipped unit\'s CRIT DMG from Additional DMG +54%.\nAfter the equipped unit activates Ultimate, applies DMG dealt from Combat Skill and Additional DMG +15% (3 turn(s)) to the equipped unit.', users: ['Rin Shinonome (Cross-Forged Refinement)'] },
+      { stars: 5, name: 'GG-Iapetus', effect: 'CRIT Rate (%) +16%\nEach time the equipped unit attacks 1 Kaiju, applies ATK +2% to the equipped unit. Max 10 stack(s).', users: [] },
+      { stars: 5, name: 'GG-5012', effect: 'Shot DMG Dealt (%) +20%\nIf there are 3 or more Kaiju on the field, the equipped unit\'s ATK +25%.\nWhen the equipped unit activates Combat Skill or Ultimate against a Kaiju that has 50% or less remaining HP, the equipped unit\'s DMG dealt +15%.', users: ['Rin Shinonome (Aspiration and Honor)'] },
+      { stars: 4, name: 'GG-Squirrel 02', effect: 'ATK +28%\nAfter the equipped unit defeats a Kaiju, applies DMG dealt +21% (3 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Standard Gatling Gun', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Gauntlet', icon: '🥊',
     weapons: [
-      { stars: 5, name: 'Fs-Baldr', users: ['Isao Shinomiya (Prime Fist)'] },
-      { stars: 5, name: 'Fs-Magni', users: ['Kikoru Shinomiya (The Inherited Will)'] },
-      { stars: 5, name: 'Fs-Vidar', users: [] },
-      { stars: 5, name: 'Fs-1002', users: ['Isao Shinomiya (The Unbreakable Iron Wall)'] },
-      { stars: 4, name: 'Fs-Gaur 28', users: [] },
-      { stars: 4, name: 'Fs-Grizzly 83', users: [] },
-      { stars: 3, name: 'Heavy Duty Gauntlet', users: [] },
+      { stars: 5, name: 'Fs-Baldr', effect: 'CRIT DMG (%) +48%\nThe equipped unit\'s Combat Skill and Ultimate DMG dealt +15%.\nIf there are 3 or more Kaiju on the field, after the equipped unit activates Combat Skill, applies Blunt DMG dealt +18% (2 turn(s)) to the equipped unit.', users: ['Isao Shinomiya (Prime Fist)'] },
+      { stars: 5, name: 'Fs-Magni', effect: 'Effect Hit Rate (%) +20%\nWhen attacking a Kaiju that already has a debuff, the equipped unit\'s Blunt DMG dealt +15%.\nAfter the equipped unit destroys a Kaiju\'s PLT, applies ATK +25% (2 turn(s)) to the equipped unit.', users: ['Kikoru Shinomiya (The Inherited Will)'] },
+      { stars: 5, name: 'Fs-Vidar', effect: 'DEF +23%\nAfter the equipped unit activates Normal Attack, applies DMG Taken Reduction +3% (2 turn(s)) to the equipped unit. Max 3 stack(s).', users: [] },
+      { stars: 5, name: 'Fs-1002', effect: 'DEF +34%\nAfter the equipped unit receives an attack, applies DEF +25% (1 turn(s)) to the equipped unit.\nIf the equipped unit has a Shield, all allies\' DMG Taken Reduction +4%.', users: ['Isao Shinomiya (The Unbreakable Iron Wall)'] },
+      { stars: 4, name: 'Fs-Gaur 28', effect: 'ATK +23%\nBefore the equipped unit activates Ultimate, if there are 3 or more Kaiju on the field, applies DMG dealt +12% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 4, name: 'Fs-Grizzly 83', effect: 'DEF +28%\nWhen the equipped unit\'s remaining HP is less than 40%, the equipped unit\'s DEF +36%.', users: [] },
+      { stars: 3, name: 'Heavy Duty Gauntlet', effect: 'DEF +23%', users: [] },
     ]
   },
   {
     type: 'Greatsword', icon: '⚔️',
     weapons: [
-      { stars: 5, name: 'S-12066', users: ['Kikoru Shinomiya (Evolving Talent)'] },
-      { stars: 4, name: 'S-Silky Shark 13', users: [] },
-      { stars: 3, name: 'Standard Greatsword', users: [] },
+      { stars: 5, name: 'S-Iwanagahime', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit activates Ultimate or Follow-Up Skill, applies ATK +27% (3 turn(s)) to the equipped unit.', users: [] },
+      { stars: 5, name: 'S-12066', effect: 'CRIT DMG (%) +48%\nThe equipped unit\'s DMG dealt from Additional DMG +23%.\nAfter the equipped unit activates Follow-Up Skill or Extra Attack, applies Slash DMG dealt +8% (2 turn(s)) to the equipped unit. Max 2 stack(s).', users: ['Kikoru Shinomiya (Evolving Talent)'] },
+      { stars: 4, name: 'S-Silky Shark 13', effect: 'ATK +28%\nAfter the equipped unit defeats a Kaiju or causes a Kaiju to be Core Exposed, applies DMG dealt +21% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Standard Greatsword', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Gunsword', icon: '🗡️',
     weapons: [
-      { stars: 5, name: 'GS-Aremihc', users: ['Gen Narumi (Sky-Piercing Bolt)'] },
-      { stars: 5, name: 'GS-Xmas25', users: ['Gen Narumi (Japan\'s Strongest Santa)'] },
-      { stars: 5, name: 'GS-Oyamatsumi', users: ['Gen Narumi (Future Sight)'] },
-      { stars: 5, name: 'GS-Amatsu Mikaboshi', users: [] },
-      { stars: 5, name: 'GS-Takamimusubi', users: [] },
-      { stars: 5, name: 'GS-3305', users: ['Gen Narumi (Japan\'s Strongest Combatant)'] },
-      { stars: 4, name: 'GS-Walrus 92', users: [] },
-      { stars: 4, name: 'GS-Orca', users: [] },
-      { stars: 3, name: 'Standard Gunsword', users: [] },
+      { stars: 5, name: 'GS-Aremihc', effect: 'HP +34%\nAfter the equipped unit activates Ultimate, recovers all allies\' HP equal to 5% of the equipped unit\'s Max HP.\nAfter activating Normal Attack, applies DMG dealt +4% (2 turn(s)) and DMG dealt from Additional DMG +7.5% (2 turn(s)) to all allies.', users: ['Gen Narumi (Sky-Piercing Bolt)'] },
+      { stars: 5, name: 'GS-Xmas25', effect: 'CRIT Rate (%) +24%\nEach time the equipped unit consumes 1 SP, applies DMG dealt +4% (2 turn(s)) and Ultimate Gauge Charge Rate +4% (2 turn(s)) to the equipped unit. Max 4 stack(s).', users: ['Gen Narumi (Japan\'s Strongest Santa)'] },
+      { stars: 5, name: 'GS-Oyamatsumi', effect: 'CRIT DMG (%) +48%\nEach time the equipped unit attacks a Core Exposed Kaiju, applies DEF PEN Rate +4% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit activates Combat Skill, applies Shot DMG dealt +15% (2 turn(s)) to the equipped unit.', users: ['Gen Narumi (Future Sight)'] },
+      { stars: 5, name: 'GS-Amatsu Mikaboshi', effect: 'CRIT Rate (%) +16%\nIf there are 3 or fewer Kaiju on the field, the equipped unit\'s ATK +18%.', users: [] },
+      { stars: 5, name: 'GS-Takamimusubi', effect: 'Slash DMG Dealt +17%\nEach time the equipped unit destroys a PLT, applies ATK +4% to the equipped unit. Max 6 stack(s).\nAfter the equipped unit causes a Kaiju to be Core Exposed, applies DMG dealt +12% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 5, name: 'GS-3305', effect: 'Slash DMG Dealt (%) +20%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +5% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit activates Ultimate, applies Ultimate Gauge Charge +13% (2 turn(s)) to the equipped unit.', users: ['Gen Narumi (Japan\'s Strongest Combatant)'] },
+      { stars: 4, name: 'GS-Walrus 92', effect: 'HP +28%\nThe equipped unit\'s chance of being targeted slightly increases.\nThe equipped unit\'s DMG Taken Reduction +19%.', users: [] },
+      { stars: 4, name: 'GS-Orca 70', effect: 'ATK +28%\nWhen the equipped unit attacks a Core Exposed Kaiju, the equipped unit\'s ATK +36%.', users: [] },
+      { stars: 3, name: 'Standard Gunsword', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Hammer', icon: '🔨',
     weapons: [
-      { stars: 5, name: 'HM-Eporhtnacyl', users: ['Suited (Unbridled Curiosity)'] },
-      { stars: 5, name: 'HM-Nohpyt', users: ['Aoi Kaguragi (Fruits of Diligence)'] },
-      { stars: 4, name: 'HM-Canasta', users: [] },
-      { stars: 4, name: 'HM-Holdem', users: [] },
-      { stars: 3, name: 'Standard Hammer', users: [] },
+      { stars: 5, name: 'HM-Eporhtnacyl', effect: 'CRIT DMG (%) +48%\nAfter an ally attacks, applies ATK +5% to the equipped unit. Max 5 stack(s).\nBefore the equipped unit activates Extra Attack, applies Extra Attack CRIT DMG +8% (2 turn(s)) to the equipped unit. Max 5 stack(s).', users: ['Suited (Unbridled Curiosity)'] },
+      { stars: 5, name: 'HM-Nohpyt', effect: 'DEF +34%\nAfter activating Normal Attack, applies DEF +15% (2 turn(s)) to all allies.\nAfter the equipped unit activates Ultimate or Follow-Up Skill, applies Ultimate Gauge Charge Rate +13% (3 turn(s)) to the equipped unit.', users: ['Aoi Kaguragi (Fruits of Diligence)'] },
+      { stars: 4, name: 'HM-Aimal', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies Blunt DMG dealt +10% (3 turn(s)) to the equipped unit.', users: [] },
+      { stars: 4, name: 'HM-Canasta', effect: 'DEF +28%\nFor each ally having a Shield, the equipped unit\'s DMG dealt +7%.', users: [] },
+      { stars: 4, name: 'HM-Holdem', effect: 'Blunt DMG Dealt (%) +17%\nThe equipped unit\'s DMG dealt from Follow-Up Skill and Extra Attack +21%.', users: [] },
+      { stars: 3, name: 'Standard Hammer', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Handgun', icon: '🔫',
     weapons: [
-      { stars: 5, name: 'HG-Xmas25', users: ['Kafka Hibino (The Man Who Became a Reindeer)'] },
-      { stars: 5, name: 'HG-Beetle 15', users: ['Kafka Hibino (The Man Who Became a Kaiju)'] },
-      { stars: 3, name: 'Standard Handgun', users: [] },
+      { stars: 5, name: 'HG-Xmas25', effect: 'Ultimate Gauge Charge Rate (%) +15%\nBefore activating Combat Skill, applies ATK +36% (2 turn(s)) to the equipped unit.', users: ['Kafka Hibino (The Man Who Became a Reindeer)'] },
+      { stars: 5, name: 'HG-Beetle 15', effect: 'ATK +28%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +21% (2 turn(s)) to the equipped unit.', users: ['Kafka Hibino (The Man Who Became a Kaiju)'] },
+      { stars: 3, name: 'Standard Handgun', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Iron Ball', icon: '⚫',
     weapons: [
-      { stars: 5, name: 'SB-7137', users: ['Jura Igarashi (Grit and Duty)'] },
-      { stars: 4, name: 'SB-Stegosaurus 38', users: [] },
-      { stars: 3, name: 'Standard Iron Ball', users: [] },
+      { stars: 5, name: 'SB-7137', effect: 'Effect Hit Rate (%) +20%\nAfter the equipped unit attacks a Kaiju that has a status ailment, the equipped unit\'s Ultimate Gauge +15.\nAfter the equipped unit activates Ultimate, applies DMG dealt +12% (2 turn(s)) to all other allies.', users: ['Jura Igarashi (Grit and Duty)'] },
+      { stars: 4, name: 'SB-Stegosaurus 38', effect: 'ATK +28%\nAfter the equipped unit attacks a Kaiju in Burn state, applies ATK +36% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Standard Iron Ball', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Powered Suit', icon: '🤖',
     weapons: [
-      { stars: 4, name: 'PS-Dobermann 52', users: ['Eiji Hasegawa (Right-Hand Man of the Strongest)'] },
-      { stars: 3, name: 'Standard Power Suit', users: [] },
+      { stars: 4, name: 'PS-Dobermann 52', effect: 'ATK +28%\nIf there is a Core Exposed Kaiju on the field, the equipped unit\'s DMG dealt +21%.', users: ['Eiji Hasegawa (Right-Hand Man of the Strongest)'] },
+      { stars: 3, name: 'Standard Powered Suit', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Ride-Frame', icon: '🏍️',
     weapons: [
-      { stars: 5, name: 'RF-Mruwdnil', users: ['Zoee Wanderfalke (The Weapon Unsealed)'] },
-      { stars: 4, name: 'RF-Judith', users: [] },
-      { stars: 3, name: 'Sustained Combat Ride-Frame', users: [] },
+      { stars: 5, name: 'RF-Mruwdnil', effect: 'HP +34%\nBefore the equipped unit activates Combat Skill, consumes 5% of the equipped unit\'s Max HP and applies CRIT DMG +36% (2 turn(s)) and DMG dealt +15% (2 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 30% or less, after the equipped unit activates Combat Skill or Ultimate, recovers the equipped unit\'s HP equal to 6% of the equipped unit\'s Max HP.', users: ['Zoee Wanderfalke (The Weapon Unsealed)'] },
+      { stars: 4, name: 'RF-Judith', effect: 'HP +28%\nAfter the equipped unit loses HP or recovers HP, applies DMG dealt +32% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Sustained Combat Ride-Frame', effect: 'HP +23%', users: [] },
     ]
   },
   {
     type: 'Shield', icon: '🛡️',
     weapons: [
-      { stars: 5, name: 'SH-Nahallud', users: ['Sagan Shinomiya (The Resurgent Commander)'] },
-      { stars: 5, name: 'SH-Xnihps', users: [] },
-      { stars: 5, name: 'SH-luggnil', users: ['Sagan Shinomiya (Dimensionally Distorted Destiny)'] },
-      { stars: 4, name: 'SH-Ratscrew', users: [] },
-      { stars: 4, name: 'SH-Euchre', users: [] },
-      { stars: 3, name: 'Heavy Duty Shield', users: [] },
+      { stars: 5, name: 'SH-Nahallud', effect: 'CRIT DMG (%) +48%\nAfter an ally attacks, applies Ultimate Gauge Charge Rate +3% to the equipped unit. Max 8 stack(s).\nAfter the equipped unit activates Extra Attack, applies White-Hot (2 turn(s)) to the equipped unit.\nWhite-Hot: All allies\' CRIT DMG +21% and Extra Attack CRIT DMG +21%.', users: ['Sagan Shinomiya (The Resurgent Commander)'] },
+      { stars: 5, name: 'SH-Xnihps', effect: 'DEF +23%\nAfter the equipped unit receives an attack, if remaining HP is 50% or more, applies DMG dealt +10% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 5, name: 'SH-luggnil', effect: 'DEF +34%\nAfter the equipped unit activates Combat Skill, applies CRIT Rate +18% (2 turn(s)) to the equipped unit.\nAfter the equipped unit receives an attack, applies Fire DMG dealt +3% to the equipped unit. Max 5 stack(s).', users: ['Sagan Shinomiya (Dimensionally Distorted Destiny)'] },
+      { stars: 4, name: 'SH-Ratscrew', effect: 'ATK +23%\nAll allies\' Follow-Up Skill and Extra Attack ATK +5%.', users: [] },
+      { stars: 4, name: 'SH-Euchre', effect: 'DEF +28%\nAfter the equipped unit activates Ultimate, applies Effect RES +21% (2 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Heavy Duty Shield', effect: 'DEF +23%', users: [] },
     ]
   },
   {
     type: 'Spear', icon: '🔱',
     weapons: [
-      { stars: 5, name: 'Lc-Anorollal', users: ['Sagan Shinomiya (Over Limit)'] },
-      { stars: 5, name: 'Lc-Brunhild', users: [] },
-      { stars: 5, name: 'Lc-0039', users: ['Hikari Shinomiya (The Valkyrie)'] },
-      { stars: 4, name: 'Lc-Rhinoceros 01', users: [] },
-      { stars: 3, name: 'Standard Spear', users: [] },
+      { stars: 5, name: 'Lc-Anorollal', effect: 'Fire DMG Dealt (%) +20%\nThe equipped unit\'s Normal Attack and Ultimate DMG dealt +15%.\nAfter the equipped unit loses HP, applies CRIT Rate +18% (3 turn(s)) to the equipped unit.', users: ['Sagan Shinomiya (Over Limit)'] },
+      { stars: 5, name: 'Lc-Brunhild', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit activates Combat Skill, applies ATK +6% (2 turn(s)) to the equipped unit. Max 3 stack(s).', users: [] },
+      { stars: 5, name: 'Lc-0039', effect: 'CRIT DMG (%) +48%\nBefore the equipped unit activates Combat Skill, applies Slash DMG dealt +15% (2 turn(s)) to the equipped unit.\nWhen the equipped unit\'s SPD is 190 or more, the equipped unit\'s Normal Attack and Combat Skill DMG dealt +25%.', users: ['Hikari Shinomiya (The Valkyrie)'] },
+      { stars: 4, name: 'Lc-Rhinoceros 01', effect: 'ATK +28%\nAfter the equipped unit destroys a PLT, applies Combat Skill DMG dealt +21% (1 turn(s)) to the equipped unit.', users: [] },
+      { stars: 3, name: 'Standard Spear', effect: 'ATK +23%', users: [] },
     ]
   },
   {
     type: 'Twin Swords', icon: '⚔️',
     weapons: [
-      { stars: 5, name: 'SW-Ihcatiamak', users: ['Soshiro Hoshina (New Possibilities)'] },
-      { stars: 5, name: 'SW-Susanoo', users: ['Soshiro Hoshina (United Front)'] },
-      { stars: 5, name: 'SW-Ameno Torifune', users: [] },
-      { stars: 5, name: 'SW-Takeminakata', users: [] },
-      { stars: 5, name: 'SW-2033', users: ['Soshiro Hoshina (Hoshina-Style Sword-Slay Technique)'] },
-      { stars: 4, name: 'SW-Crow', users: [] },
-      { stars: 4, name: 'SW-Fox', users: ['Soshiro Hoshina (Blade Specialist)'] },
-      { stars: 3, name: 'Standard Twin Swords', users: [] },
+      { stars: 5, name: 'SW-Ihcatiamak', effect: 'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Combat Skill, applies 1 stack(s) of Deftness (1 turn(s)) to the equipped unit. Max 2 stack(s).\nBefore the equipped unit activates Ultimate, if Deftness is at 2 stack(s), applies DMG dealt +16% (2 turn(s)) to the equipped unit.\nDeftness: The equipped unit\'s Ultimate Gauge Charge Rate +8% and Wind DMG dealt +9%.', users: ['Soshiro Hoshina (New Possibilities)'] },
+      { stars: 5, name: 'SW-Susanoo', effect: 'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, if there are 2 or fewer Kaiju on the field, applies SPD +18% (2 turn(s)) to the equipped units.\nBefore the equipped unit activates Ultimate, applies Combat Skill and Ultimate DMG dealt +15% (3 turn(s)) to the equipped unit.', users: ['Soshiro Hoshina (United Front)'] },
+      { stars: 5, name: 'SW-Ameno Torifune', effect: 'CRIT DMG (%) +33%\nAfter the equipped unit attacks a Core Exposed Kaiju, applies DMG dealt +10% (3 turn(s)) to the equipped unit.', users: [] },
+      { stars: 5, name: 'SW-Takeminakata', effect: 'Slash DMG Dealt +17%\nBefore the equipped unit activates Ultimate, applies ATK +21% (3 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 80% or more, the equipped unit\'s DMG dealt +12%.', users: [] },
+      { stars: 5, name: 'SW-2033', effect: 'SPD +25%\nAfter the equipped unit activates Normal Attack or Combat Skill, if a Critical Hit occurs, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nBefore the equipped unit activates an AoE Attack, applies Slash DMG dealt +15% (1 turn(s)) to the equipped unit.', users: ['Soshiro Hoshina (Hoshina-Style Sword-Slay Technique)'] },
+      { stars: 4, name: 'SW-Crow 93', effect: 'ATK +28%\nThe equipped unit\'s Ultimate DMG dealt +21%.', users: [] },
+      { stars: 4, name: 'SW-Fox 48', effect: 'Effect RES +17%\nAfter the equipped unit activates Ultimate, applies ATK +25% (2 turn(s)) to battle buddy.', users: ['Soshiro Hoshina (Blade Specialist)'] },
+      { stars: 3, name: 'Standard Twin Swords', effect: 'ATK +23%', users: [] },
     ]
   },
 ];
@@ -361,6 +366,7 @@ const charIds = {
   'Ryo Ikaruga (Passion and Responsibility)': 'char-ryo-ikaruga-pr',
   'Sagan Shinomiya (Dimensionally Distorted Destiny)': 'char-sagan-shinomiya-ddd',
   'Sagan Shinomiya (Over Limit)': 'char-sagan-shinomiya-ol',
+  'Sagan Shinomiya (The Resurgent Commander)': 'char-sagan-shinomiya-rc',
   'Soichiro Hoshina (Keystone of Western Japan)': 'char-soichiro-hoshina-kowj',
   'Soshiro Hoshina (Ax Technique Proficiency)': 'char-soshiro-hoshina-atp',
   'Soshiro Hoshina (Blade Specialist)': 'char-soshiro-hoshina-bs',
@@ -389,9 +395,15 @@ function buildSection(cat) {
     const usersHTML = w.users.length
       ? w.users.map(userTagHTML).join('')
       : '<span class="no-users">—</span>';
+    const effectLines = w.effect ? w.effect.split('\n').map((line, i) =>
+      i === 0
+        ? `<span class="weapon-effect-stat">${line}</span>`
+        : `<span class="weapon-effect-line">${line}</span>`
+    ).join('') : '';
+    const effectHTML = effectLines ? `<div class="weapon-effect">${effectLines}</div>` : '';
     return `<div class="weapon-row" data-stars="${w.stars}" data-name="${w.name.toLowerCase()}" data-users="${w.users.join(' ').toLowerCase()}">
       <div class="weapon-star-col"><span class="star-badge ${starClass}">${starStr(w.stars)}</span></div>
-      <div class="weapon-name-col"><span class="weapon-name-text">${w.name}</span></div>
+      <div class="weapon-name-col"><span class="weapon-name-text">${w.name}</span>${effectHTML}</div>
       <div class="weapon-users-col">${usersHTML}</div>
     </div>`;
   }).join('');
