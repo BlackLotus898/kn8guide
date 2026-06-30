@@ -84,6 +84,11 @@
   .a-toggle-btn { font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: .5px; padding: .15rem .4rem; border: 1px solid var(--border); color: #555; cursor: pointer; user-select: none; transition: all .15s; }
   .a-toggle-btn:hover { border-color: #888; color: #aaa; }
   .a-toggle-btn.active { border-color: var(--red); color: var(--red); background: rgba(232,0,26,.1); }
+  .slot-weapon { margin-top: .5rem; padding-top: .4rem; border-top: 1px solid var(--border); }
+  .slot-weapon-label { font-family: 'Share Tech Mono', monospace; font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: #555; display: block; margin-bottom: .3rem; }
+  .slot-weapon-select { width: 100%; background: var(--dark); border: 1px solid var(--border); color: var(--text); font-size: .75rem; padding: .25rem .4rem; font-family: 'Rajdhani', sans-serif; }
+  .slot-weapon-effect { font-size: .68rem; color: #888; line-height: 1.4; margin-top: .35rem; padding: .3rem .4rem; background: var(--dark); border-left: 2px solid var(--cyan); }
+  .slot-weapon-none { font-size: .72rem; color: #555; font-style: italic; }
   .slot-remove { position: absolute; top: .4rem; right: .4rem; width: 18px; height: 18px; background: var(--dark); border: 1px solid var(--border); color: var(--muted); font-size: .6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
   .slot-remove:hover { color: var(--red); border-color: var(--red); }
 
@@ -204,8 +209,142 @@ const IMG = '../Kn8 Characters/';
 const STORAGE_KEY = 'kn8_squads_v1';
 
 // ── CHARACTER DATA ──────────────────────────────────────────────────────────
+const WEAPONS_BY_TYPE = {
+  'Assault Rifle': [
+    { name:'AR-6710', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Follow-Up Skill, applies DMG dealt +15% (2 turn(s)) and DEF PEN Rate +10% (2 turn(s)) to all allies.' },
+    { name:'AR-Gnijiluh', effect:'Effect Hit Rate (%) +20%\nBefore the equipped unit activates Normal Attack or Combat Skill, applies Lightning DMG dealt +5% (2 turn(s)) to the equipped unit. Max 3 stack(s).\nAfter the equipped unit attacks, if there is any Kaiju target that already has a debuff, based on the number of Kaiju that receive DMG, applies DMG dealt +3% to the equipped unit. Max 6 stack(s).' },
+    { name:'AR-Xmas25', effect:'Fire DMG Dealt (%) +20%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nEach time a Kaiju receives DoT, applies ATK +4% to the equipped unit. Max 10 stack(s).' },
+    { name:'AR-Anollococ', effect:'ATK +34%\nAfter the equipped unit activates Normal Attack, applies ATK +25% (2 turn(s)) to the equipped unit.\nAfter the equipped unit activates Combat Skill, applies DMG dealt +9% (3 turn(s)) to all other allies.' },
+    { name:'AR-Boreas', effect:'CRIT Rate (%) +24%\nAfter the equipped unit activates Combat Skill, applies Ice DMG dealt +8% (3 turn(s)) and Ultimate Gauge Charge Rate +7% (3 turn(s)) to the equipped unit. Max 2 stack(s).' },
+    { name:'AR-Cronus', effect:'CRIT Rate (%) +16%\nAfter the equipped unit activates Combat Skill, applies ATK +6% (2 turn(s)) to the equipped unit. Max 3 stack(s).' },
+    { name:'AR-Crius', effect:'HP +28%\nBefore the wielder uses a Combat Skill, grants the wielder +12%/1.2% Healing Multiplier for 2 turn(s).\nAfter the wielder uses an Ultimate, increases all allies\' Ultimate Gauge by +3/0.3.' },
+    { name:'AR-Hyperion', effect:'ATK +28%\nAt the start of battle, grants all allies +4%/0.4% SPD for 3 turn(s).\nAfter the wielder uses an Ultimate, grants all allies +6%/0.6% ATK for 2 turn(s).' },
+    { name:'AR-Hgrumis', effect:'HP +34%\nAfter the equipped unit activates Normal Attack or Extra Attack:\n1. Applies ATK +7% (2 turn(s)) to the equipped unit. Max 5 stack(s).\n2. Applies DMG dealt +3% (2 turn(s)) to all allies. Max 5 stack(s).' },
+    { name:'AR-Hound 64', effect:'ATK +23%\nAfter the equipped unit activates Combat Skill targeting an ally, applies SPD +4% (2 turn(s)) to all allies.' },
+    { name:'AR-Egret 12', effect:'Effect Hit Rate (%) +14%\nAfter the equipped unit activates Follow-Up Skill, applies Slash DMG dealt +12% (2 turn(s)) to the equipped unit.' },
+    { name:'AR-Squid 62', effect:'DEF +28%\nAt the start of battle, applies DMG Taken Reduction +5% (3 turn(s)) to all allies.' },
+    { name:'AR-Honeybee 84', effect:'HP +28%\nBefore the equipped unit activates Ultimate, applies Healing Multiplier +21% (2 turn(s)) to the equipped unit.' },
+    { name:'AR-Panther 33', effect:'Effect RES (%) +17%\nAfter the equipped unit activates Ultimate, applies DMG dealt +6% (2 turn(s)) to all allies.' },
+    { name:'AR-Octopus 58', effect:'Effect Hit Rate (%) +17%\nAfter the equipped unit attacks a Kaiju that already has a debuff or status ailment, the equipped unit\'s Ultimate Gauge +30.' },
+    { name:'AR-Narwhal 59', effect:'ATK +28%\nThe equipped unit\'s Combat Skill DMG dealt +21%.' },
+    { name:'AR-Lynx 75', effect:'ATK +28%\nAfter the equipped unit activates Normal Attack or Ultimate, applies DMG dealt +21% (1 turn(s)) to the equipped unit.' },
+    { name:'AR-Allosaurus 77', effect:'DEF +23%\nBefore the equipped unit activates Combat Skill, applies Healing Multiplier +12% (2 turn(s)) to the equipped unit.' },
+    { name:'Sustained Combat Assault Rifle', effect:'HP +23%' },
+    { name:'Heavy Duty Assault Rifle', effect:'DEF +23%' },
+    { name:'Standard Assault Rifle', effect:'ATK +23%' },
+  ],
+  'Ax': [
+    { name:'Ax-0087', effect:'CRIT DMG (%) +48%\nWhen the equipped unit\'s Effect Hit Rate is 30% or more, the equipped unit\'s Slash DMG dealt +15%.\nAfter the equipped unit activates Combat Skill, applies DMG dealt from Additional DMG +15% (2 turn(s)) to all allies.' },
+    { name:'Ax-Xmas25', effect:'HP +34%\nAfter the equipped unit activates a recovery skill on an ally, applies ATK +15% (2 turn(s)) to the target.\nBefore the equipped unit activates Ultimate, applies Healing Multiplier +6% (1 turn(s)) to all allies.' },
+    { name:'Ax-Dellingr', effect:'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies ATK +18% (2 turn(s)) to the equipped unit.' },
+    { name:'Ax-Var', effect:'Slash DMG Dealt +17%\nAfter the equipped unit attacks, applies ATK +7% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit causes a Kaiju to be Core Exposed, applies DMG dealt +12% (2 turn(s)) to the equipped unit.' },
+    { name:'Ax-0112', effect:'Slash DMG Dealt +20%\nAfter the equipped unit activates Combat Skill, applies ATK +9% (2 turn(s)) to the equipped unit. Max 3 stack(s).\nBefore the equipped unit attacks a Kaiju that already has a debuff, applies DMG dealt +15% (2 turn(s)) to the equipped unit.' },
+    { name:'Ax-Bison 91', effect:'Effect Hit Rate (%) +14%\nThe equipped unit\'s DMG dealt from Additional DMG +12%.' },
+    { name:'Ax-Mantis 21', effect:'ATK +28%\nWhen the equipped unit attacks a Core Exposed Kaiju, the equipped unit\'s DMG dealt +21%.' },
+    { name:'Standard Battle Ax', effect:'ATK +23%' },
+  ],
+  'Bow': [
+    { name:'AW-Kokyab', effect:'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, applies Adept (1 turn(s)) to the equipped unit.\nAdept: 1. Battle buddy\'s ST Attack and Blast Attack DMG dealt +23%. 2. Battle buddy\'s ST Attack and Blast Attack DEF PEN Rate +15%.' },
+    { name:'AW-Scopone', effect:'ATK +28%\nAfter the equipped unit activates Ultimate, advances all allies\' Action Order by 13%.' },
+    { name:'Standard Bow', effect:'ATK +23%' },
+  ],
+  'Cannon': [
+    { name:'T-Dionysus', effect:'CRIT Rate (%) +24%\nBefore the equipped unit activates Combat Skill, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nBefore the equipped unit activates Extra Attack, applies CRIT DMG +12% to the equipped unit. Max 3 stack(s).' },
+    { name:'T-Rhea', effect:'CRIT DMG (%) +33%\nWhen the equipped unit attacks a Kaiju that has 50% or less remaining HP, the equipped unit\'s DMG dealt +10%.' },
+    { name:'T-Oceanus', effect:'Shot DMG Dealt +17%\nAfter the equipped unit activates Ultimate, applies ATK +7% to the equipped unit. Max 3 stack(s).\nIf there are 2 or fewer Kaiju on the field, the equipped unit\'s DMG dealt +12%.' },
+    { name:'T-25101985', effect:'Shot DMG Dealt +20%\nBefore the equipped unit activates a Normal Attack, applies ATK +13% (2 turn(s)) and Ultimate Gauge Charge Rate +7% (2 turn(s)) to the equipped unit. Max 2 stack(s).' },
+    { name:'T-Tiger 15', effect:'ATK +28%\nAfter the equipped unit activates Combat Skill, applies Ultimate Gauge Charge Rate +19% (2 turn(s)) to the equipped unit.' },
+    { name:'Standard Cannon', effect:'ATK +23%' },
+  ],
+  'Gatling Gun': [
+    { name:'GG-Rinfaf', effect:'CRIT Rate (%) +24%\nThe equipped unit\'s CRIT DMG from Additional DMG +54%.\nAfter the equipped unit activates Ultimate, applies DMG dealt from Combat Skill and Additional DMG +15% (3 turn(s)) to the equipped unit.' },
+    { name:'GG-Iapetus', effect:'CRIT Rate (%) +16%\nEach time the equipped unit attacks 1 Kaiju, applies ATK +2% to the equipped unit. Max 10 stack(s).' },
+    { name:'GG-5012', effect:'Shot DMG Dealt (%) +20%\nIf there are 3 or more Kaiju on the field, the equipped unit\'s ATK +25%.\nWhen the equipped unit activates Combat Skill or Ultimate against a Kaiju that has 50% or less remaining HP, the equipped unit\'s DMG dealt +15%.' },
+    { name:'GG-Squirrel 02', effect:'ATK +28%\nAfter the equipped unit defeats a Kaiju, applies DMG dealt +21% (3 turn(s)) to the equipped unit.' },
+    { name:'Standard Gatling Gun', effect:'ATK +23%' },
+  ],
+  'Gauntlet': [
+    { name:'Fs-Baldr', effect:'CRIT DMG (%) +48%\nThe equipped unit\'s Combat Skill and Ultimate DMG dealt +15%.\nIf there are 3 or more Kaiju on the field, after the equipped unit activates Combat Skill, applies Blunt DMG dealt +18% (2 turn(s)) to the equipped unit.' },
+    { name:'Fs-Magni', effect:'Effect Hit Rate (%) +20%\nWhen attacking a Kaiju that already has a debuff, the equipped unit\'s Blunt DMG dealt +15%.\nAfter the equipped unit destroys a Kaiju\'s PLT, applies ATK +25% (2 turn(s)) to the equipped unit.' },
+    { name:'Fs-Vidar', effect:'DEF +23%\nAfter the equipped unit activates Normal Attack, applies DMG Taken Reduction +3% (2 turn(s)) to the equipped unit. Max 3 stack(s).' },
+    { name:'Fs-1002', effect:'DEF +34%\nAfter the equipped unit receives an attack, applies DEF +25% (1 turn(s)) to the equipped unit.\nIf the equipped unit has a Shield, all allies\' DMG Taken Reduction +4%.' },
+    { name:'Fs-Gaur 28', effect:'ATK +23%\nBefore the equipped unit activates Ultimate, if there are 3 or more Kaiju on the field, applies DMG dealt +12% (2 turn(s)) to the equipped unit.' },
+    { name:'Fs-Grizzly 83', effect:'DEF +28%\nWhen the equipped unit\'s remaining HP is less than 40%, the equipped unit\'s DEF +36%.' },
+    { name:'Heavy Duty Gauntlet', effect:'DEF +23%' },
+  ],
+  'Greatsword': [
+    { name:'S-Iwanagahime', effect:'CRIT Rate (%) +16%\nAfter the equipped unit activates Ultimate or Follow-Up Skill, applies ATK +27% (3 turn(s)) to the equipped unit.' },
+    { name:'S-12066', effect:'CRIT DMG (%) +48%\nThe equipped unit\'s DMG dealt from Additional DMG +23%.\nAfter the equipped unit activates Follow-Up Skill or Extra Attack, applies Slash DMG dealt +8% (2 turn(s)) to the equipped unit. Max 2 stack(s).' },
+    { name:'S-Silky Shark 13', effect:'ATK +28%\nAfter the equipped unit defeats a Kaiju or causes a Kaiju to be Core Exposed, applies DMG dealt +21% (2 turn(s)) to the equipped unit.' },
+    { name:'Standard Greatsword', effect:'ATK +23%' },
+  ],
+  'Gunsword': [
+    { name:'GS-Aremihc', effect:'HP +34%\nAfter the equipped unit activates Ultimate, recovers all allies\' HP equal to 5% of the equipped unit\'s Max HP.\nAfter activating Normal Attack, applies DMG dealt +4% (2 turn(s)) and DMG dealt from Additional DMG +7.5% (2 turn(s)) to all allies.' },
+    { name:'GS-Xmas25', effect:'CRIT Rate (%) +24%\nEach time the equipped unit consumes 1 SP, applies DMG dealt +4% (2 turn(s)) and Ultimate Gauge Charge Rate +4% (2 turn(s)) to the equipped unit. Max 4 stack(s).' },
+    { name:'GS-Oyamatsumi', effect:'CRIT DMG (%) +48%\nEach time the equipped unit attacks a Core Exposed Kaiju, applies DEF PEN Rate +4% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit activates Combat Skill, applies Shot DMG dealt +15% (2 turn(s)) to the equipped unit.' },
+    { name:'GS-Amatsu Mikaboshi', effect:'CRIT Rate (%) +16%\nIf there are 3 or fewer Kaiju on the field, the equipped unit\'s ATK +18%.' },
+    { name:'GS-Takamimusubi', effect:'Slash DMG Dealt +17%\nEach time the equipped unit destroys a PLT, applies ATK +4% to the equipped unit. Max 6 stack(s).\nAfter the equipped unit causes a Kaiju to be Core Exposed, applies DMG dealt +12% (2 turn(s)) to the equipped unit.' },
+    { name:'GS-3305', effect:'Slash DMG Dealt (%) +20%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +5% to the equipped unit. Max 3 stack(s).\nAfter the equipped unit activates Ultimate, applies Ultimate Gauge Charge +13% (2 turn(s)) to the equipped unit.' },
+    { name:'GS-Walrus 92', effect:'HP +28%\nThe equipped unit\'s chance of being targeted slightly increases.\nThe equipped unit\'s DMG Taken Reduction +19%.' },
+    { name:'GS-Orca 70', effect:'ATK +28%\nWhen the equipped unit attacks a Core Exposed Kaiju, the equipped unit\'s ATK +36%.' },
+    { name:'Standard Gunsword', effect:'ATK +23%' },
+  ],
+  'Hammer': [
+    { name:'HM-Eporhtnacyl', effect:'CRIT DMG (%) +48%\nAfter an ally attacks, applies ATK +5% to the equipped unit. Max 5 stack(s).\nBefore the equipped unit activates Extra Attack, applies Extra Attack CRIT DMG +8% (2 turn(s)) to the equipped unit. Max 5 stack(s).' },
+    { name:'HM-Nohpyt', effect:'DEF +34%\nAfter activating Normal Attack, applies DEF +15% (2 turn(s)) to all allies.\nAfter the equipped unit activates Ultimate or Follow-Up Skill, applies Ultimate Gauge Charge Rate +13% (3 turn(s)) to the equipped unit.' },
+    { name:'HM-Aimal', effect:'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies Blunt DMG dealt +10% (3 turn(s)) to the equipped unit.' },
+    { name:'HM-Canasta', effect:'DEF +28%\nFor each ally having a Shield, the equipped unit\'s DMG dealt +7%.' },
+    { name:'HM-Holdem', effect:'Blunt DMG Dealt (%) +17%\nThe equipped unit\'s DMG dealt from Follow-Up Skill and Extra Attack +21%.' },
+    { name:'Standard Hammer', effect:'ATK +23%' },
+  ],
+  'Handgun': [
+    { name:'HG-Xmas25', effect:'Ultimate Gauge Charge Rate (%) +15%\nBefore activating Combat Skill, applies ATK +36% (2 turn(s)) to the equipped unit.' },
+    { name:'HG-Beetle 15', effect:'ATK +28%\nAfter the equipped unit activates Combat Skill, applies DMG dealt +21% (2 turn(s)) to the equipped unit.' },
+    { name:'Standard Handgun', effect:'ATK +23%' },
+  ],
+  'Iron Ball': [
+    { name:'SB-7137', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit attacks a Kaiju that has a status ailment, the equipped unit\'s Ultimate Gauge +15.\nAfter the equipped unit activates Ultimate, applies DMG dealt +12% (2 turn(s)) to all other allies.' },
+    { name:'SB-Stegosaurus 38', effect:'ATK +28%\nAfter the equipped unit attacks a Kaiju in Burn state, applies ATK +36% (2 turn(s)) to the equipped unit.' },
+    { name:'Standard Iron Ball', effect:'ATK +23%' },
+  ],
+  'Powered Suit': [
+    { name:'PS-Dobermann 52', effect:'ATK +28%\nIf there is a Core Exposed Kaiju on the field, the equipped unit\'s DMG dealt +21%.' },
+    { name:'Standard Powered Suit', effect:'ATK +23%' },
+  ],
+  'Ride-Frame': [
+    { name:'RF-Mruwdnil', effect:'HP +34%\nBefore the equipped unit activates Combat Skill, consumes 5% of the equipped unit\'s Max HP and applies CRIT DMG +36% (2 turn(s)) and DMG dealt +15% (2 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 30% or less, after the equipped unit activates Combat Skill or Ultimate, recovers the equipped unit\'s HP equal to 6% of the equipped unit\'s Max HP.' },
+    { name:'RF-Judith', effect:'HP +28%\nAfter the equipped unit loses HP or recovers HP, applies DMG dealt +32% (2 turn(s)) to the equipped unit.' },
+    { name:'Sustained Combat Ride-Frame', effect:'HP +23%' },
+  ],
+  'Shield': [
+    { name:'SH-Nahallud', effect:'CRIT DMG (%) +48%\nAfter an ally attacks, applies Ultimate Gauge Charge Rate +3% to the equipped unit. Max 8 stack(s).\nAfter the equipped unit activates Extra Attack, applies White-Hot (2 turn(s)) to the equipped unit.\nWhite-Hot: All allies\' CRIT DMG +21% and Extra Attack CRIT DMG +21%.' },
+    { name:'SH-Xnihps', effect:'DEF +23%\nAfter the equipped unit receives an attack, if remaining HP is 50% or more, applies DMG dealt +10% (2 turn(s)) to the equipped unit.' },
+    { name:'SH-luggnil', effect:'DEF +34%\nAfter the equipped unit activates Combat Skill, applies CRIT Rate +18% (2 turn(s)) to the equipped unit.\nAfter the equipped unit receives an attack, applies Fire DMG dealt +3% to the equipped unit. Max 5 stack(s).' },
+    { name:'SH-Ratscrew', effect:'ATK +23%\nAll allies\' Follow-Up Skill and Extra Attack ATK +5%.' },
+    { name:'SH-Euchre', effect:'DEF +28%\nAfter the equipped unit activates Ultimate, applies Effect RES +21% (2 turn(s)) to the equipped unit.' },
+    { name:'Heavy Duty Shield', effect:'DEF +23%' },
+  ],
+  'Spear': [
+    { name:'Lc-Anorollal', effect:'Fire DMG Dealt (%) +20%\nThe equipped unit\'s Normal Attack and Ultimate DMG dealt +15%.\nAfter the equipped unit loses HP, applies CRIT Rate +18% (3 turn(s)) to the equipped unit.' },
+    { name:'Lc-Brunhild', effect:'CRIT Rate (%) +16%\nAfter the equipped unit activates Combat Skill, applies ATK +6% (2 turn(s)) to the equipped unit. Max 3 stack(s).' },
+    { name:'Lc-0039', effect:'CRIT DMG (%) +48%\nBefore the equipped unit activates Combat Skill, applies Slash DMG dealt +15% (2 turn(s)) to the equipped unit.\nWhen the equipped unit\'s SPD is 190 or more, the equipped unit\'s Normal Attack and Combat Skill DMG dealt +25%.' },
+    { name:'Lc-Rhinoceros 01', effect:'ATK +28%\nAfter the equipped unit destroys a PLT, applies Combat Skill DMG dealt +21% (1 turn(s)) to the equipped unit.' },
+    { name:'Standard Spear', effect:'ATK +23%' },
+  ],
+  'Twin Swords': [
+    { name:'SW-Ihcatiamak', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Combat Skill, applies 1 stack(s) of Deftness (1 turn(s)) to the equipped unit. Max 2 stack(s).\nBefore the equipped unit activates Ultimate, if Deftness is at 2 stack(s), applies DMG dealt +16% (2 turn(s)) to the equipped unit.\nDeftness: The equipped unit\'s Ultimate Gauge Charge Rate +8% and Wind DMG dealt +9%.' },
+    { name:'SW-Susanoo', effect:'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, if there are 2 or fewer Kaiju on the field, applies SPD +18% (2 turn(s)) to the equipped units.\nBefore the equipped unit activates Ultimate, applies Combat Skill and Ultimate DMG dealt +15% (3 turn(s)) to the equipped unit.' },
+    { name:'SW-Ameno Torifune', effect:'CRIT DMG (%) +33%\nAfter the equipped unit attacks a Core Exposed Kaiju, applies DMG dealt +10% (3 turn(s)) to the equipped unit.' },
+    { name:'SW-Takeminakata', effect:'Slash DMG Dealt +17%\nBefore the equipped unit activates Ultimate, applies ATK +21% (3 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 80% or more, the equipped unit\'s DMG dealt +12%.' },
+    { name:'SW-2033', effect:'SPD +25%\nAfter the equipped unit activates Normal Attack or Combat Skill, if a Critical Hit occurs, applies DMG dealt +15% (2 turn(s)) to the equipped unit.\nBefore the equipped unit activates an AoE Attack, applies Slash DMG dealt +15% (1 turn(s)) to the equipped unit.' },
+    { name:'SW-Crow 93', effect:'ATK +28%\nThe equipped unit\'s Ultimate DMG dealt +21%.' },
+    { name:'SW-Fox 48', effect:'Effect RES +17%\nAfter the equipped unit activates Ultimate, applies ATK +25% (2 turn(s)) to battle buddy.' },
+    { name:'Standard Twin Swords', effect:'ATK +23%' },
+  ],
+};
+
 const CHARACTERS = [
-  { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',               stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'AkariMinase-FC.png', subRoles:['Debuffer'],
+  { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',               stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'AkariMinase-FC.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies Burn (3 turns) to all Kaiju via Ultimate — 100% base chance'} ],
         ascension:[
       {id:'A1', name:'Smooth Execution', effect:"After applying a status ailment, applies DMG dealt +15% (2 turns) to this unit."},
@@ -216,7 +355,7 @@ const CHARACTERS = [
       {id:'A6', name:'Beacon of the Holy Night', effect:"This unit\'s DoT DMG Multiplier +80%."},
     ],
     },
-  { id:'akari-minase-hc',    name:'Akari Minase',     variant:'Heart of Compassion',             stars:4, role:'Defender',  types:['Shot'],           img:'AkariMinase-HC.png', subRoles:['Healer', 'Tank'],
+  { id:'akari-minase-hc',    name:'Akari Minase',     variant:'Heart of Compassion',             stars:4, role:'Defender',  types:['Shot'],           img:'AkariMinase-HC.png', subRoles:['Healer', 'Tank'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'Recovers all allies HP equal to 9.5% of this unit\'s Max HP +77'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -228,7 +367,7 @@ const CHARACTERS = [
       {id:'A6', name:'Miracle of Compassion', effect:"If an ally other than this unit becomes incapacitated, recovers the target\'s HP equal to 10% of Max HP and revives them. Can be activated 1 time per battle."},
     ],
     },
-  { id:'akari-minase-sa',    name:'Akari Minase',     variant:'Synchro Aptitude',                stars:5, role:'Defender',  types:['Shot','Slash'],   img:'AkariMinase-SA.png', subRoles:['Healer', 'Buffer', 'Tank'],
+  { id:'akari-minase-sa',    name:'Akari Minase',     variant:'Synchro Aptitude',                stars:5, role:'Defender',  types:['Shot','Slash'],   img:'AkariMinase-SA.png', subRoles:['Healer', 'Buffer', 'Tank'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'Applies CRIT DMG +33% (3 turns) for Follow-Up, Extra Attack, and Overflow Attack to all allies'}, {scope:'all', desc:'After Overflow Attack: DEF PEN Rate +20% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[ {desc:'Applies Surveillance to all allies (enemy debuff-tracking effect)'} ],
         ascension:[
@@ -240,7 +379,7 @@ const CHARACTERS = [
       {id:'A6', name:'Synchro Mastery', effect:"The CRIT DMG buff applied before Extra Attack will stack up to 2 stacks. After activating Ultimate, applies CRIT DMG +50% (3 turns) to this unit."},
     ],
     },
-  { id:'aoi-kaguragi-fd',    name:'Aoi Kaguragi',     variant:'Fruits of Diligence',             stars:5, role:'Defender',  types:['Blunt'],          img:'AoiKaguragi-FD.png', subRoles:['Tank', 'Debuffer', 'Healer'],
+  { id:'aoi-kaguragi-fd',    name:'Aoi Kaguragi',     variant:'Fruits of Diligence',             stars:5, role:'Defender',  types:['Blunt'],          img:'AoiKaguragi-FD.png', subRoles:['Tank', 'Debuffer', 'Healer'], weaponType:'Hammer',
     teamBuffs:[ {scope:'all', desc:'Shield equal to 11.6% of this unit\'s DEF +11 to all allies (3 turns)'}, {scope:'all', desc:'After Ultimate: recovers all allies\' HP by 200'} ],
     buddyBuffs:[], debuffs:[ {desc:'Applies Wound to enemies — increases enemy DMG Taken and boosts ally DMG dealt to Wounded Kaiju'} ],
         ascension:[
@@ -252,7 +391,7 @@ const CHARACTERS = [
       {id:'A6', name:'Accumulated Might', effect:"Unyielding max stack count -5. After activating Ultimate, recovers all allies\' HP by 200."},
     ],
     },
-  { id:'aoi-kaguragi-tprs',  name:'Aoi Kaguragi',     variant:'The Promising Rising Star',       stars:4, role:'Attacker',  types:['Shot','Wind'],    img:'AoiKaguragi-TPRS.png', subRoles:['Debuffer'],
+  { id:'aoi-kaguragi-tprs',  name:'Aoi Kaguragi',     variant:'The Promising Rising Star',       stars:4, role:'Attacker',  types:['Shot','Wind'],    img:'AoiKaguragi-TPRS.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'After attacking, 100% base chance to apply Windbite (2 turns) — Wind DoT to the target'} ],
         ascension:[
       {id:'A1', name:'Cautious Movements', effect:"After attacking, has a 50% fixed chance to apply ATK +10% (2 turns) to this unit."},
@@ -263,7 +402,7 @@ const CHARACTERS = [
       {id:'A6', name:'Exceptional Stamina', effect:"After defeating a Kaiju with Ultimate, applies Ultimate Gauge Charge Rate +30% (2 turns) to this unit."},
     ],
     },
-  { id:'chester-tar',        name:'Chester',           variant:'The All-Rounder',                 stars:5, role:'Supporter', types:['Shot'],           img:'Chester-TAR.png', subRoles:['Buffer'],
+  { id:'chester-tar',        name:'Chester',           variant:'The All-Rounder',                 stars:5, role:'Supporter', types:['Shot'],           img:'Chester-TAR.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'ATK boost to all other allies equal to 19.2% of Chester\'s own ATK'}, {scope:'all', desc:'DMG dealt +13.7% and CRIT Rate +12.6% (2 turns) to all allies'}, {scope:'all', desc:'Advances all other allies\' next Action Order by 10.5%'}, {scope:'all', desc:'After Ultimate: DEF PEN Rate +20% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -275,7 +414,7 @@ const CHARACTERS = [
       {id:'A6', name:'Flawless Execution', effect:"Turn duration of DMG dealt buff applied by Ultimate +1. Additional DMG Multiplier caused by Passive Skill +50%."},
     ],
     },
-  { id:'eiji-hasegawa-rhms', name:'Eiji Hasegawa',    variant:'Right-Hand Man of the Strongest', stars:4, role:'Attacker',  types:['Blunt','Shot'],   img:'EijiHasegawa-RHMS.png', subRoles:[],
+  { id:'eiji-hasegawa-rhms', name:'Eiji Hasegawa',    variant:'Right-Hand Man of the Strongest', stars:4, role:'Attacker',  types:['Blunt','Shot'],   img:'EijiHasegawa-RHMS.png', subRoles:[], weaponType:'Powered Suit',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
     ascension:[
       {id:'A1', name:'Rapid Advance', effect:"Each time this unit destroys a PLT, Ultimate Gauge +15."},
@@ -285,7 +424,7 @@ const CHARACTERS = [
       {id:'A5', name:'First Division\'s Hard Worker', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Solid Competence', effect:"After activating Follow-Up Skill, advances this unit\'s next Action Order by 50%."},
     ], },
-  { id:'gen-narumi-fs',      name:'Gen Narumi',        variant:'Future Sight',                    stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-FS.png', subRoles:['PLT Breaker', 'Debuffer'],
+  { id:'gen-narumi-fs',      name:'Gen Narumi',        variant:'Future Sight',                    stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-FS.png', subRoles:['PLT Breaker', 'Debuffer'], weaponType:'Gunsword',
     teamBuffs:[ {scope:'all', desc:'At start of battle: Increase Ultimate Gauge When Turn Starts (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[ {desc:'PLT reduction — reduces enemy Plates on attack'} ],
         ascension:[
@@ -297,7 +436,7 @@ const CHARACTERS = [
       {id:'A6', name:'Tenacious Ace in the Hole', effect:"After activating Ultimate, advances this unit\'s next Action Order by 50%."},
     ],
     },
-  { id:'gen-narumi-jsc',     name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-JSC.png', subRoles:['PLT Breaker', 'Buffer'],
+  { id:'gen-narumi-jsc',     name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-JSC.png', subRoles:['PLT Breaker', 'Buffer'], weaponType:'Gunsword',
     teamBuffs:[ {scope:'all', desc:'Increases ATK of all allies when using Combat Skill'} ],
     buddyBuffs:[], debuffs:[ {desc:'PLT reduction on multiple targets'} ],
         ascension:[
@@ -309,7 +448,7 @@ const CHARACTERS = [
       {id:'A6', name:'The Essence of His Genius', effect:"After activating Combat Skill, applies Combat Skill DMG Multiplier +5% to this unit. Max 3 stacks."},
     ],
     },
-  { id:'hikari-shinomiya-tv', name:'Hikari Shinomiya', variant:'The Valkyrie',                    stars:5, role:'Attacker',  types:['Wind','Slash'],   img:'HikariShinomiya-TV.png', subRoles:['PLT Breaker'],
+  { id:'hikari-shinomiya-tv', name:'Hikari Shinomiya', variant:'The Valkyrie',                    stars:5, role:'Attacker',  types:['Wind','Slash'],   img:'HikariShinomiya-TV.png', subRoles:['PLT Breaker'], weaponType:'Spear',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Swift Spearwork', effect:"This unit\'s DEF PEN Rate +16%."},
@@ -320,7 +459,7 @@ const CHARACTERS = [
       {id:'A6', name:'Preemptive Move', effect:"Before activating Ultimate, applies Forestalled (1 turn) to the target. After the applier attacks a Kaiju in Forestalled state, deals Slash Additional DMG equal to 100% of this unit\'s ATK."},
     ],
     },
-  { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, role:'Attacker',  types:['Slash','Ice'],    img:'GenNarumi-JSS.png', subRoles:[],
+  { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, role:'Attacker',  types:['Slash','Ice'],    img:'GenNarumi-JSS.png', subRoles:[], weaponType:'Gunsword',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Successful Promotion', effect:"After activating Combat Skill, applies CRIT Rate +5% to this unit. Max 3 stacks."},
@@ -331,7 +470,7 @@ const CHARACTERS = [
       {id:'A6', name:'Peak Performance', effect:"Hyped max stack count +4. Will apply 2 stacks of Hyped after activating Combat Skill or Ultimate."},
     ],
     },
-  { id:'gen-narumi-spb',     name:'Gen Narumi',        variant:'Sky-Piercing Bolt',                stars:5, role:'Defender',  types:['Slash','Lightning'], img:'GenNarumi-SPB.png', subRoles:['Tank','Buffer','Reviver'],
+  { id:'gen-narumi-spb',     name:'Gen Narumi',        variant:'Sky-Piercing Bolt',                stars:5, role:'Defender',  types:['Slash','Lightning'], img:'GenNarumi-SPB.png', subRoles:['Tank','Buffer','Reviver'], weaponType:'Gunsword',
     teamBuffs:[
       {scope:'all', desc:'All allies CRIT DMG +16% while Prestige is active'},
       {scope:'other', desc:'Shield equal to 7.5% Max HP (3 turns) to all allies via Combat Skill'},
@@ -347,7 +486,7 @@ const CHARACTERS = [
       {id:'A5', name:'Invincible Readiness', effect:"Normal Attack, Combat Skill, Follow-Up Skill Lv. +2. Normal Attack, Combat Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'The Strongest\'s Prowess', effect:"When Sass is at max stacks, additionally applies DMG dealt +80% (3 turns) + Additional DMG Multiplier +100% (3 turns) to self."},
     ], },
-  { id:'hakua-igarashi-sp', dotEffects:[ {type:'burn',desc:'Fire DoT (via Patience)'} ],  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot','Fire'],    img:'HakuaIgarashi-SP.png', subRoles:['Buffer', 'Healer', 'Tank'],
+  { id:'hakua-igarashi-sp', dotEffects:[ {type:'burn',desc:'Fire DoT (via Patience)'} ],  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, role:'Defender',  types:['Shot','Fire'],    img:'HakuaIgarashi-SP.png', subRoles:['Buffer', 'Healer', 'Tank'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'Applies Patience (2 turns) to all allies'}, {scope:'all', desc:'All allies\' Fire DMG dealt +16.5%'}, {scope:'all', desc:'All allies\' Blast Attack and AoE Attack DMG +10%'}, {scope:'all', desc:'Randomly removes 1 debuff from all allies after Combat Skill'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -359,7 +498,7 @@ const CHARACTERS = [
       {id:'A6', name:'Culminated Effort', effect:"Fire DMG dealt buff applied by Passive Skill +20%."},
     ],
     },
-  { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot'],    img:'HaruichiIzumo-CC.png', subRoles:['Buffer'],
+  { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot'],    img:'HaruichiIzumo-CC.png', subRoles:['Buffer'], weaponType:'Bow',
     teamBuffs:[], 
     buddyBuffs:[ {desc:'Battle Buddy\'s All-Attribute DMG dealt +19.2%'}, {desc:'After Combat Skill: ATK +26.4% (2 turns) to Battle Buddy'}, {desc:'After Combat Skill: ST Attack and Blast Attack DMG +30% (1 turn) to Battle Buddy'} ], debuffs:[],
     ascension:[
@@ -370,7 +509,7 @@ const CHARACTERS = [
       {id:'A5', name:'The Path Discovered', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Distinguished Choice', effect:"Turn duration of DMG dealt, SPD, and True Potential buffs applied by Combat Skill +1."},
     ], },
-  { id:'haruichi-izumo-tcce',name:'Haruichi Izumo',   variant:'The Clean-Cut Elite',             stars:4, role:'Supporter', types:['Shot'],           img:'HaruichiIzumo-TCCE.png', subRoles:['Buffer', 'Debuffer'],
+  { id:'haruichi-izumo-tcce',name:'Haruichi Izumo',   variant:'The Clean-Cut Elite',             stars:4, role:'Supporter', types:['Shot'],           img:'HaruichiIzumo-TCCE.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'All allies\' Effect RES +10%'}, {scope:'single', desc:'After Follow-Up Skill: removes 1 debuff from a single ally'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -382,7 +521,7 @@ const CHARACTERS = [
       {id:'A6', name:'Solid Combat Style', effect:"For each debuff already applied to a Kaiju, this unit\'s DMG dealt to that Kaiju +5%. Max +25%."},
     ],
     },
-  { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, role:'Supporter', types:['Shot','Lightning'],img:'IharuFuruhashi-LT.png', subRoles:['Debuffer'],
+  { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, role:'Supporter', types:['Shot','Lightning'],img:'IharuFuruhashi-LT.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'All allies\' Effect Hit Rate +7%'}, {scope:'conditional', desc:'When ally attacks Kaiju with a debuff: Lightning DMG dealt +20%'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -394,7 +533,7 @@ const CHARACTERS = [
       {id:'A6', name:'Awakening of Talent', effect:"DoT DMG Multiplier of Shock applied by Combat Skill +60%."},
     ],
     },
-  { id:'isao-shinomiya-pf',  name:'Isao Shinomiya',   variant:'Prime Fist',                      stars:5, role:'Attacker',  types:['Blunt'],          img:'IsaoShinomiya-PF.png', subRoles:[],
+  { id:'isao-shinomiya-pf',  name:'Isao Shinomiya',   variant:'Prime Fist',                      stars:5, role:'Attacker',  types:['Blunt'],          img:'IsaoShinomiya-PF.png', subRoles:[], weaponType:'Gauntlet',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Flawless Combat Style', effect:"Before activating Ultimate, applies ATK +40% (1 turn) to this unit."},
@@ -405,7 +544,7 @@ const CHARACTERS = [
       {id:'A6', name:'Overwhelming Destructive Power', effect:"Blunt Additional DMG from Passive Skill will activate 2 times."},
     ],
     },
-  { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya',   variant:'The Unbreakable Iron Wall',       stars:5, role:'Defender',  types:['Blunt'],          img:'IsaoShinomiya-TUIW.png', subRoles:['Buffer', 'Tank'],
+  { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya',   variant:'The Unbreakable Iron Wall',       stars:5, role:'Defender',  types:['Blunt'],          img:'IsaoShinomiya-TUIW.png', subRoles:['Buffer', 'Tank'], weaponType:'Gauntlet',
     teamBuffs:[ {scope:'all', desc:'Shield equal to 7.5% of DEF +33 to all allies (3 turns)'}, {scope:'conditional', desc:'For each ally with a Shield: all allies\' DMG dealt +3.2%'}, {scope:'all', desc:'After Combat Skill: Effect RES +15% (3 turns) to all allies'}, {scope:'all', desc:'After Ultimate: DMG Taken Reduction +10% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -417,7 +556,7 @@ const CHARACTERS = [
       {id:'A6', name:'Unified Offense and Defense', effect:"While having a Shield, this unit\'s Normal Attack and Ultimate DMG Multiplier +80%."},
     ],
     },
-  { id:'jura-igarashi-gd', dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png', subRoles:['Buffer', 'Debuffer'],
+  { id:'jura-igarashi-gd', dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Iron Ball',
     teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%', isDot:true}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ],
         ascension:[
@@ -429,7 +568,7 @@ const CHARACTERS = [
       {id:'A6', name:'Grit-Fueled Push', effect:"Afterburn applied by Passive Skill will apply to all Kaiju. When an ally attacks a Kaiju with a debuff or status ailment, the ally\'s ATK +30%."},
     ],
     },
-  { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, role:'Attacker',  types:['Shot'],           img:'KafkaHibino-TMWBK.png', subRoles:['Debuffer'],
+  { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, role:'Attacker',  types:['Shot'],           img:'KafkaHibino-TMWBK.png', subRoles:['Debuffer'], weaponType:'Handgun',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Resolution of a Defense Officer', effect:"While in Kaiju form, this unit\'s ATK +10%."},
@@ -440,7 +579,7 @@ const CHARACTERS = [
       {id:'A6', name:'Mastered Strength', effect:"After activating Normal Attack or Combat Skill in Kaiju form, applies Blunt DMG dealt +5% to this unit. Max 3 stacks."},
     ],
     },
-  { id:'kafka-hibino-tmwbr', name:'Kafka Hibino',     variant:'The Man Who Became a Reindeer',   stars:4, role:'Supporter', types:['Shot'],           img:'KafkaHibino-TMWBR.png', subRoles:['Buffer'],
+  { id:'kafka-hibino-tmwbr', name:'Kafka Hibino',     variant:'The Man Who Became a Reindeer',   stars:4, role:'Supporter', types:['Shot'],           img:'KafkaHibino-TMWBR.png', subRoles:['Buffer'], weaponType:'Handgun',
     teamBuffs:[ {scope:'single', desc:'Combat Skill: Combat Skill DMG dealt +25.6% (1 turn) to a single ally, applies Care Package'}, {scope:'single', desc:'Ultimate: applies Gift to a single ally — ATK +38.8% of this unit\'s ATK'} ], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Generous Spirit', effect:"After activating Ultimate, randomly removes 1 of this unit\'s debuffs."},
@@ -451,7 +590,7 @@ const CHARACTERS = [
       {id:'A6', name:'Heartfelt Support', effect:"After activating Ultimate, target\'s Ultimate Gauge +25."},
     ],
     },
-  { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, role:'Supporter', types:['Shot'],           img:'KeijiItami-CQ.png', subRoles:['Debuffer'],
+  { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, role:'Supporter', types:['Shot'],           img:'KeijiItami-CQ.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'}, {desc:'After attacking, 80% base chance to apply Poison (2 turns) — DoT equal to 5% of target\'s Max HP'} ],
         ascension:[
       {id:'A1', name:'Habitual Procedure', effect:"While in Stealth state, SP will not be consumed."},
@@ -462,7 +601,7 @@ const CHARACTERS = [
       {id:'A6', name:'Seasoned Expertise', effect:"Before activating Combat Skill, has a 100% base chance to apply DMG Taken Increase +10% (2 turns) to the target."},
     ],
     },
-  { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya', variant:'Evolving Talent',                 stars:5, role:'Attacker',  types:['Slash','Blunt'],  img:'KikoruShinomiya-EV.png', subRoles:[],
+  { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya', variant:'Evolving Talent',                 stars:5, role:'Attacker',  types:['Slash','Blunt'],  img:'KikoruShinomiya-EV.png', subRoles:[], weaponType:'Greatsword',
     teamBuffs:[ {scope:'all', desc:'Before attacking: DMG Taken Reduction +9.6% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -474,7 +613,7 @@ const CHARACTERS = [
       {id:'A6', name:'Seized Mastery', effect:"After defeating a Kaiju, applies 1 stack of Wrath to this unit. This unit\'s DMG dealt from Additional DMG +30% and CRIT DMG from Additional DMG +50%."},
     ],
     },
-  { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',            stars:5, role:'Defender',  types:['Slash'],          img:'KikoruShinomiya-FPC.png', subRoles:['Healer', 'Buffer', 'Tank'],
+  { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',            stars:5, role:'Defender',  types:['Slash'],          img:'KikoruShinomiya-FPC.png', subRoles:['Healer', 'Buffer', 'Tank'], weaponType:'Ax',
     teamBuffs:[ {scope:'all', desc:'After Normal Attack or Follow-Up Skill: DMG dealt +9.9% (1 turn) to all allies'}, {scope:'all', desc:'Recovers all allies\' HP equal to 7.3% of Max HP +42'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -486,7 +625,7 @@ const CHARACTERS = [
       {id:'A6', name:'True Essence of Christmas Eve', effect:"After activating Combat Skill or Ultimate, applies DMG dealt +40% (2 turns) to the target."},
     ],
     },
-  { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',    stars:5, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-GLF.png', subRoles:['Debuffer'],
+  { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',    stars:5, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-GLF.png', subRoles:['Debuffer'], weaponType:'Ax',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Decisive Ax Strike', effect:"When attacking a Kaiju that already has a debuff, this unit\'s CRIT Rate +15%."},
@@ -497,7 +636,7 @@ const CHARACTERS = [
       {id:'A6', name:'On the Rise', effect:"After activating Ultimate, this unit\'s Tip-Top Shape will not be consumed."},
     ],
     },
-  { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',             stars:5, role:'Attacker',  types:['Blunt'],          img:'KikoruShinomiya-TIW.png', subRoles:['Debuffer'],
+  { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',             stars:5, role:'Attacker',  types:['Blunt'],          img:'KikoruShinomiya-TIW.png', subRoles:['Debuffer'], weaponType:'Gauntlet',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Natural Talent', effect:"After attacking a Kaiju that already has a debuff, applies Blunt DMG dealt +20% (1 turn) to this unit."},
@@ -508,7 +647,7 @@ const CHARACTERS = [
       {id:'A6', name:'Strength to Uphold a Legacy', effect:"After activating Ultimate, applies Ultimate DMG Multiplier +130% (3 turns) to this unit. After performing Normal Attack while in Inheritance state, advances this unit\'s next Action Order by 20%."},
     ],
     },
-  { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',     stars:4, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-TMBP.png', subRoles:[],
+  { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',     stars:4, role:'Attacker',  types:['Slash'],          img:'KikoruShinomiya-TMBP.png', subRoles:[], weaponType:'Ax',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Outstanding Talent', effect:"After activating Combat Skill against a Core Exposed Kaiju, this unit\'s Ultimate Gauge +30."},
@@ -519,7 +658,7 @@ const CHARACTERS = [
       {id:'A6', name:'Accumulating Experience', effect:"This unit\'s Ultimate DMG dealt +20% and Slash Additional DMG Multiplier +50%."},
     ],
     },
-  { id:'kikoru-shinomiya-wr',  name:'Kikoru Shinomiya',variant:'Waterside Respite',              stars:5, role:'Support',   types:['Slash','Water'],   img:'KikoruShinomiya-WR.png',  subRoles:['Buffer'],
+  { id:'kikoru-shinomiya-wr',  name:'Kikoru Shinomiya',variant:'Waterside Respite',              stars:5, role:'Support',   types:['Slash','Water'],   img:'KikoruShinomiya-WR.png',  subRoles:['Buffer'], weaponType:null,
     teamBuffs:['DMG Dealt (All-Attribute)', 'CRIT DMG (High Summer)', 'CRIT Rate', 'SP Generation', 'DMG Taken Reduction'], buddyBuffs:['Combat Skill DMG Dealt', 'Action Order Advance'], debuffs:[],
         ascension:[
       {id:'A1', name:'Fleeting Coolness', effect:"While in High Summer state, all allies\' CRIT DMG +35%. Max stack count of All-Attribute DMG dealt buff applied by Passive Skill +10."},
@@ -530,7 +669,7 @@ const CHARACTERS = [
       {id:'A6', name:'Fruitful Summer', effect:"The \"Combat Skill DMG dealt buff\" applied by Combat Skill becomes a \"DMG dealt buff.\" The \"Combat Skill CRIT DMG buff\" from High Summer state for all other allies becomes a \"CRIT DMG buff.\""},
     ],
     },
-  { id:'kn8-f98',            name:'Kaiju No. 8',      variant:'Fortitude 9.8',                   stars:5, role:'Attacker',  types:['Blunt'],          img:'KN8-F98.png', subRoles:['Tank'],
+  { id:'kn8-f98',            name:'Kaiju No. 8',      variant:'Fortitude 9.8',                   stars:5, role:'Attacker',  types:['Blunt'],          img:'KN8-F98.png', subRoles:['Tank'], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Kaiju Awakening', effect:"After activating Normal Attack, this unit\'s Ultimate Gauge +30."},
@@ -541,7 +680,7 @@ const CHARACTERS = [
       {id:'A6', name:'Overflowing Fighting Spirit', effect:"At the start of battle, applies 1 stack of Fighting Spirit to this unit. Fighting Spirit max stack count +2."},
     ],
     },
-  { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[],
+  { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Unwavering Readiness', effect:"This unit\'s Ultimate CRIT DMG +42%."},
@@ -552,7 +691,7 @@ const CHARACTERS = [
       {id:'A6', name:'Thermal Overdrive', effect:"Resolve max stack count +2. Resolve: In addition, this unit\'s Ultimate DMG Multiplier +4%."},
     ],
     },
-  { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",   stars:4, role:'Defender',  types:['Shot','Ice'],     img:'KotaTachibana-FDFF.png', subRoles:[],
+  { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",   stars:4, role:'Defender',  types:['Shot','Ice'],     img:'KotaTachibana-FDFF.png', subRoles:[], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Feral Gaze', effect:"After activating Ultimate, recovers this unit\'s HP equal to 5% of Max HP."},
@@ -563,7 +702,7 @@ const CHARACTERS = [
       {id:'A6', name:'Unmatched Caliber', effect:"After receiving an attack, applies DMG Taken Reduction +5% to this unit. Max 5 stacks."},
     ],
     },
-  { id:'mina-ashiro-agh',    name:'Mina Ashiro',      variant:'Aiming for Greater Heights',      stars:4, role:'Supporter', types:['Shot'],           img:'MinaAshiro-AGH.png', subRoles:['Buffer'],
+  { id:'mina-ashiro-agh',    name:'Mina Ashiro',      variant:'Aiming for Greater Heights',      stars:4, role:'Supporter', types:['Shot'],           img:'MinaAshiro-AGH.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Continue the Operation', effect:"After defeating a Kaiju with Ultimate, advances this unit\'s next Action Order by 20%."},
@@ -574,7 +713,7 @@ const CHARACTERS = [
       {id:'A6', name:'Firing with Belief', effect:"While Morale is applied to an ally, this unit\'s Ultimate Shot DMG dealt +15%."},
     ],
     },
-  { id:'mina-ashiro-os',     name:'Mina Ashiro',      variant:'Off the Scale',                   stars:5, role:'Attacker',  types:['Shot'],           img:'MinaAshiro-OS.png', subRoles:[],
+  { id:'mina-ashiro-os',     name:'Mina Ashiro',      variant:'Off the Scale',                   stars:5, role:'Attacker',  types:['Shot'],           img:'MinaAshiro-OS.png', subRoles:[], weaponType:'Cannon',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Declaration of Neutralization', effect:"After activating Ultimate, applies SPD +15% (2 turns) to this unit."},
@@ -585,7 +724,7 @@ const CHARACTERS = [
       {id:'A6', name:'Unparalleled Output', effect:"When Focus is at its max stacks, applies CRIT DMG +40% (1 turn) to this unit."},
     ],
     },
-  { id:'mina-ashiro-sc',     name:'Mina Ashiro',      variant:'Superb Combination',              stars:5, role:'Attacker', types:['Shot'],           img:'MinaAshiro-SC.png', subRoles:['Buffer'],
+  { id:'mina-ashiro-sc',     name:'Mina Ashiro',      variant:'Superb Combination',              stars:5, role:'Attacker', types:['Shot'],           img:'MinaAshiro-SC.png', subRoles:['Buffer'], weaponType:'Cannon',
     teamBuffs:[ {scope:'all', desc:'Boosts allies\' Ultimate DMG and charges Ultimate Gauges'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -597,7 +736,7 @@ const CHARACTERS = [
       {id:'A6', name:'Perfected Snipe', effect:"Turn duration of CRIT Rate buff applied by Bakko +1. When this unit\'s HP is 70% or more, this unit\'s CRIT DMG +50%."},
     ],
     },
-  { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png', subRoles:['Debuffer'],
+  { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Calm Demeanor', effect:"When remaining HP is 50% or less, this unit\'s DEF +20%."},
@@ -608,7 +747,7 @@ const CHARACTERS = [
       {id:'A6', name:'Latent Potential', effect:"Before activating Ultimate, has a 100% base chance to apply DMG Taken Increase +15% (1 turn) to the target."},
     ],
     },
-  { id:'reno-ichikawa-tcu',  name:'Reno Ichikawa',    variant:'The Compatible User',             stars:5, role:'Attacker', types:['Shot','Ice'],     img:'RenoIchikawa-TCU.png', subRoles:['Debuffer', 'PLT Breaker'],
+  { id:'reno-ichikawa-tcu',  name:'Reno Ichikawa',    variant:'The Compatible User',             stars:5, role:'Attacker', types:['Shot','Ice'],     img:'RenoIchikawa-TCU.png', subRoles:['Debuffer', 'PLT Breaker'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies multiple elemental debuffs and Plate reduction'} ],
         ascension:[
       {id:'A1', name:'Lingering Cold', effect:"Before activating Ultimate, applies CRIT DMG +30% (1 turn) to this unit."},
@@ -619,7 +758,7 @@ const CHARACTERS = [
       {id:'A6', name:'Awakened Compatible User', effect:"Ice Additional DMG Multiplier caused by Ice Crystal +60%."},
     ],
     },
-  { id:'rin-shinonome-ah',   name:'Rin Shinonome',    variant:'Aspiration and Honor',            stars:5, role:'Attacker',  types:['Shot'],           img:'RinShinonome-AH.png', subRoles:[],
+  { id:'rin-shinonome-ah',   name:'Rin Shinonome',    variant:'Aspiration and Honor',            stars:5, role:'Attacker',  types:['Shot'],           img:'RinShinonome-AH.png', subRoles:[], weaponType:'Gatling Gun',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Skillful Coordination', effect:"After causing a Kaiju to be Core Exposed, applies CRIT Rate +20% (2 turns) to this unit."},
@@ -630,7 +769,7 @@ const CHARACTERS = [
       {id:'A6', name:'My Honor', effect:"After activating Combat Skill, applies CRIT DMG +20% (1 turn) to this unit. This unit\'s Ultimate Gauge +20."},
     ],
     },
-  { id:'rin-shinonome-cfr',  name:'Rin Shinonome',    variant:'Cross-Forged Refinement',         stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'RinShinonome-CFR.png', subRoles:['Additional DMG'],
+  { id:'rin-shinonome-cfr',  name:'Rin Shinonome',    variant:'Cross-Forged Refinement',         stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'RinShinonome-CFR.png', subRoles:['Additional DMG'], weaponType:'Gatling Gun',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Decisive Intent', effect:"While in Fury, before Combat Skill, applies Shot DMG dealt +24% (1 turn) to this unit. While in Pride, after Combat Skill, advances this unit\'s next Action Order by 20%."},
@@ -641,7 +780,7 @@ const CHARACTERS = [
       {id:'A6', name:'Indomitable Instinct', effect:"Activation count of Shot Additional DMG triggered by this unit\'s Passive Skill +4."},
     ],
     },
-  { id:'ryo-ikaruga-pr',     name:'Ryo Ikaruga',      variant:'Passion and Responsibility',      stars:4, role:'Supporter', types:['Shot'],           img:'RyoIkaruga-PR.png', subRoles:['Buffer'],
+  { id:'ryo-ikaruga-pr',     name:'Ryo Ikaruga',      variant:'Passion and Responsibility',      stars:4, role:'Supporter', types:['Shot'],           img:'RyoIkaruga-PR.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'All other allies\' ATK +12.8%'}, {scope:'all', desc:'At start of wave: ATK +10% (2 turns) to all allies'}, {scope:'all', desc:'All allies\' DMG dealt +10%'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -653,7 +792,7 @@ const CHARACTERS = [
       {id:'A6', name:'Frontline Command', effect:"All allies\' DMG dealt +10%."},
     ],
     },
-  { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',  variant:'Dimensionally Distorted Destiny', stars:5, role:'Defender',  types:['Blunt','Fire'],   img:'SaganShinomiya-DDD.png', subRoles:['Buffer', 'Tank'],
+  { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',  variant:'Dimensionally Distorted Destiny', stars:5, role:'Defender',  types:['Blunt','Fire'],   img:'SaganShinomiya-DDD.png', subRoles:['Buffer', 'Tank'], weaponType:'Shield',
     teamBuffs:[ {scope:'all', desc:'Before Ultimate: CRIT DMG +30% (2 turns) to all allies'}, {scope:'all', desc:'After Ultimate: Shield equal to 20% of DEF to all allies'}, {scope:'all', desc:'ATK +10.5% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[ {desc:'After countering, 80% base chance to apply Burn (2 turns) to the target (via Additional Passive Skill)'} ],
         ascension:[
@@ -665,7 +804,7 @@ const CHARACTERS = [
       {id:'A6', name:'Strong Will to Protect Allies', effect:"After activating Ultimate, applies a Shield (2 turns) equal to 20% of this unit\'s DEF to all allies."},
     ],
     },
-  { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya',  variant:'Over Limit',                      stars:5, role:'Attacker',  types:['Slash','Fire'],   img:'SaganShinomiya-OL.png', subRoles:['Buffer'],
+  { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya',  variant:'Over Limit',                      stars:5, role:'Attacker',  types:['Slash','Fire'],   img:'SaganShinomiya-OL.png', subRoles:['Buffer'], weaponType:'Spear',
     teamBuffs:[ {scope:'all', desc:'CRIT DMG +11% (3 turns) to all allies'}, {scope:'all', desc:'Ultimate DMG dealt +3.3% to all allies (max 5 stacks)'}, {scope:'all', desc:'After Enhanced Normal Attack: all allies\' Ultimate Gauge +27'}, {scope:'conditional', desc:'While in Ardor state: all allies\' DEF PEN Rate +24%'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -677,7 +816,7 @@ const CHARACTERS = [
       {id:'A6', name:'Burning Vow of Protection', effect:"While in Blaze state, this unit\'s CRIT DMG from Enhanced Normal Attack and Ultimate +150%."},
     ],
     },
-  { id:'sagan-shinomiya-rc', name:'Sagan Shinomiya',  variant:'The Resurgent Commander',          stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'SaganShinomiya-RC.png', subRoles:['Buffer'],
+  { id:'sagan-shinomiya-rc', name:'Sagan Shinomiya',  variant:'The Resurgent Commander',          stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'SaganShinomiya-RC.png', subRoles:['Buffer'], weaponType:'Shield',
     teamBuffs:[ {scope:'all', desc:'DMG dealt +21.6% and Extra Attack DMG dealt +21.6% (3 turns) to all allies'}, {scope:'all', desc:'While in Command: all allies\' CRIT Rate +32%, CRIT DMG +32%, Extra Attack CRIT DMG +32%'}, {scope:'all', desc:'Advances all other allies\' Action Order by 50% on Ultimate'}, {scope:'conditional', desc:'While in Command: all allies\' DEF PEN Rate +24%'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -689,7 +828,7 @@ const CHARACTERS = [
       {id:'A6', name:'Hellfire Roar', effect:"Number of Elemental PLT destroyed with Extra Attack\'s effect +1."},
     ],
     },
-  { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',     stars:5, role:'Supporter', types:['Shot','Slash'],   img:'SoichiroHoshina-KOWJ.png', subRoles:['Buffer', 'Debuffer'],
+  { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',     stars:5, role:'Supporter', types:['Shot','Slash'],   img:'SoichiroHoshina-KOWJ.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'all', desc:'Buffs and debuffs enemies to boost team\'s damage output'} ],
     buddyBuffs:[], debuffs:[ {desc:'Applies debuffs to reduce enemy resistance and boost ally ATK'} ],
     ascension:[
@@ -700,7 +839,7 @@ const CHARACTERS = [
       {id:'A5', name:'Eldest Brother\'s Resolve', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Bearer of the Hoshina Style', effect:"Target of the SPD and DMG Taken Increase debuffs applied by Follow-Up Skill becomes all Kaiju."},
     ], },
-  { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',  variant:'Ax Technique Proficiency',        stars:5, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-ATP.png', subRoles:['Buffer', 'Debuffer'],
+  { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',  variant:'Ax Technique Proficiency',        stars:5, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-ATP.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Ax',
     teamBuffs:[ {scope:'all', desc:'All allies\' DMG dealt +5.5%'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -712,7 +851,7 @@ const CHARACTERS = [
       {id:'A6', name:'Overwhelming Battle Aura', effect:"Slash Additional DMG Multiplier for each stack of Fear +10%."},
     ],
     },
-  { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina',  variant:'Blade Specialist',                stars:4, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-BS.png', subRoles:['Buffer'],
+  { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina',  variant:'Blade Specialist',                stars:4, role:'Supporter', types:['Slash'],          img:'SoshiroHoshina-BS.png', subRoles:['Buffer'], weaponType:'Twin Swords',
     teamBuffs:[],
     buddyBuffs:[ {desc:'SPD +14.7% (2 turns) to Battle Buddy after attacking'}, {desc:'If SP ≤2: SPD +16% (2 turns) to Battle Buddy'}, {desc:'If SP ≤1: CRIT DMG +32% (2 turns) to Battle Buddy'}, {desc:'This unit\'s and Battle Buddy\'s Normal Attack DMG dealt +20%'}, {desc:'Randomly removes 1 debuff from Battle Buddy'} ], debuffs:[],
         ascension:[
@@ -724,7 +863,7 @@ const CHARACTERS = [
       {id:'A6', name:'Genuine Praise', effect:"After battle buddy defeats a Kaiju, applies SPD +20% (2 turns) to this unit."},
     ],
     },
-  { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina',variant:'Hoshina-Style Sword-Slay Technique',stars:5,role:'Attacker', types:['Slash'],          img:'SoshiroHoshina-HSSST.png', subRoles:[],
+  { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina',variant:'Hoshina-Style Sword-Slay Technique',stars:5,role:'Attacker', types:['Slash'],          img:'SoshiroHoshina-HSSST.png', subRoles:[], weaponType:'Twin Swords',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Steady Neutralization', effect:"When attacking a Kaiju that has 50% or less remaining HP, this unit\'s CRIT DMG +20%."},
@@ -735,7 +874,7 @@ const CHARACTERS = [
       {id:'A6', name:'Unwavering Edge', effect:"While in Fierce state, this unit\'s DEF PEN Rate +25%."},
     ],
     },
-  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png', subRoles:[],
+  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png', subRoles:[], weaponType:'Twin Swords',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'After attacking, 100% base chance to apply Windbite (2 turns) — Wind DoT to the target'} ],
     ascension:[
       {id:'A1', name:'Gale of the Kamaitachi', effect:"DEF PEN Rate +16%. At the start of wave, has a 100% base chance to apply Windbite (1 turn) to all Kaiju."},
@@ -745,7 +884,7 @@ const CHARACTERS = [
       {id:'A5', name:'A New Horizon', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Realm of Masterful Art', effect:"After activating Combat Skill, applies 1 stack of Opening to the target. After attacking, applies Wind DMG dealt +7% to this unit. Max 5 stacks."},
     ], },
-  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png', subRoles:[],
+  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png', subRoles:[], weaponType:'Twin Swords',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Polished Technique', effect:"Before activating Combat Skill, applies CRIT Rate +25% (1 turn) to this unit."},
@@ -756,7 +895,7 @@ const CHARACTERS = [
       {id:'A6', name:'Joy of Combat', effect:"After activating Ultimate, applies CRIT DMG +100% (2 turns) to this unit."},
     ],
     },
-  { id:'suited-uc',          name:'Suited',            variant:'Unbridled Curiosity',             stars:5, role:'Attacker',  types:['Blunt'],          img:'Suited-UC.png', subRoles:['Buffer'],
+  { id:'suited-uc',          name:'Suited',            variant:'Unbridled Curiosity',             stars:5, role:'Attacker',  types:['Blunt'],          img:'Suited-UC.png', subRoles:['Buffer'], weaponType:'Hammer',
     teamBuffs:[ {scope:'all', desc:'After Extra Attack: Follow-Up and Extra Attack DMG dealt +15% (2 turns) to all allies (max 3 stacks)'}, {scope:'all', desc:'After Extra Attack: CRIT DMG +25% (1 turn) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
@@ -768,7 +907,7 @@ const CHARACTERS = [
       {id:'A6', name:'Bursting Ambition', effect:"Chips max stack count +3. After activating Ultimate, additionally applies 3 stacks of Chips. This unit\'s Blunt DMG dealt from Extra Attack +25%."},
     ],
     },
-  { id:'tae-nakanoshima-tkepl', dotEffects:[ {type:'burn',desc:'Fire debuffs'} ],name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',   stars:4, role:'Attacker',  types:['Shot','Fire'],    img:'TaeNakanoshima-TKEPL.png', subRoles:['Debuffer'],
+  { id:'tae-nakanoshima-tkepl', dotEffects:[ {type:'burn',desc:'Fire debuffs'} ],name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',   stars:4, role:'Attacker',  types:['Shot','Fire'],    img:'TaeNakanoshima-TKEPL.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Fire debuffs on enemies'} ],
         ascension:[
       {id:'A1', name:'Ample Stamina', effect:"After activating Ultimate, applies Ultimate Gauge Charge Rate +20% (2 turns) to this unit."},
@@ -779,7 +918,7 @@ const CHARACTERS = [
       {id:'A6', name:'Expanded Heatwave', effect:"After activating Ultimate, has a 65% base chance to apply Burn (2 turns) with the same effect as Combat Skill\'s to a single Kaiju and adjacent Kaiju."},
     ],
     },
-  { id:'wang-meixing-nwc', dotEffects:[ {type:'shock',desc:'Shock Wire'} ],   name:'Wang Meixing',      variant:'Negotiator of Wit and Charm',     stars:5, role:'Supporter', types:['Shot','Lightning'],img:'WangMeixing-NWC.png', subRoles:['Debuffer', 'Buffer'],
+  { id:'wang-meixing-nwc', dotEffects:[ {type:'shock',desc:'Shock Wire'} ],   name:'Wang Meixing',      variant:'Negotiator of Wit and Charm',     stars:5, role:'Supporter', types:['Shot','Lightning'],img:'WangMeixing-NWC.png', subRoles:['Debuffer', 'Buffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'conditional', desc:'[4+ PLTs removed]: DoT DMG Multiplier +16.5% (1 turn) to all allies'}, {scope:'conditional', desc:'[6+ PLTs removed]: DEF PEN Rate +7.8% (1 turn) to all allies'}, {scope:'conditional', desc:'When ally attacks Kaiju in Shock Wire state: ally\'s DMG dealt +15%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Shock Wire — DEF reduction and DoT; triggers team DMG bonus'} ],
         ascension:[
@@ -791,7 +930,7 @@ const CHARACTERS = [
       {id:'A6', name:'Exceeding Expectations', effect:"After activating Ultimate, has a 100% base chance to apply DEF -20% (3 turns) to the target. This unit\'s DoT DMG Multiplier +50%."},
     ],
     },
-  { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, role:'Attacker',  types:['Shot','Slash'],   img:'ZoeeWanderfalke-TWU.png',
+  { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, role:'Attacker',  types:['Shot','Slash'],   img:'ZoeeWanderfalke-TWU.png', subRoles:[], weaponType:'Ride-Frame',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Breakthrough Will', effect:"At the start of battle, this unit\'s Ultimate Gauge +90. Each time this unit loses a total of 20% of Max HP, applies CRIT DMG +10% to this unit. Max 5 stacks."},
@@ -813,9 +952,12 @@ function saveSquads() {
 }
 
 // ── STATE ────────────────────────────────────────────────────────────────────
-let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null], ascendedNodes:[[],[],[],[]] }];
-// Backfill ascendedNodes for squads saved before this feature existed
-squads.forEach(s => { if (!s.ascendedNodes) s.ascendedNodes = [[],[],[],[]]; });
+let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null], ascendedNodes:[[],[],[],[]], weapons:[null,null,null,null] }];
+// Backfill fields for squads saved before these features existed
+squads.forEach(s => {
+  if (!s.ascendedNodes) s.ascendedNodes = [[],[],[],[]];
+  if (!s.weapons) s.weapons = [null,null,null,null];
+});
 let activeSquad = 0;
 let activeSlot = null; // index of slot currently picking
 
@@ -830,6 +972,18 @@ function toggleAscension(slotIdx, nodeId) {
   if (pos === -1) arr.push(nodeId); else arr.splice(pos, 1);
   saveSquads(); renderSlots(); renderAnalysis();
 }
+function slotWeapon(i) {
+  const char = slotChar(i);
+  if (!char || !char.weaponType) return null;
+  const list = WEAPONS_BY_TYPE[char.weaponType] || [];
+  const savedName = squads[activeSquad].weapons[i];
+  return list.find(w => w.name === savedName) || list[list.length - 1] || null; // default to Standard weapon (last in list)
+}
+function setSlotWeapon(slotIdx, weaponName) {
+  squads[activeSquad].weapons[slotIdx] = weaponName;
+  saveSquads(); renderSlots(); renderAnalysis();
+}
+
 function isBuddy(slotA, slotB) { return (slotA === 0 && slotB === 1) || (slotA === 1 && slotB === 0) || (slotA === 2 && slotB === 3) || (slotA === 3 && slotB === 2); }
 function buddyOf(slotIdx) { return slotIdx === 0 ? 1 : slotIdx === 1 ? 0 : slotIdx === 2 ? 3 : 2; }
 
@@ -889,6 +1043,13 @@ function renderSlot(idx) {
           ${char.types.map(t => `<span class="slot-tag ${tagColor(t)}">${t}</span>`).join('')}
           ${(char.subRoles||[]).map(r => `<span class="slot-tag ${tagColor(r)}">${r}</span>`).join('')}
         </div>
+        ${char.weaponType ? `<div class="slot-weapon">
+          <span class="slot-weapon-label">Weapon</span>
+          <select class="slot-weapon-select" data-slot="${idx}">
+            ${(WEAPONS_BY_TYPE[char.weaponType]||[]).map(w => `<option value="${w.name}"${slotWeapon(idx)?.name===w.name?' selected':''}>${w.name}</option>`).join('')}
+          </select>
+          ${slotWeapon(idx) ? `<div class="slot-weapon-effect">${slotWeapon(idx).effect.replace(/\n/g,'<br>')}</div>` : ''}
+        </div>` : char.weaponType === null ? `<div class="slot-weapon"><span class="slot-weapon-label">Weapon</span><div class="slot-weapon-none">Cannot equip weapons</div></div>` : ''}
         ${char.ascension ? `<div class="slot-ascension">
           <span class="slot-ascension-label">Ascension</span>
           <div class="slot-ascension-toggles">
@@ -909,6 +1070,13 @@ function renderSlot(idx) {
         toggleAscension(+btn.dataset.slot, btn.dataset.node);
       });
     });
+    const weaponSelect = slot.querySelector('.slot-weapon-select');
+    if (weaponSelect) {
+      weaponSelect.addEventListener('click', (e) => e.stopPropagation());
+      weaponSelect.addEventListener('change', (e) => {
+        setSlotWeapon(+weaponSelect.dataset.slot, e.target.value);
+      });
+    }
   } else {
     slot.className = 'slot empty' + (activeSlot === idx ? ' picking' : '');
     slot.innerHTML = `
@@ -1034,6 +1202,20 @@ function renderAnalysis() {
           teamBuffs.push({source: `${src} — ${node.id}`, scope:'all', desc: node.effect, isAscension:true});
         }
       });
+    }
+
+    // Selected weapon's effect — feeds into the same pipeline so equipping
+    // a different weapon actually changes the squad's totals/coverage too
+    const weapon = slotWeapon(f.slotIdx);
+    if (weapon) {
+      const weaponLower = weapon.effect.toLowerCase();
+      const scope = weaponLower.includes('all allies') ? 'all' : 'conditional';
+      const weaponSrc = `${src} — ${weapon.name}`;
+      if (scope === 'conditional') {
+        condBuffs.push({source: weaponSrc, desc: weapon.effect, isWeapon:true});
+      } else {
+        teamBuffs.push({source: weaponSrc, scope:'all', desc: weapon.effect, isWeapon:true});
+      }
     }
   });
 
@@ -1230,7 +1412,7 @@ document.getElementById('squad-name-input').addEventListener('input', (e) => {
 
 // ── NEW / DELETE SQUAD ────────────────────────────────────────────────────────
 document.getElementById('new-squad-btn').addEventListener('click', () => {
-  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null], ascendedNodes:[[],[],[],[]] });
+  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null], ascendedNodes:[[],[],[],[]], weapons:[null,null,null,null] });
   activeSquad = squads.length - 1;
   activeSlot = null;
   saveSquads();
