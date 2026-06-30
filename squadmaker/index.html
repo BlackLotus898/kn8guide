@@ -206,7 +206,7 @@ const STORAGE_KEY = 'kn8_squads_v1';
 // ── CHARACTER DATA ──────────────────────────────────────────────────────────
 const CHARACTERS = [
   { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',               stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'AkariMinase-FC.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Applies Burn (3 turns) to all Kaiju via Ultimate — 100% base chance'} ],
         ascension:[
       {id:'A1', name:'Smooth Execution', effect:"After applying a status ailment, applies DMG dealt +15% (2 turns) to this unit."},
       {id:'A2', name:'Tactful Action', effect:"At the start of battle, applies DoT DMG Multiplier +50% (1 turn) to this unit. At the start of wave, has a 100% base chance to apply Burn (3 turns), that is the same as Ultimate, to all Kaiju."},
@@ -253,7 +253,7 @@ const CHARACTERS = [
     ],
     },
   { id:'aoi-kaguragi-tprs',  name:'Aoi Kaguragi',     variant:'The Promising Rising Star',       stars:4, role:'Attacker',  types:['Shot','Wind'],    img:'AoiKaguragi-TPRS.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'After attacking, 100% base chance to apply Windbite (2 turns) — Wind DoT to the target'} ],
         ascension:[
       {id:'A1', name:'Cautious Movements', effect:"After attacking, has a 50% fixed chance to apply ATK +10% (2 turns) to this unit."},
       {id:'A2', name:'Unflinching Integrity', effect:"After activating Combat Skill, randomly removes 1 of this unit\'s debuffs."},
@@ -452,7 +452,7 @@ const CHARACTERS = [
     ],
     },
   { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, role:'Supporter', types:['Shot'],           img:'KeijiItami-CQ.png', subRoles:['Debuffer'],
-    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'} ],
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'Stealth — reduces enemy targeting of allies'}, {desc:'After attacking, 80% base chance to apply Poison (2 turns) — DoT equal to 5% of target\'s Max HP'} ],
         ascension:[
       {id:'A1', name:'Habitual Procedure', effect:"While in Stealth state, SP will not be consumed."},
       {id:'A2', name:'Smooth Progress', effect:"After defeating a Kaiju, this unit\'s Ultimate Gauge +35."},
@@ -655,7 +655,7 @@ const CHARACTERS = [
     },
   { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',  variant:'Dimensionally Distorted Destiny', stars:5, role:'Defender',  types:['Blunt','Fire'],   img:'SaganShinomiya-DDD.png', subRoles:['Buffer', 'Tank'],
     teamBuffs:[ {scope:'all', desc:'Before Ultimate: CRIT DMG +30% (2 turns) to all allies'}, {scope:'all', desc:'After Ultimate: Shield equal to 20% of DEF to all allies'}, {scope:'all', desc:'ATK +10.5% (2 turns) to all allies'} ],
-    buddyBuffs:[], debuffs:[],
+    buddyBuffs:[], debuffs:[ {desc:'After countering, 80% base chance to apply Burn (2 turns) to the target (via Additional Passive Skill)'} ],
         ascension:[
       {id:'A1', name:'Same Fighting Spirit', effect:"Before activating Ultimate, applies CRIT DMG +30% (2 turns) to all allies."},
       {id:'A2', name:'Blazing Drive', effect:"If Inner Flame is at 1 or more stacks, after turn arrives, randomly removes 1 of this unit\'s debuffs."},
@@ -736,7 +736,7 @@ const CHARACTERS = [
     ],
     },
   { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png', subRoles:[],
-    teamBuffs:[], buddyBuffs:[], debuffs:[],
+    teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'After attacking, 100% base chance to apply Windbite (2 turns) — Wind DoT to the target'} ],
     ascension:[
       {id:'A1', name:'Gale of the Kamaitachi', effect:"DEF PEN Rate +16%. At the start of wave, has a 100% base chance to apply Windbite (1 turn) to all Kaiju."},
       {id:'A2', name:'Opening-Cleaving Blade', effect:"When activating Combat Skill against a Kaiju with 5 or more stacks of Opening, this unit\'s Combat Skill DMG dealt +30%."},
@@ -1066,11 +1066,15 @@ function renderAnalysis() {
   const hasBurn      = filled.some(f => f.char.dotEffects?.some(d => d.type === 'burn') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('burn')));
   const hasAftBurn   = filled.some(f => f.char.dotEffects?.some(d => d.type === 'afterburn') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('afterburn')));
   const hasShockWire = filled.some(f => f.char.dotEffects?.some(d => d.type === 'shock') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('shock wire')));
+  const hasWindbite  = filled.some(f => f.char.dotEffects?.some(d => d.type === 'windbite') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('windbite')));
+  const hasPoison    = filled.some(f => f.char.dotEffects?.some(d => d.type === 'poison') || f.char.debuffs?.some(d => d.desc.toLowerCase().includes('poison')));
   const hasDoTBonus  = filled.some(f => [...f.char.teamBuffs,...f.char.buddyBuffs].some(b => b.desc.toLowerCase().includes('dot') || b.desc.toLowerCase().includes('multiplier')));
   const dotTypes = [];
   if (hasBurn) dotTypes.push('Burn');
   if (hasAftBurn) dotTypes.push('Afterburn');
   if (hasShockWire) dotTypes.push('Shock Wire');
+  if (hasWindbite) dotTypes.push('Windbite');
+  if (hasPoison) dotTypes.push('Poison');
 
   // Warnings
   const warnings = [];
