@@ -49,6 +49,7 @@ ANNOUNCEMENTS_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "a
 # Add or remove instances here as needed; the script tries each in order
 # and uses the first one that returns a valid feed.
 BRIDGE_INSTANCES = [
+    "https://rss.xcancel.com/{user}/rss",
     "https://xcancel.com/{user}/rss",
     "https://nitter.poast.org/{user}/rss",
     "https://nitter.privacyredirect.com/{user}/rss",
@@ -66,12 +67,17 @@ def fetch_feed():
         url = template.format(user=X_USERNAME)
         try:
             resp = requests.get(url, timeout=REQUEST_TIMEOUT, headers={
-                "User-Agent": "Mozilla/5.0 (compatible; kn8guide-bot/1.0)"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                              "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
             })
             if resp.status_code == 200 and resp.text.strip():
                 parsed = feedparser.parse(resp.text)
                 if parsed.entries:
                     print(f"Successfully fetched feed from {url}")
+                    newest = parsed.entries[0]
+                    newest_title = newest.get("title", "(no title)")[:80]
+                    newest_date = newest.get("published", newest.get("updated", "(no date)"))
+                    print(f"Newest entry in feed: [{newest_date}] {newest_title}")
                     return parsed
         except requests.RequestException as e:
             print(f"Bridge {url} failed: {e}")
