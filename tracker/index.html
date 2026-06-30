@@ -37,6 +37,9 @@
   .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
   .reset-btn { margin-left: auto; padding: .4rem .9rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
   .reset-btn:hover { color: var(--red); border-color: var(--red); }
+  .export-btn, .import-btn { padding: .4rem .9rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .export-btn:hover, .import-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+  .export-btn { margin-left: auto; }
 
   /* RARITY SECTION */
   .rarity-section { margin-bottom: 2.5rem; }
@@ -139,6 +142,9 @@
     <button class="filter-btn" data-filter="missing">Missing</button>
     <button class="filter-btn" data-filter="5">★★★★★</button>
     <button class="filter-btn" data-filter="4">★★★★</button>
+    <button class="export-btn" id="export-btn">Export Data</button>
+    <button class="import-btn" id="import-btn">Import Data</button>
+    <input type="file" id="import-file-input" accept="application/json" style="display:none;">
     <button class="reset-btn" id="reset-btn">Reset All</button>
   </div>
 
@@ -379,10 +385,86 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 document.getElementById('reset-btn').addEventListener('click', () => {
   if (confirm('Reset all progress? This cannot be undone.')) {
     owned.clear();
+    ascension = {};
     save();
+    saveAscension();
     buildTracker();
     updateStats();
   }
+});
+
+// ── EXPORT / IMPORT ──────────────────────────────────────────────────────────
+document.getElementById('export-btn').addEventListener('click', () => {
+  const payload = {
+    source: 'K8GUIDE Character Tracker',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    owned: [...owned],
+    ascension: ascension,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `k8guide-tracker-backup-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+const importFileInput = document.getElementById('import-file-input');
+document.getElementById('import-btn').addEventListener('click', () => {
+  importFileInput.value = '';
+  importFileInput.click();
+});
+
+importFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    let data;
+    try {
+      data = JSON.parse(evt.target.result);
+    } catch (err) {
+      alert('This file isn\'t valid JSON and can\'t be imported. Make sure you selected a tracker backup file exported from this page.');
+      return;
+    }
+    if (!data || typeof data !== 'object' || !Array.isArray(data.owned) || typeof data.ascension !== 'object') {
+      alert('This file doesn\'t look like a K8GUIDE tracker backup. Make sure you selected the correct exported .json file.');
+      return;
+    }
+    const validIds = new Set(characters.map(c => c.id));
+    const importedOwned = data.owned.filter(id => validIds.has(id));
+    const skippedOwned = data.owned.length - importedOwned.length;
+    const importedAscension = {};
+    let skippedAscension = 0;
+    for (const [id, lvl] of Object.entries(data.ascension)) {
+      if (validIds.has(id) && typeof lvl === 'number' && lvl >= 0 && lvl <= 6) {
+        importedAscension[id] = lvl;
+      } else {
+        skippedAscension++;
+      }
+    }
+    const currentOwnedCount = owned.size;
+    const currentAscCount = Object.keys(ascension).length;
+    let warning = `Import ${importedOwned.length} owned character(s) and ${Object.keys(importedAscension).length} ascension record(s)?\n\nThis will REPLACE your current data (${currentOwnedCount} owned, ${currentAscCount} ascension records) — this cannot be undone.`;
+    if (skippedOwned > 0 || skippedAscension > 0) {
+      warning += `\n\nNote: ${skippedOwned} owned entr${skippedOwned===1?'y':'ies'} and ${skippedAscension} ascension entr${skippedAscension===1?'y':'ies'} in the file didn't match any known character and will be skipped (the site may have been updated since this backup was made).`;
+    }
+    if (!confirm(warning)) return;
+
+    owned = new Set(importedOwned);
+    ascension = importedAscension;
+    save();
+    saveAscension();
+    buildTracker();
+    updateStats();
+    alert('Import complete.');
+  };
+  reader.readAsText(file);
 });
 
 buildTracker();
