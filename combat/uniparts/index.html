@@ -62,6 +62,15 @@
   .unipart-users { display: flex; flex-wrap: wrap; gap: .3rem; }
   .unipart-user-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .15rem .5rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: color .2s, border-color .2s; }
   .unipart-user-tag:hover { color: var(--cyan); border-color: var(--cyan); }
+  .stat-roll-table { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--border); margin: 1.2rem 0 1.8rem; background: var(--dark); }
+  .stat-roll-col { border-right: 1px solid var(--border); }
+  .stat-roll-col:last-child { border-right: none; }
+  .stat-roll-head { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--cyan); padding: .7rem 1rem; border-bottom: 1px solid var(--border); background: rgba(0,212,255,.04); }
+  .stat-roll-row { padding: .7rem 1rem; border-bottom: 1px solid var(--border); font-size: .9rem; color: var(--muted); line-height: 1.5; }
+  .stat-roll-row:last-child { border-bottom: none; }
+  .stat-roll-row strong { color: var(--text); }
+  .stat-roll-row.empty { color: transparent; }
+  @media (max-width: 700px) { .stat-roll-table { grid-template-columns: 1fr; } .stat-roll-col { border-right: none; border-bottom: 1px solid var(--border); } .stat-roll-col:last-child { border-bottom: none; } }
   @media (max-width: 600px) { .status-row { grid-template-columns: 140px 1fr; } .two-col-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -89,6 +98,30 @@
     </div>
     <div class="guide-section-body">
       <p class="guide-text">Uniparts are equipment pieces that provide stat bonuses and set effects. Equipping a full set of the same type activates the set bonus. Always match the unipart type to the character's recommended set on their individual page.</p>
+
+      <div class="guide-subheading">Max Unipart Stat Rolls</div>
+      <div class="stat-roll-table">
+        <div class="stat-roll-col">
+          <div class="stat-roll-head">Gloves</div>
+          <div class="stat-roll-row"><strong>ATK:</strong> 32.8%, 280</div>
+          <div class="stat-roll-row"><strong>DEF:</strong> 32.8%, 280</div>
+          <div class="stat-roll-row"><strong>HP:</strong> 32.8%, 560</div>
+        </div>
+        <div class="stat-roll-col">
+          <div class="stat-roll-head">Chest</div>
+          <div class="stat-roll-row"><strong>CRIT Rate:</strong> 23.8%</div>
+          <div class="stat-roll-row"><strong>CRIT DMG:</strong> 47.6%</div>
+          <div class="stat-roll-row"><strong>Effect Hit Rate:</strong> 19.6%</div>
+          <div class="stat-roll-row"><strong>Ultimate Gauge Charge Rate:</strong> 16.8%</div>
+          <div class="stat-roll-row"><strong>Healing Multiplier Bonus:</strong> 14%</div>
+        </div>
+        <div class="stat-roll-col">
+          <div class="stat-roll-head">Boots</div>
+          <div class="stat-roll-row"><strong>Type DMG Dealt</strong> (Ice, Shot, Blunt, Wind, etc): 18.2%</div>
+          <div class="stat-roll-row"><strong>SPD:</strong> 20</div>
+          <div class="stat-roll-row"><strong>Effect RES:</strong> 19.6%</div>
+        </div>
+      </div>
 
       <div class="uniparts-grid">
 
