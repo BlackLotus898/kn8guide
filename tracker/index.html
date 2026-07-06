@@ -501,7 +501,7 @@ async function exportTrackerImage() {
     }
 
     const PADDING = 24;
-    const TITLE_H = 80;
+    const TITLE_H = 90;
     const CHIP_W = 96;
     const CHIP_GAP = 12;
     const LABEL_H = 34;
@@ -523,24 +523,44 @@ async function exportTrackerImage() {
     ctx.fillStyle = '#080b10';
     ctx.fillRect(0, 0, canvasWidth, totalHeight);
 
-    // Header
-    ctx.fillStyle = '#ffffff';
+    // Cyan accent bar across top
+    ctx.fillStyle = '#00d4ff';
+    ctx.fillRect(0, 0, canvasWidth, 4);
+
+    // Title
+    ctx.fillStyle = '#e8edf4';
     ctx.font = '700 30px Rajdhani, sans-serif';
     ctx.textBaseline = 'top';
-    ctx.fillText('Character Tracker', PADDING, PADDING);
+    ctx.fillText('Character Tracker', PADDING, PADDING + 8);
 
     const ownedCount = owned.size;
     const totalCount = characters.length;
     const pct = totalCount ? Math.round(ownedCount / totalCount * 100) : 0;
     ctx.fillStyle = '#00d4ff';
     ctx.font = '600 16px Rajdhani, sans-serif';
-    ctx.fillText(`${ownedCount} / ${totalCount} Owned — ${pct}% Complete`, PADDING, PADDING + 38);
+    ctx.fillText(`${ownedCount} / ${totalCount} Owned — ${pct}% Complete`, PADDING, PADDING + 46);
 
-    ctx.fillStyle = '#5a7090';
-    ctx.font = '11px monospace';
-    ctx.textAlign = 'right';
-    ctx.fillText('KN8GUIDE.XYZ', canvasWidth - PADDING, PADDING + 4);
+    // URL pill
+    const urlText = 'KN8GUIDE.XYZ';
+    ctx.font = '700 15px monospace';
+    const urlW = ctx.measureText(urlText).width;
+    const pillPad = 10;
+    const pillX = canvasWidth - PADDING - urlW - pillPad * 2;
+    const pillY = PADDING + 8;
+    const pillH = 26;
+    ctx.fillStyle = 'rgba(0,40,55,0.9)';
+    ctx.fillRect(pillX, pillY, urlW + pillPad * 2, pillH);
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pillX, pillY, urlW + pillPad * 2, pillH);
+    ctx.fillStyle = '#00d4ff';
     ctx.textAlign = 'left';
+    ctx.fillText(urlText, pillX + pillPad, pillY + 5);
+    ctx.textAlign = 'left';
+
+    // Bottom accent bar
+    ctx.fillStyle = 'rgba(0,40,55,0.8)';
+    ctx.fillRect(0, totalHeight - 3, canvasWidth, 3);
 
     // Preload images
     const imageCache = {};
