@@ -13,7 +13,7 @@
     --red:#e8001a; --font:'Rajdhani',sans-serif; --mono:'Share Tech Mono',monospace;
   }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; overflow-x:hidden; }
 
   /* ── PAGE LAYOUT ── */
   .page { max-width:780px; margin:0 auto; padding:2rem 1.5rem 4rem; }
@@ -103,6 +103,10 @@
     .result-row { gap:.5rem; padding:.6rem; }
     .result-bar-wrap { flex:1.2; }
   }
+  footer { text-align:center; padding:3rem 2rem; border-top:1px solid var(--border); font-family:var(--mono); font-size:.7rem; letter-spacing:2px; color:var(--muted); }
+  footer a { color:var(--muted); text-decoration:none; }
+  footer a:hover { color:var(--cyan); }
+  footer p { margin-top:.5rem; }
 </style>
 </head>
 <body>
