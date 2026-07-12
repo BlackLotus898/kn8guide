@@ -205,61 +205,105 @@ let showAll = false;
 let modal = null;  // null | '__picker__' | 'CharacterName'
 let swapSlot = null;
 
-// ── STORAGE ──────────────────────────────────────────────────────────────────
+// ── GOOGLE APPS SCRIPT BACKEND ───────────────────────────────────────────────
+// Paste your deployed Apps Script Web App URL here after setup:
+const SCRIPT_URL = 'YOUR_SCRIPT_URL_HERE';
+
+// Generate or retrieve a stable device ID
+function getDeviceId() {
+  let id = localStorage.getItem('kn8guide_device_id');
+  if (!id) {
+    id = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('kn8guide_device_id', id);
+  }
+  return id;
+}
+
+async function apiFetch(params) {
+  const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+  const res = await fetch(url);
+  return res.json();
+}
+
 async function loadData() {
+  if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+    // Fallback to localStorage while URL not yet set
+    try { votes = JSON.parse(localStorage.getItem('kn8_votes') || '{}'); } catch(e) {}
+    try { myPicks = JSON.parse(localStorage.getItem('kn8_picks') || '[]'); } catch(e) {}
+    return;
+  }
   try {
-    const vRes = await window.storage.get(VOTES_KEY, true);
-    if (vRes) votes = JSON.parse(vRes.value);
-  } catch(e) {}
-  try {
-    const pRes = await window.storage.get(MY_PICKS_KEY, false);
-    if (pRes) myPicks = JSON.parse(pRes.value);
-  } catch(e) {}
+    const deviceId = getDeviceId();
+    const [vRes, pRes] = await Promise.all([
+      apiFetch({ action: 'getAll' }),
+      apiFetch({ action: 'getPicks', deviceId }),
+    ]);
+    if (vRes.votes) votes = vRes.votes;
+    if (pRes.picks) myPicks = pRes.picks;
+    // Also save to localStorage as a fast cache for next load
+    localStorage.setItem('kn8_votes', JSON.stringify(votes));
+    localStorage.setItem('kn8_picks', JSON.stringify(myPicks));
+  } catch(e) {
+    // Fall back to cached localStorage data if fetch fails
+    try { votes = JSON.parse(localStorage.getItem('kn8_votes') || '{}'); } catch(e2) {}
+    try { myPicks = JSON.parse(localStorage.getItem('kn8_picks') || '[]'); } catch(e2) {}
+  }
 }
 
-async function saveMyPicks() {
-  try { await window.storage.set(MY_PICKS_KEY, JSON.stringify(myPicks), false); } catch(e) {}
-}
-
-async function updateGlobalVotes(removed, added) {
-  try {
-    let current = {};
-    try {
-      const vRes = await window.storage.get(VOTES_KEY, true);
-      if (vRes) current = JSON.parse(vRes.value);
-    } catch(e) {}
-    removed.forEach(id => { if(current[id]) current[id] = Math.max(0, current[id]-1); });
-    added.forEach(id => { current[id] = (current[id]||0)+1; });
-    await window.storage.set(VOTES_KEY, JSON.stringify(current), true);
+async function savePicks(newPicks, prevPicks) {
+  // Always save locally for instant UI response
+  localStorage.setItem('kn8_picks', JSON.stringify(newPicks));
+  if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+    // Fallback: update local vote counts only
+    const current = JSON.parse(localStorage.getItem('kn8_votes') || '{}');
+    prevPicks.forEach(id => { if(current[id]) current[id] = Math.max(0, current[id]-1); });
+    newPicks.forEach(id => { current[id] = (current[id]||0)+1; });
+    localStorage.setItem('kn8_votes', JSON.stringify(current));
     votes = current;
-  } catch(e) {}
+    return;
+  }
+  try {
+    const deviceId = getDeviceId();
+    const res = await apiFetch({
+      action: 'setPicks',
+      deviceId,
+      picks: JSON.stringify(newPicks),
+      prev: JSON.stringify(prevPicks),
+    });
+    if (res.success) {
+      // Refresh vote totals from server
+      const vRes = await apiFetch({ action: 'getAll' });
+      if (vRes.votes) {
+        votes = vRes.votes;
+        localStorage.setItem('kn8_votes', JSON.stringify(votes));
+      }
+    }
+  } catch(e) {
+    // Silent fail — picks already saved locally
+  }
 }
 
 // ── ACTIONS ──────────────────────────────────────────────────────────────────
 async function selectVariant(charId) {
-  const removed = [], added = [];
+  const prevPicks = [...myPicks];
   if (swapSlot !== null) {
-    removed.push(myPicks[swapSlot]);
     myPicks[swapSlot] = charId;
-    added.push(charId);
   } else if (myPicks.includes(charId)) {
-    removed.push(charId);
     myPicks.splice(myPicks.indexOf(charId), 1);
   } else if (myPicks.length < 3) {
     myPicks.push(charId);
-    added.push(charId);
   } else return;
   modal = null; swapSlot = null;
-  await saveMyPicks();
-  await updateGlobalVotes(removed, added);
+  render();
+  await savePicks(myPicks, prevPicks);
   render();
 }
 
 async function removePick(idx) {
-  const removed = [myPicks[idx]];
+  const prevPicks = [...myPicks];
   myPicks.splice(idx, 1);
-  await saveMyPicks();
-  await updateGlobalVotes(removed, []);
+  render();
+  await savePicks(myPicks, prevPicks);
   render();
 }
 
