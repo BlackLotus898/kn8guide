@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Vote — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080b10; --panel:#10151d; --dark:#0d1119; --border:#1f2733;
+    --text:#e8edf4; --muted:#7e8a9a; --cyan:#00d4ff; --gold:#e0b020;
+    --red:#e8001a; --font:'Rajdhani',sans-serif; --mono:'Share Tech Mono',monospace;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; }
+
+  /* ── PAGE LAYOUT ── */
+  .page { max-width:780px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+  .page-header { margin-bottom:2rem; border-bottom:1px solid var(--border); padding-bottom:1.5rem; }
+  .page-title { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:3px; color:var(--text); }
+  .page-sub { color:var(--muted); font-size:.95rem; margin-top:.3rem; }
+  .section-tag { font-family:var(--mono); font-size:.65rem; letter-spacing:2px; color:var(--red); text-transform:uppercase; display:block; margin-bottom:.4rem; }
+
+  /* ── MY PICKS ── */
+  .picks-card { background:var(--panel); border:1px solid var(--border); padding:1.5rem; margin-bottom:1.5rem; }
+  .picks-title { font-family:var(--mono); font-size:.75rem; letter-spacing:2px; color:var(--cyan); text-transform:uppercase; margin-bottom:1rem; }
+  .picks-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem; margin-bottom:1rem; }
+  .pick-slot { border:1px dashed var(--border); background:var(--bg); min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.6rem; position:relative; cursor:pointer; transition:border-color .2s; }
+  .pick-slot.filled { border-color:var(--cyan); background:rgba(0,212,255,0.05); cursor:default; }
+  .pick-slot.empty:hover { border-color:var(--muted); }
+  .pick-img { width:60px; height:60px; object-fit:cover; border:2px solid var(--cyan); display:block; }
+  .pick-name { font-size:.68rem; font-weight:700; color:var(--text); text-align:center; margin-top:.35rem; line-height:1.2; }
+  .pick-variant { font-size:.6rem; color:var(--muted); text-align:center; line-height:1.2; }
+  .pick-empty-icon { font-size:1.8rem; color:var(--border); }
+  .pick-empty-label { font-size:.65rem; color:var(--muted); margin-top:.2rem; font-family:var(--mono); }
+  .pick-actions { position:absolute; top:4px; right:4px; display:flex; gap:3px; }
+  .pick-btn { font-family:var(--mono); font-size:.55rem; padding:2px 5px; border:1px solid var(--border); background:var(--panel); color:var(--muted); cursor:pointer; transition:all .15s; }
+  .pick-btn.swap:hover { border-color:var(--cyan); color:var(--cyan); }
+  .pick-btn.remove:hover { border-color:var(--red); color:var(--red); }
+  .add-btn { width:100%; padding:.75rem; background:var(--cyan); border:none; color:var(--bg); font-family:var(--mono); font-size:.75rem; letter-spacing:2px; text-transform:uppercase; font-weight:700; cursor:pointer; transition:opacity .2s; }
+  .add-btn:hover { opacity:.85; }
+  .add-btn:disabled { background:var(--border); color:var(--muted); cursor:default; opacity:1; }
+
+  /* ── RESULTS ── */
+  .results-title { font-weight:700; font-size:1.1rem; letter-spacing:1px; margin-bottom:1rem; }
+  .result-row { display:flex; align-items:center; gap:.8rem; border:1px solid var(--border); padding:.7rem .8rem; margin-bottom:.4rem; background:var(--panel); transition:border-color .2s; }
+  .result-row.rank-1 { background:rgba(224,176,32,0.06); border-color:rgba(224,176,32,0.3); }
+  .result-row.rank-2 { background:rgba(180,180,180,0.04); border-color:rgba(180,180,180,0.15); }
+  .result-row.rank-3 { background:rgba(180,100,50,0.04); border-color:rgba(180,100,50,0.15); }
+  .result-row.my-pick { border-color:var(--cyan); }
+  .result-rank { width:28px; text-align:center; flex-shrink:0; font-size:.85rem; color:var(--muted); }
+  .result-rank.medal { font-size:1.2rem; }
+  .result-img { width:46px; height:46px; object-fit:cover; flex-shrink:0; }
+  .result-img.my-pick { border:2px solid var(--cyan); }
+  .result-info { flex:1; min-width:0; }
+  .result-name { font-weight:700; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .result-meta { font-size:.75rem; color:var(--muted); }
+  .result-my-pick { font-size:.65rem; color:var(--cyan); font-family:var(--mono); }
+  .result-bar-wrap { flex:2; min-width:0; }
+  .result-bar-track { height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+  .result-bar-fill { height:100%; border-radius:3px; background:var(--cyan); transition:width .6s ease; }
+  .result-bar-fill.rank-1 { background:var(--gold); }
+  .result-bar-fill.rank-2 { background:#aaa; }
+  .result-bar-fill.rank-3 { background:#cd7f32; }
+  .result-pct { font-size:.78rem; color:var(--muted); text-align:right; margin-top:.2rem; }
+  .show-more-btn { width:100%; padding:.7rem; background:transparent; border:1px solid var(--border); color:var(--muted); cursor:pointer; font-family:var(--mono); font-size:.72rem; letter-spacing:1px; text-transform:uppercase; margin-top:.5rem; transition:all .2s; }
+  .show-more-btn:hover { border-color:var(--muted); color:var(--text); }
+  .no-votes { color:var(--muted); text-align:center; padding:2rem; font-family:var(--mono); font-size:.85rem; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.88); display:flex; align-items:center; justify-content:center; z-index:1000; padding:1rem; }
+  .modal { background:var(--panel); border:1px solid var(--border); width:100%; max-width:540px; max-height:82vh; display:flex; flex-direction:column; }
+  .modal-header { padding:1rem 1.2rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  .modal-title { font-family:var(--mono); font-size:.75rem; letter-spacing:2px; color:var(--cyan); text-transform:uppercase; }
+  .modal-close { cursor:pointer; color:var(--muted); font-size:1.3rem; background:none; border:none; color:var(--muted); padding:0 .2rem; }
+  .modal-body { overflow-y:auto; padding:1rem; }
+  .modal-hint { font-size:.78rem; color:var(--muted); margin-bottom:.8rem; }
+  .group-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:.5rem; }
+  .group-tile { border:1px solid var(--border); background:var(--bg); padding:.6rem; cursor:pointer; text-align:center; transition:all .15s; }
+  .group-tile:hover, .group-tile.picked { border-color:var(--cyan); background:rgba(0,212,255,0.05); }
+  .group-img { width:64px; height:64px; object-fit:cover; display:block; margin:0 auto; }
+  .group-name { font-size:.72rem; font-weight:700; margin-top:.35rem; color:var(--text); line-height:1.2; }
+  .group-count { font-size:.6rem; color:var(--muted); }
+  .group-picked-badge { font-size:.58rem; color:var(--cyan); font-family:var(--mono); margin-top:.2rem; }
+  .variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:.6rem; }
+  .variant-tile { border:1px solid var(--border); background:var(--bg); padding:.6rem; cursor:pointer; text-align:center; transition:all .15s; }
+  .variant-tile:hover, .variant-tile.picked { border-color:var(--cyan); background:rgba(0,212,255,0.06); }
+  .variant-tile.picked { border-width:2px; }
+  .variant-img { width:72px; height:72px; object-fit:cover; display:block; margin:0 auto; }
+  .variant-stars { font-size:.7rem; font-weight:700; margin-top:.3rem; color:var(--gold); }
+  .variant-name { font-size:.65rem; color:var(--muted); line-height:1.3; }
+  .variant-picked-badge { font-size:.6rem; color:var(--cyan); font-family:var(--mono); margin-top:.2rem; }
+  .back-btn { margin-top:1rem; width:100%; padding:.5rem; background:transparent; border:1px solid var(--border); color:var(--muted); cursor:pointer; font-family:var(--mono); font-size:.7rem; letter-spacing:1px; }
+  .back-btn:hover { border-color:var(--muted); color:var(--text); }
+
+  /* ── LOADING ── */
+  .loading { text-align:center; padding:4rem; color:var(--muted); font-family:var(--mono); font-size:.85rem; }
+
+  @media(max-width:480px) {
+    .picks-grid { grid-template-columns:repeat(3,1fr); gap:.5rem; }
+    .pick-img { width:48px; height:48px; }
+    .result-row { gap:.5rem; padding:.6rem; }
+    .result-bar-wrap { flex:1.2; }
+  }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+
+<div class="page">
+  <div class="page-header">
+    <span class="section-tag">// Community</span>
+    <h1 class="page-title">Character Poll</h1>
+    <p class="page-sub" id="vote-sub">Pick up to 3 characters you think are best. Change your picks anytime.</p>
+  </div>
+
+  <div id="app">
+    <div class="loading">Loading votes...</div>
+  </div>
+</div>
+
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const IMG_BASE = '../Kn8 Characters/';
+const VOTES_KEY = 'kn8guide_votes_v2';
+const MY_PICKS_KEY = 'kn8guide_mypicks_v2';
+const VISIBLE_COUNT = 10;
+
+const CHARACTERS = [
+  { id:'akari-minase-fc',    name:'Akari Minase',     variant:'Festive Christmas',                stars:5, img:'AkariMinase-FC.png' },
+  { id:'akari-minase-hc',    name:'Akari Minase',     variant:'Heart of Compassion',             stars:4, img:'AkariMinase-HC.png' },
+  { id:'akari-minase-sa',    name:'Akari Minase',     variant:'Synchro Aptitude',                stars:5, img:'AkariMinase-SA.png' },
+  { id:'aoi-kaguragi-fd',    name:'Aoi Kaguragi',     variant:'Fruits of Diligence',             stars:5, img:'AoiKaguragi-FD.png' },
+  { id:'aoi-kaguragi-tprs',  name:'Aoi Kaguragi',     variant:'The Promising Rising Star',       stars:4, img:'AoiKaguragi-TPRS.png' },
+  { id:'chester-tar',        name:'Chester',           variant:'The All-Rounder',                 stars:5, img:'Chester-TAR.png' },
+  { id:'eiji-hasegawa-rhms', name:'Eiji Hasegawa',    variant:'Right-Hand Man of the Strongest', stars:4, img:'EijiHasegawa-RHMS.png' },
+  { id:'gen-narumi-fs',      name:'Gen Narumi',        variant:'Future Sight',                    stars:5, img:'GenNarumi-FS.png' },
+  { id:'gen-narumi-jsc',     name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, img:'GenNarumi-JSC.png' },
+  { id:'gen-narumi-jss',     name:'Gen Narumi',        variant:"Japan's Strongest Santa",         stars:5, img:'GenNarumi-JSS.png' },
+  { id:'gen-narumi-spb',     name:'Gen Narumi',        variant:'Sky-Piercing Bolt',               stars:5, img:'GenNarumi-SPB.png' },
+  { id:'hakua-igarashi-sp',  name:'Hakua Igarashi',   variant:'Sincerity and Potential',         stars:4, img:'HakuaIgarashi-SP.png' },
+  { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, img:'HaruichiIzumo-CC.png' },
+  { id:'haruichi-izumo-tcce',name:'Haruichi Izumo',   variant:'The Clean-Cut Elite',             stars:4, img:'HaruichiIzumo-TCCE.png' },
+  { id:'hikari-shinomiya-tv',name:'Hikari Shinomiya',  variant:'The Valkyrie',                   stars:5, img:'HikariShinomiya-TV.png' },
+  { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, img:'IharuFuruhashi-LT.png' },
+  { id:'isao-shinomiya-pf',  name:'Isao Shinomiya',   variant:'Prime Fist',                      stars:5, img:'IsaoShinomiya-PF.png' },
+  { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya',   variant:'The Unbreakable Iron Wall',       stars:5, img:'IsaoShinomiya-TUIW.png' },
+  { id:'jura-igarashi-gd',   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, img:'JuraIgarashi-GD.png' },
+  { id:'kafka-hibino-tmwbk', name:'Kafka Hibino',     variant:'The Man Who Became a Kaiju',      stars:4, img:'KafkaHibino-TMWBK.png' },
+  { id:'kafka-hibino-tmwbr', name:'Kafka Hibino',     variant:'The Man Who Became a Reindeer',   stars:4, img:'KafkaHibino-TMWBR.png' },
+  { id:'keiji-itami-cq',     name:'Keiji Itami',      variant:'Calm and Quiet',                  stars:4, img:'KeijiItami-CQ.png' },
+  { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya', variant:'Evolving Talent',                 stars:5, img:'KikoruShinomiya-EV.png' },
+  { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',            stars:5, img:'KikoruShinomiya-FPC.png' },
+  { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',    stars:5, img:'KikoruShinomiya-GLF.png' },
+  { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',              stars:5, img:'KikoruShinomiya-TIW.png' },
+  { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',     stars:4, img:'KikoruShinomiya-TMBP.png' },
+  { id:'kikoru-shinomiya-wr',name:'Kikoru Shinomiya', variant:'Waterside Respite',               stars:5, img:'KikoruShinomiya-WR.png' },
+  { id:'kn8-f98',            name:'Kaiju No. 8',       variant:'Fortitude 9.8',                  stars:5, img:'KN8-F98.png' },
+  { id:'kn8-sv',             name:'Kaiju No. 8',       variant:'Scorching Variant',               stars:5, img:'KN8-SV.png' },
+  { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",    stars:4, img:'KotaTachibana-FDFF.png' },
+  { id:'mina-ashiro-agh',    name:'Mina Ashiro',       variant:'Aiming for Greater Heights',      stars:4, img:'MinaAshiro-AGH.png' },
+  { id:'mina-ashiro-ds',     name:'Mina Ashiro',       variant:'Dazzling Splash',                 stars:5, img:'MinaAshiro-DS.png' },
+  { id:'mina-ashiro-os',     name:'Mina Ashiro',       variant:'Off the Scale',                   stars:5, img:'MinaAshiro-OS.png' },
+  { id:'mina-ashiro-sc',     name:'Mina Ashiro',       variant:'Superb Combination',              stars:5, img:'MinaAshiro-SC.png' },
+  { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',     variant:'Signs of Awakening',              stars:5, img:'RenoIchikawa-SA.png' },
+  { id:'reno-ichikawa-tcu',  name:'Reno Ichikawa',     variant:'The Compatible User',             stars:4, img:'RenoIchikawa-TCU.png' },
+  { id:'rin-shinonome-ah',   name:'Rin Shinonome',     variant:'Aspiration and Honor',            stars:5, img:'RinShinonome-AH.png' },
+  { id:'rin-shinonome-cfr',  name:'Rin Shinonome',     variant:'Cross-Forged Refinement',         stars:5, img:'RinShinonome-CFR.png' },
+  { id:'ryo-ikaruga-pr',     name:'Ryo Ikaruga',       variant:'Passion and Responsibility',      stars:4, img:'RyoIkaruga-PR.png' },
+  { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',   variant:'Dimensionally Distorted Destiny', stars:5, img:'SaganShinomiya-DDD.png' },
+  { id:'sagan-shinomiya-ol', name:'Sagan Shinomiya',   variant:'Over Limit',                      stars:5, img:'SaganShinomiya-OL.png' },
+  { id:'sagan-shinomiya-rc', name:'Sagan Shinomiya',   variant:'The Resurgent Commander',         stars:5, img:'SaganShinomiya-RC.png' },
+  { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',      stars:5, img:'SoichiroHoshina-KOWJ.png' },
+  { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',   variant:'Ax Technique Proficiency',        stars:5, img:'SoshiroHoshina-ATP.png' },
+  { id:'soshiro-hoshina-bs', name:'Soshiro Hoshina',   variant:'Blade Specialist',                stars:4, img:'SoshiroHoshina-BS.png' },
+  { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina', variant:'Hoshina-Style Sword-Slay Technique',stars:5,img:'SoshiroHoshina-HSSST.png' },
+  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',   variant:'New Possibilities',               stars:5, img:'SoshiroHoshina-NP.png' },
+  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',   variant:'United Front',                    stars:5, img:'SoshiroHoshina-UF.png' },
+  { id:'suited-uc',          name:'Suited',             variant:'Unbridled Curiosity',             stars:5, img:'Suited-UC.png' },
+  { id:'tae-nakanoshima-tkepl',name:'Tae Nakanoshima', variant:'The Keen-Eyed Platoon Leader',    stars:4, img:'TaeNakanoshima-TKEPL.png' },
+  { id:'wang-meixing-nwc',   name:'Wang Meixing',       variant:'Negotiator of Wit and Charm',    stars:5, img:'WangMeixing-NWC.png' },
+  { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, img:'ZoeeWanderfalke-TWU.png' },
+];
+
+const MEDALS = ['🥇','🥈','🥉'];
+const charById = Object.fromEntries(CHARACTERS.map(c=>[c.id,c]));
+const GROUPS = {};
+CHARACTERS.forEach(c => { if(!GROUPS[c.name]) GROUPS[c.name]=[]; GROUPS[c.name].push(c); });
+const GROUP_NAMES = Object.keys(GROUPS).sort();
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let votes = {};
+let myPicks = [];  // up to 3 char ids (this device's picks)
+let showAll = false;
+let modal = null;  // null | '__picker__' | 'CharacterName'
+let swapSlot = null;
+
+// ── STORAGE ──────────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const vRes = await window.storage.get(VOTES_KEY, true);
+    if (vRes) votes = JSON.parse(vRes.value);
+  } catch(e) {}
+  try {
+    const pRes = await window.storage.get(MY_PICKS_KEY, false);
+    if (pRes) myPicks = JSON.parse(pRes.value);
+  } catch(e) {}
+}
+
+async function saveMyPicks() {
+  try { await window.storage.set(MY_PICKS_KEY, JSON.stringify(myPicks), false); } catch(e) {}
+}
+
+async function updateGlobalVotes(removed, added) {
+  try {
+    let current = {};
+    try {
+      const vRes = await window.storage.get(VOTES_KEY, true);
+      if (vRes) current = JSON.parse(vRes.value);
+    } catch(e) {}
+    removed.forEach(id => { if(current[id]) current[id] = Math.max(0, current[id]-1); });
+    added.forEach(id => { current[id] = (current[id]||0)+1; });
+    await window.storage.set(VOTES_KEY, JSON.stringify(current), true);
+    votes = current;
+  } catch(e) {}
+}
+
+// ── ACTIONS ──────────────────────────────────────────────────────────────────
+async function selectVariant(charId) {
+  const removed = [], added = [];
+  if (swapSlot !== null) {
+    removed.push(myPicks[swapSlot]);
+    myPicks[swapSlot] = charId;
+    added.push(charId);
+  } else if (myPicks.includes(charId)) {
+    removed.push(charId);
+    myPicks.splice(myPicks.indexOf(charId), 1);
+  } else if (myPicks.length < 3) {
+    myPicks.push(charId);
+    added.push(charId);
+  } else return;
+  modal = null; swapSlot = null;
+  await saveMyPicks();
+  await updateGlobalVotes(removed, added);
+  render();
+}
+
+async function removePick(idx) {
+  const removed = [myPicks[idx]];
+  myPicks.splice(idx, 1);
+  await saveMyPicks();
+  await updateGlobalVotes(removed, []);
+  render();
+}
+
+function openModal(name, slot=null) {
+  modal = name; swapSlot = slot; render();
+}
+function closeModal() {
+  modal = null; swapSlot = null; render();
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function img(src, alt, cls='') {
+  return `<img src="${IMG_BASE}${src}" alt="${alt}" class="${cls}" onerror="this.style.background='#1f2733';this.style.display='none'">`;
+}
+
+function renderPickSlot(i) {
+  const id = myPicks[i];
+  const c = id ? charById[id] : null;
+  if (c) {
+    return `<div class="pick-slot filled">
+      ${img(c.img, c.name, 'pick-img')}
+      <div class="pick-name">${c.name}</div>
+      <div class="pick-variant">${c.variant.length>22?c.variant.slice(0,21)+'…':c.variant}</div>
+      <div class="pick-actions">
+        <button class="pick-btn swap" onclick="openModal('__picker__',${i})">SWAP</button>
+        <button class="pick-btn remove" onclick="removePick(${i})">✕</button>
+      </div>
+    </div>`;
+  }
+  return `<div class="pick-slot empty" onclick="openModal('__picker__')">
+    <div class="pick-empty-icon">+</div>
+    <div class="pick-empty-label">Pick ${i+1}</div>
+  </div>`;
+}
+
+function renderResults() {
+  const totalVotes = Object.values(votes).reduce((a,b)=>a+b,0);
+  if (totalVotes === 0) return `<div class="no-votes">No votes yet — be the first to pick!</div>`;
+  const sorted = [...CHARACTERS].sort((a,b)=>(votes[b.id]||0)-(votes[a.id]||0));
+  const visible = showAll ? sorted : sorted.slice(0, VISIBLE_COUNT);
+  let html = visible.map((c,i) => {
+    const v = votes[c.id]||0;
+    const pct = totalVotes>0 ? Math.round(v/totalVotes*100) : 0;
+    const isPick = myPicks.includes(c.id);
+    const rankClass = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    const barClass = rankClass;
+    return `<div class="result-row ${rankClass}${isPick?' my-pick':''}">
+      <div class="result-rank${i<3?' medal':''}">${i<3?MEDALS[i]:i+1}</div>
+      ${img(c.img, c.name, 'result-img'+(isPick?' my-pick':''))}
+      <div class="result-info">
+        <div class="result-name">${c.name}${isPick?` <span class="result-my-pick">★ your pick</span>`:''}</div>
+        <div class="result-meta">${c.stars}★ · ${c.variant}</div>
+      </div>
+      <div class="result-bar-wrap">
+        <div class="result-bar-track"><div class="result-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+        <div class="result-pct">${pct}% · ${v.toLocaleString()} vote${v!==1?'s':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  if (sorted.length > VISIBLE_COUNT) {
+    html += `<button class="show-more-btn" onclick="toggleShowAll()">${showAll?`Show Top ${VISIBLE_COUNT} ▲`:`Show All ${sorted.length} Characters ▼`}</button>`;
+  }
+  return html;
+}
+
+function renderModal() {
+  if (!modal) return '';
+  let body = '';
+  if (modal === '__picker__') {
+    body = `<div class="modal-hint">Tap a character to select, or to choose a specific variant.</div>
+    <div class="group-grid">
+      ${GROUP_NAMES.map(name => {
+        const group = GROUPS[name];
+        const anyPicked = group.some(c=>myPicks.includes(c.id));
+        const thumb = group[0];
+        const clickFn = group.length===1 ? `selectVariant('${group[0].id}')` : `openModal('${name.replace(/'/g,"\\'")}')`;
+        return `<div class="group-tile${anyPicked?' picked':''}" onclick="${clickFn}">
+          ${img(thumb.img, name, 'group-img')}
+          <div class="group-name">${name}</div>
+          ${group.length>1?`<div class="group-count">${group.length} variants</div>`:''}
+          ${anyPicked?`<div class="group-picked-badge">★ picked</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  } else {
+    const group = GROUPS[modal] || [];
+    body = `<div class="modal-hint">Choose which ${modal} variant you want to vote for:</div>
+    <div class="variant-grid">
+      ${group.map(c => {
+        const isPicked = myPicks.includes(c.id);
+        return `<div class="variant-tile${isPicked?' picked':''}" onclick="selectVariant('${c.id}')">
+          ${img(c.img, c.variant, 'variant-img')}
+          <div class="variant-stars">${'★'.repeat(c.stars)}</div>
+          <div class="variant-name">${c.variant}</div>
+          ${isPicked?`<div class="variant-picked-badge">★ your pick</div>`:''}
+        </div>`;
+      }).join('')}
+    </div>
+    <button class="back-btn" onclick="openModal('__picker__')">← Back to all characters</button>`;
+  }
+
+  const title = modal==='__picker__' ? 'SELECT CHARACTER' : modal.toUpperCase()+' — PICK VARIANT';
+  return `<div class="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">// ${title}</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">${body}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const totalVotes = Object.values(votes).reduce((a,b)=>a+b,0);
+  document.getElementById('vote-sub').textContent =
+    `Pick up to 3 characters you think are best. Change your picks anytime. ${totalVotes.toLocaleString()} vote${totalVotes!==1?'s':''} cast.`;
+
+  document.getElementById('app').innerHTML = `
+    <!-- My Picks -->
+    <div class="picks-card">
+      <div class="picks-title">Your Picks</div>
+      <div class="picks-grid">
+        ${[0,1,2].map(renderPickSlot).join('')}
+      </div>
+      ${myPicks.length<3?`<button class="add-btn" onclick="openModal('__picker__')">+ Add Character</button>`:`<button class="add-btn" disabled>3 picks selected</button>`}
+    </div>
+
+    <!-- Results -->
+    <div class="results-title">// Results</div>
+    ${renderResults()}
+
+    <!-- Modal -->
+    ${renderModal()}
+  `;
+}
+
+function toggleShowAll() { showAll = !showAll; render(); }
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+loadData().then(render);
+</script>
+</body>
+</html>
