@@ -151,6 +151,12 @@
     </ul>
   </li>
   <a href="${base}announcements/">Announcements</a>
+  <li class="nav-dropdown">
+    <a href="${base}vote/">Fan Zone ▾</a>
+    <ul class="dropdown-menu">
+      <li><a href="${base}vote/">Character Poll</a></li>
+    </ul>
+  </li>
   <a href="${base}socials/">Socials</a>
   <a href="${base}feedback/">Feedback</a>
 </ul>`;
