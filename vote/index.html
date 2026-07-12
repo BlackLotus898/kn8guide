@@ -207,7 +207,7 @@ let swapSlot = null;
 
 // ── GOOGLE APPS SCRIPT BACKEND ───────────────────────────────────────────────
 // Paste your deployed Apps Script Web App URL here after setup:
-const SCRIPT_URL = 'YOUR_SCRIPT_URL_HERE';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwa9sP-zchswf3VqQ-2sBkCM2YuQtet5aEq2dK87ybwDvi26r-QYQzOmq2iEP4cQndB/exec';
 
 // Generate or retrieve a stable device ID
 function getDeviceId() {
@@ -226,7 +226,7 @@ async function apiFetch(params) {
 }
 
 async function loadData() {
-  if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+  if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwa9sP-zchswf3VqQ-2sBkCM2YuQtet5aEq2dK87ybwDvi26r-QYQzOmq2iEP4cQndB/exec') {
     // Fallback to localStorage while URL not yet set
     try { votes = JSON.parse(localStorage.getItem('kn8_votes') || '{}'); } catch(e) {}
     try { myPicks = JSON.parse(localStorage.getItem('kn8_picks') || '[]'); } catch(e) {}
@@ -253,7 +253,7 @@ async function loadData() {
 async function savePicks(newPicks, prevPicks) {
   // Always save locally for instant UI response
   localStorage.setItem('kn8_picks', JSON.stringify(newPicks));
-  if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+  if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwa9sP-zchswf3VqQ-2sBkCM2YuQtet5aEq2dK87ybwDvi26r-QYQzOmq2iEP4cQndB/exec') {
     // Fallback: update local vote counts only
     const current = JSON.parse(localStorage.getItem('kn8_votes') || '{}');
     prevPicks.forEach(id => { if(current[id]) current[id] = Math.max(0, current[id]-1); });
