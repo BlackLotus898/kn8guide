@@ -538,6 +538,7 @@
   <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
   <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
   <p style="margin-top:.5rem;"><a href="https://kj8-thegame.com/en/" target="_blank">Official Site</a> &nbsp;·&nbsp; <a href="https://store.steampowered.com/app/3393070/" target="_blank">Steam</a> &nbsp;·&nbsp; <a href="https://gamewith.net/kj8-thegame/" target="_blank">GameWith Wiki</a></p>
+  <p style="margin-top:.8rem;" id="visitor-count"></p>
 </footer>
 
 <script>
@@ -592,5 +593,43 @@ function renderNewsGrid(items) {
 }
 </script>
 
+
+<script>
+(function() {
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwa9sP-zchswf3VqQ-2sBkCM2YuQtet5aEq2dK87ybwDvi26r-QYQzOmq2iEP4cQndB/exec';
+  const DEVICE_KEY = 'kn8guide_device_id';
+
+  function getDeviceId() {
+    let id = localStorage.getItem(DEVICE_KEY);
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
+  }
+
+  function displayCount(count) {
+    const el = document.getElementById('visitor-count');
+    if (el) {
+      el.style.fontFamily = "'Share Tech Mono', monospace";
+      el.style.fontSize = '.68rem';
+      el.style.letterSpacing = '1px';
+      el.style.color = 'var(--muted)';
+      el.textContent = count.toLocaleString() + ' unique visitor' + (count !== 1 ? 's' : '');
+    }
+  }
+
+  async function trackAndDisplay() {
+    try {
+      const deviceId = getDeviceId();
+      const res = await fetch(SCRIPT_URL + '?action=trackVisitor&deviceId=' + encodeURIComponent(deviceId));
+      const data = await res.json();
+      if (typeof data.count === 'number') displayCount(data.count);
+    } catch(e) {}
+  }
+
+  trackAndDisplay();
+})();
+</script>
 </body>
 </html>
