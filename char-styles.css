@@ -197,3 +197,5 @@ footer a:hover { color: var(--cyan); }
 
   footer { padding: 2rem 1.2rem; font-size: .62rem; }
 }
+
+.weapon-icon { width:36px; height:36px; object-fit:contain; flex-shrink:0; border:1px solid var(--border); background:var(--dark); }
