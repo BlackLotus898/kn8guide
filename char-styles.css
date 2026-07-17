@@ -70,6 +70,7 @@ nav { position: sticky; top: 0; z-index: 900; background: rgba(8,11,16,.92); bac
 .weapon-rank.best { color: var(--gold); }
 .weapon-rank.second { color: var(--text); }
 .weapon-name { font-weight: 600; font-size: 1rem; color: var(--text); }
+.weapon-icon { width:42px; height:42px; object-fit:cover; object-position:center 15%; flex-shrink:0; }
 
 /* TWO COL */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
@@ -197,5 +198,3 @@ footer a:hover { color: var(--cyan); }
 
   footer { padding: 2rem 1.2rem; font-size: .62rem; }
 }
-
-.weapon-icon { width:36px; height:36px; object-fit:contain; flex-shrink:0; border:1px solid var(--border); background:var(--dark); }
