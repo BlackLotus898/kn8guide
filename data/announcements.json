@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-13",
+  "lastUpdated": "2026-07-18",
   "announcements": [
     {
       "id": "2026-07-17-site-update-kikoru-mina-fanzone-tracker-weapons",
@@ -9,6 +9,29 @@
       "link": null,
       "autoAdded": false,
       "summary": "Added Kikoru Shinomiya (Waterside Respite) and Mina Ashiro (Dazzling Splash) · Launched Character Poll under Fan Zone · Added Export feature to the Character Tracker · Added weapon icons to all character pages · Fixed miscellaneous errors"
+    },
+    {
+      "id": "2026-07-16-x-kaijuno8thegame-kaiju-rush-now-available-in-kaiju-",
+      "date": "2026-07-16",
+      "type": "game",
+      "title": "◤　#KaijuNo8THEGAME 　Kaiju Rush Now Available! ◢ In Kaiju Rush, you will fight against K...",
+      "summary": "◤ #KaijuNo8THEGAME Kaiju Rush Now Available! ◢ In Kaiju Rush, you will fight against Kaiju while carrying over elements such as HP and SP from battle to battle. The area unlocked today, Downpour Rapidfire features support effects like Shot and Water Attack DMG Up 💥💧 ▼ Details inf",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2077596584330805644#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2077596584330805644#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHNT_VrPboAEXyvZ.jpg"
+    },
+    {
+      "id": "2026-07-14-x-kaijuno8thegame-training-kaijumite-2x-rewards-camp",
+      "date": "2026-07-14",
+      "type": "game",
+      "title": "◤ 　　#KaijuNo8THEGAME 　　 　Training: Kaijumite 　　　2x Rewards Campaign　　　◢ The 2x Rewards ...",
+      "summary": "◤ #KaijuNo8THEGAME Training: Kaijumite 2x Rewards Campaign ◢ The 2x Rewards Campaign for Training: Kaijumite has come online. During the campaign, receive 2x rewards when completing eligible Training! *There is a daily limit to the number of times rewards can be doubled. ▼Details",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2076879361907814728#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2076879361907814728#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHNJ27FqbYAAd0aC.jpg",
+      "category": "event"
     },
     {
       "id": "2026-07-13-x-kaijuno8thegame-large-conquest-now-available-large",
