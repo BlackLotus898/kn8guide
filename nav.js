@@ -93,7 +93,7 @@
   // so we only treat the first segment as a base path if it's not already
   // one of our known top-level site folders (meaning: if it looks like a
   // page path, not a repo name, base should just be '/').
-  const KNOWN_TOP_LEVEL = ['characters','weapons','tracker','squadmaker','tierlist','beginner','banners','limited','gameguide','combat','announcements','socials','feedback','data','kn8 characters','vote'];
+  const KNOWN_TOP_LEVEL = ['characters','weapons','tracker','squadmaker','tierlist','beginner','banners','limited','gameguide','combat','announcements','socials','feedback','data','kn8 characters','vote','fan-zone'];
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   let base = '/';
   if (pathParts.length > 0 && !KNOWN_TOP_LEVEL.includes(pathParts[0].toLowerCase())) {
@@ -152,8 +152,9 @@
   </li>
   <a href="${base}announcements/">Announcements</a>
   <li class="nav-dropdown">
-    <a href="${base}vote/">Fan Zone ▾</a>
+    <a href="${base}fan-zone/">Fan Zone ▾</a>
     <ul class="dropdown-menu">
+      <li><a href="${base}fan-zone/">Fan Zone Home</a></li>
       <li><a href="${base}vote/">Character Poll</a></li>
     </ul>
   </li>

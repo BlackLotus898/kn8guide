@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fan Zone — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .nav-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .nav-card { display: block; text-decoration: none; background: var(--panel); border: 1px solid var(--border); padding: 2rem 1.4rem; text-align: center; position: relative; overflow: hidden; transition: border-color .2s, transform .2s; }
+  .nav-card:hover { transform: translateY(-4px); }
+  .nav-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .nav-card.gold::before   { background: var(--gold); }
+  .nav-card.cyan::before   { background: var(--cyan); }
+  .nav-card.red::before    { background: var(--red); }
+  .nav-card.green::before  { background: #40d080; }
+  .nav-card.purple::before { background: #a040f0; }
+  .nav-card:hover.gold   { border-color: var(--gold); }
+  .nav-card:hover.cyan   { border-color: var(--cyan); }
+  .nav-card:hover.red    { border-color: var(--red); }
+  .nav-card:hover.green  { border-color: #40d080; }
+  .nav-card:hover.purple { border-color: #a040f0; }
+  .nc-icon { font-size: 2rem; margin-bottom: .6rem; }
+  .nc-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: #fff; }
+  .nc-desc { margin-top: .4rem; font-size: .85rem; color: var(--muted); line-height: 1.4; }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Community</p>
+  <h1 class="page-title">Fan Zone</h1>
+  <p class="page-desc">Polls, votes, and community features for K8GUIDE.</p>
+</div>
+<div class="page">
+  <div class="nav-cards">
+    <a href="../vote/" class="nav-card cyan">
+      <div class="nc-icon">🗳️</div>
+      <div class="nc-title">Character Poll</div>
+      <p class="nc-desc">Vote for your top 3 favorite characters</p>
+    </a>
+  </div>
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+</body>
+</html>
