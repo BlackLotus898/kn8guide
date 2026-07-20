@@ -297,9 +297,11 @@ const WEAPONS_BY_TYPE = {
   'Hammer': [
     { name:'HM-Eporhtnacyl', effect:'CRIT DMG (%) +48%\nAfter an ally attacks, applies ATK +5% to the equipped unit. Max 5 stack(s).\nBefore the equipped unit activates Extra Attack, applies Extra Attack CRIT DMG +8% (2 turn(s)) to the equipped unit. Max 5 stack(s).' },
     { name:'HM-Nohpyt', effect:'DEF +34%\nAfter activating Normal Attack, applies DEF +15% (2 turn(s)) to all allies.\nAfter the equipped unit activates Ultimate or Follow-Up Skill, applies Ultimate Gauge Charge Rate +13% (3 turn(s)) to the equipped unit.' },
+    { name:'HM-Ogopogo', effect:'HP +34%\nHealing Multiplier +15%\nAfter the equipped unit activates Ultimate, if the equipped unit\'s HP is 50% or more, has a 150% chance to apply DMG Taken Increase +10% (3 turn(s)) to the target.' },
     { name:'HM-Aimal', effect:'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies Blunt DMG dealt +10% (3 turn(s)) to the equipped unit.' },
     { name:'HM-Canasta', effect:'DEF +28%\nFor each ally having a Shield, the equipped unit\'s DMG dealt +7%.' },
     { name:'HM-Holdem', effect:'Blunt DMG Dealt (%) +17%\nThe equipped unit\'s DMG dealt from Follow-Up Skill and Extra Attack +21%.' },
+    { name:'HM-Slapjack', effect:'HP +28%\nThe equipped unit\'s Normal Attack and Ultimate Blunt DMG dealt +21%.' },
     { name:'Standard Hammer', effect:'ATK +23%' },
   ],
   'Handgun': [
@@ -407,8 +409,8 @@ const CHARACTERS = [
       {id:'A6', name:'Exceptional Stamina', effect:"After defeating a Kaiju with Ultimate, applies Ultimate Gauge Charge Rate +30% (2 turns) to this unit."},
     ],
     },
-  { id:'chester-tar',        name:'Chester',           variant:'The All-Rounder',                 stars:5, role:'Supporter', types:['Shot'],           img:'Chester-TAR.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
-    teamBuffs:[ {scope:'all', desc:'ATK boost to all other allies equal to 19.2% of Chester\'s own ATK'}, {scope:'all', desc:'DMG dealt +13.7% and CRIT Rate +12.6% (2 turns) to all allies'}, {scope:'all', desc:'Advances all other allies\' next Action Order by 10.5%'}, {scope:'all', desc:'After Ultimate: DEF PEN Rate +20% (2 turns) to all allies'} ],
+  { id:'chester-tar',        name:'Chester Lochburn',  variant:'The All-Rounder',                 stars:5, role:'Supporter', types:['Shot'],           img:'Chester-TAR.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
+    teamBuffs:[ {scope:'all', desc:'ATK boost to all other allies equal to 19.2% of Chester Lochburn\'s own ATK'}, {scope:'all', desc:'DMG dealt +13.7% and CRIT Rate +12.6% (2 turns) to all allies'}, {scope:'all', desc:'Advances all other allies\' next Action Order by 10.5%'}, {scope:'all', desc:'After Ultimate: DEF PEN Rate +20% (2 turns) to all allies'} ],
     buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Ultimate Wit and Courage', effect:"While an ally is in Field Ops state, their DMG dealt +30%."},
@@ -911,8 +913,8 @@ const CHARACTERS = [
     ],
     },
   { id:'suited-ssp', name:'Suited', variant:'Surging Swimsuit Power', stars:5, role:'Defender', types:['Blunt','Water'], img:'Suited-SSP.png', subRoles:['Healer'], weaponType:'Hammer',
-    teamBuffs:['spd','crit_dmg','dmg_dealt','atk','max_hp'], buddyBuffs:[], debuffs:[],
-    hasHealing: true,
+    teamBuffs:[ {scope:'all', desc:"Combat Skill: recovers all allies' HP equal to 5.3% of this unit's Max HP"}, {scope:'all', desc:"Combat Skill: applies Refreshing Rain to all allies — recovers 6.4% of target's Max HP after taking a hit (max 1 activation)"}, {scope:'all', desc:"Ultimate: applies Hydration (3 turns) to all allies — Max HP Boost +13.7%"}, {scope:'all', desc:"Ultimate: recovers the ally with the lowest HP equal to 12.6% of this unit's Max HP"}, {scope:'conditional', desc:'[25+ Radiance stacks]: 77% chance to apply CRIT DMG +11% (2 turns) to all allies'}, {scope:'conditional', desc:'[45+ Radiance stacks]: consumes 30 stacks to apply DMG dealt +9.9% (2 turns) to all allies'} ],
+    buddyBuffs:[], debuffs:[],
     ascension:[
       {id:'A1', name:'Refreshing Downpour', effect:"Max activation count of Refreshing Rain +1. Max HP Boost for allies in Hydration +10%."},
       {id:'A2', name:'Cool Vibes☆High Energy', effect:"After Ultimate: SPD +20% (3 turns) to all allies. After Combat Skill: randomly removes 1 debuff/ailment from target."},
