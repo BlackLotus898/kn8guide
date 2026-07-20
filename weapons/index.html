@@ -36,10 +36,16 @@
     display: flex; align-items: center; gap: 1rem;
     padding: .8rem 1.4rem; background: var(--dark);
     border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none;
   }
+  .weapon-type-header:hover { background: rgba(0,212,255,.04); }
   .weapon-type-icon { font-size: 1.2rem; }
   .weapon-type-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; }
   .weapon-type-count { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 2px; color: var(--muted); margin-left: auto; }
+  .weapon-type-toggle-icon { font-size: .7rem; color: var(--muted); margin-left: .8rem; transition: transform .2s; }
+  .weapon-type-section.collapsed .weapon-type-toggle-icon { transform: rotate(-90deg); }
+  .weapon-type-section.collapsed .weapon-col-headers,
+  .weapon-type-section.collapsed .weapon-list-inner { display: none; }
 
   .weapon-list-inner { display: flex; flex-direction: column; }
 
@@ -138,6 +144,11 @@
     <button class="filter-btn" data-value="4">★★★★</button>
     <button class="filter-btn" data-value="3">★★★</button>
   </div>
+  <button class="filter-btn" id="collapse-all-btn" data-value="all">Collapse All ▲</button>
+</div>
+
+<div class="controls" style="margin-top:.6rem;">
+  <div class="filter-group" id="filter-types"></div>
 </div>
 
 <div class="results-bar">Showing <span id="count">0</span> weapons</div>
@@ -261,7 +272,7 @@ const weaponData = [
       { stars: 4, name: 'HM-Aimal', effect: 'CRIT Rate (%) +16%\nAfter the equipped unit defeats a Kaiju, applies Blunt DMG dealt +10% (3 turn(s)) to the equipped unit.', users: [] },
       { stars: 4, name: 'HM-Canasta', effect: 'DEF +28%\nFor each ally having a Shield, the equipped unit\'s DMG dealt +7%.', users: [] },
       { stars: 4, name: 'HM-Holdem', effect: 'Blunt DMG Dealt (%) +17%\nThe equipped unit\'s DMG dealt from Follow-Up Skill and Extra Attack +21%.', users: [] },
-      { stars: 4, name: 'HM-Slapjack', effect: 'HP +28%\nThe equipped unit\'s Normal Attack and Ultimate Blunt DMG dealt +21%.', users: ['Suited (Surging Swimsuit Power)'] },
+      { stars: 4, name: 'HM-Slapjack', effect: 'HP +28%\nThe equipped unit\'s Normal Attack and Ultimate Blunt DMG dealt +21%.', users: [] },
       { stars: 3, name: 'Standard Hammer', effect: 'ATK +23%', users: [] },
     ]
   },
@@ -425,6 +436,7 @@ function buildSection(cat) {
       <span class="weapon-type-icon">${cat.icon}</span>
       <span class="weapon-type-name">${cat.type}</span>
       <span class="weapon-type-count">${cat.weapons.length} WEAPONS</span>
+      <span class="weapon-type-toggle-icon">▼</span>
     </div>
     <div class="weapon-col-headers">
       <div class="col-header">Stars</div>
@@ -439,37 +451,57 @@ function buildSection(cat) {
 const container = document.getElementById('weapons-container');
 weaponData.forEach(cat => container.insertAdjacentHTML('beforeend', buildSection(cat)));
 
+// Build type filter buttons dynamically from weaponData
+const typeFilterGroup = document.getElementById('filter-types');
+typeFilterGroup.innerHTML = ['<button class="filter-btn active" data-value="all">All Types</button>']
+  .concat(weaponData.map(cat => `<button class="filter-btn" data-value="${cat.type.toLowerCase()}">${cat.icon} ${cat.type}</button>`))
+  .join('');
+
 // Filters
 let activeStars = 'all';
+let activeType = 'all';
 let searchQuery = '';
 
 function applyFilters() {
   let total = 0;
-  document.querySelectorAll('.weapon-row').forEach(row => {
-    const stars = row.dataset.stars;
-    const name = row.dataset.name;
-    const users = row.dataset.users;
-    const matchStars = activeStars === 'all' || stars === activeStars;
-    const matchSearch = searchQuery === '' || name.includes(searchQuery) || users.includes(searchQuery);
-    const show = matchStars && matchSearch;
-    row.classList.toggle('hidden', !show);
-    if (show) total++;
-  });
-
-  // Hide empty sections
   document.querySelectorAll('.weapon-type-section').forEach(section => {
-    const visible = section.querySelectorAll('.weapon-row:not(.hidden)').length;
-    section.classList.toggle('hidden', visible === 0);
+    const typeMatches = activeType === 'all' || section.dataset.type === activeType;
+    let visibleInSection = 0;
+    section.querySelectorAll('.weapon-row').forEach(row => {
+      const stars = row.dataset.stars;
+      const name = row.dataset.name;
+      const users = row.dataset.users;
+      const matchStars = activeStars === 'all' || stars === activeStars;
+      const matchSearch = searchQuery === '' || name.includes(searchQuery) || users.includes(searchQuery);
+      const show = typeMatches && matchStars && matchSearch;
+      row.classList.toggle('hidden', !show);
+      if (show) { visibleInSection++; total++; }
+    });
+    section.classList.toggle('hidden', visibleInSection === 0);
   });
 
   document.getElementById('count').textContent = total;
 }
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
+document.getElementById('filter-stars').querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('filter-stars').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     activeStars = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+typeFilterGroup.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    typeFilterGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeType = btn.dataset.value;
+    // Auto-expand the selected type's section so results are visible
+    if (activeType !== 'all') {
+      const section = document.querySelector(`.weapon-type-section[data-type="${activeType}"]`);
+      if (section) section.classList.remove('collapsed');
+    }
     applyFilters();
   });
 });
@@ -477,6 +509,24 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 document.getElementById('search').addEventListener('input', e => {
   searchQuery = e.target.value.toLowerCase().trim();
   applyFilters();
+});
+
+// Collapse/expand individual sections
+container.addEventListener('click', e => {
+  const header = e.target.closest('.weapon-type-header');
+  if (!header) return;
+  header.parentElement.classList.toggle('collapsed');
+});
+
+// Collapse All / Expand All toggle
+const collapseAllBtn = document.getElementById('collapse-all-btn');
+let allCollapsed = false;
+collapseAllBtn.addEventListener('click', () => {
+  allCollapsed = !allCollapsed;
+  document.querySelectorAll('.weapon-type-section').forEach(section => {
+    section.classList.toggle('collapsed', allCollapsed);
+  });
+  collapseAllBtn.textContent = allCollapsed ? 'Expand All ▼' : 'Collapse All ▲';
 });
 
 applyFilters();
