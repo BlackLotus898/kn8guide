@@ -250,8 +250,8 @@
     flex: 1; display: flex; gap: 1px; overflow: auto; background: var(--border);
   }
   .compare-column {
-    flex: 1 0 340px; max-width: 420px; background: var(--dark);
-    display: flex; flex-direction: column; overflow-y: auto;
+    flex: 1 0 380px; max-width: 460px; background: var(--dark);
+    display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
   }
   .compare-column-header {
     position: sticky; top: 0; z-index: 2;
@@ -263,9 +263,32 @@
     width: 26px; height: 26px; cursor: pointer; font-size: .85rem; flex-shrink: 0;
   }
   .compare-column-remove:hover { color: var(--red); border-color: var(--red); }
-  .compare-column-body { padding: 1rem; }
+  .compare-column-body { padding: 1rem; min-width: 0; }
+  .compare-column-body * { min-width: 0; }
   .compare-column-body .char-hero { margin-bottom: 1rem; }
   .compare-column-body .section-block { margin-bottom: 1rem; }
+
+  /* The character pages were built for a ~1100px full-width layout.
+     Force a compact, single-column layout inside the narrow compare
+     columns regardless of the browser's actual viewport width. */
+  .compare-column-body .char-hero {
+    grid-template-columns: 1fr !important;
+    padding: 1.1rem !important; gap: .9rem !important; overflow: visible !important;
+  }
+  .compare-column-body .char-photo { width: 100% !important; max-width: 200px; margin: 0 auto; }
+  .compare-column-body .char-name { font-size: 1.5rem !important; }
+  .compare-column-body .char-variant { font-size: 1rem !important; }
+  .compare-column-body .meta-grid { grid-template-columns: 1fr 1fr !important; gap: .4rem !important; }
+  .compare-column-body .meta-item { padding: .45rem .6rem !important; }
+  .compare-column-body .meta-item .val { font-size: .85rem !important; word-break: break-word; }
+  .compare-column-body .two-col { grid-template-columns: 1fr !important; }
+  .compare-column-body .weapon-item { flex-wrap: wrap; gap: .6rem; padding: .6rem .8rem; }
+  .compare-column-body .skill-stats { grid-template-columns: 1fr !important; }
+  .compare-column-body .ascension-item { grid-template-columns: 60px 1fr !important; }
+  .compare-column-body .ascension-content { padding: .6rem .8rem !important; }
+  .compare-column-body .section-block-header { padding: .7rem 1rem; gap: .6rem; flex-wrap: wrap; }
+  .compare-column-body .section-block-header h2 { font-size: 1.05rem; }
+  .compare-column-body img { max-width: 100%; }
   .compare-loading, .compare-error {
     padding: 2rem 1rem; text-align: center; font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--muted); letter-spacing: 1px;
   }
