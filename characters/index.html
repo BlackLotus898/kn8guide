@@ -247,10 +247,13 @@
   }
   .compare-overlay-close:hover { color: var(--red); border-color: var(--red); }
   .compare-columns {
-    flex: 1; display: flex; gap: 1px; overflow: auto; background: var(--border);
+    flex: 1; overflow: auto; background: var(--border);
+  }
+  .compare-columns-inner {
+    display: flex; gap: 1px; margin: 0 auto; min-width: fit-content; height: 100%;
   }
   .compare-column {
-    flex: 1 0 380px; max-width: 460px; background: var(--dark);
+    flex: 1 0 380px; max-width: 520px; width: 380px; background: var(--dark);
     display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
   }
   .compare-column-header {
@@ -643,7 +646,7 @@ function buildColumnSkeleton(id) {
 async function openCompareOverlay() {
   if (selectedIds.length < 2) return;
   compareOverlayTitle.textContent = `Comparing ${selectedIds.length} Characters`;
-  compareColumns.innerHTML = selectedIds.map(buildColumnSkeleton).join('');
+  compareColumns.innerHTML = `<div class="compare-columns-inner" id="compare-columns-inner">${selectedIds.map(buildColumnSkeleton).join('')}</div>`;
   compareOverlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 
