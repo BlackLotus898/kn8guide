@@ -6,6 +6,7 @@
 <title>Characters — K8 GUIDE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../char-styles.css">
 <style>
   :root {
     --red: #e8001a;
@@ -175,6 +176,109 @@
   }
   footer a { color: var(--muted); text-decoration: none; }
   footer a:hover { color: var(--cyan); }
+
+  /* ── COMPARE MODE ─────────────────────────────────────────── */
+  .compare-toggle-btn {
+    padding: .4rem .9rem;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .compare-toggle-btn:hover { color: var(--text); border-color: var(--text); }
+  .compare-toggle-btn.active { background: var(--cyan); border-color: var(--cyan); color: #05070b; }
+
+  body.compare-mode-active .char-card { cursor: pointer; }
+  .compare-checkbox {
+    display: none;
+    position: absolute; top: .5rem; right: .5rem; z-index: 3;
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--muted); background: rgba(8,11,16,.85);
+    align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: transparent;
+    transition: all .2s;
+  }
+  body.compare-mode-active .compare-checkbox { display: flex; }
+  .char-card.compare-selected { border-color: var(--cyan); }
+  .char-card.compare-selected .compare-checkbox { background: var(--cyan); border-color: var(--cyan); color: #05070b; }
+
+  .compare-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 950;
+    background: rgba(8,11,16,.97); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: .8rem 2rem; display: none;
+    align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .compare-bar.show { display: flex; }
+  .compare-bar-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+  .compare-bar-thumbs { display: flex; gap: .5rem; flex: 1; flex-wrap: wrap; }
+  .compare-thumb {
+    display: flex; align-items: center; gap: .4rem;
+    padding: .25rem .6rem .25rem .3rem; background: var(--panel); border: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: .68rem; color: var(--text);
+  }
+  .compare-thumb img { width: 24px; height: 24px; object-fit: cover; }
+  .compare-thumb button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: .9rem; line-height: 1; padding: 0; }
+  .compare-thumb button:hover { color: var(--red); }
+  .compare-bar-actions { display: flex; gap: .5rem; }
+  .compare-btn-clear, .compare-btn-go {
+    padding: .5rem 1.1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted); cursor: pointer;
+  }
+  .compare-btn-clear:hover { color: var(--text); border-color: var(--text); }
+  .compare-btn-go { background: var(--cyan); border-color: var(--cyan); color: #05070b; }
+  .compare-btn-go:disabled { background: var(--panel); border-color: var(--border); color: var(--muted); cursor: not-allowed; }
+  .compare-btn-go:not(:disabled):hover { opacity: .85; }
+
+  .compare-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1100;
+    background: rgba(5,7,11,.97); backdrop-filter: blur(6px);
+    flex-direction: column;
+  }
+  .compare-overlay.show { display: flex; }
+  .compare-overlay-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 2rem; border-bottom: 1px solid var(--border); background: var(--dark);
+  }
+  .compare-overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .compare-overlay-close {
+    width: 34px; height: 34px; border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+    cursor: pointer; font-size: 1rem; transition: all .2s;
+  }
+  .compare-overlay-close:hover { color: var(--red); border-color: var(--red); }
+  .compare-columns {
+    flex: 1; display: flex; gap: 1px; overflow: auto; background: var(--border);
+  }
+  .compare-column {
+    flex: 1 0 340px; max-width: 420px; background: var(--dark);
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .compare-column-header {
+    position: sticky; top: 0; z-index: 2;
+    display: flex; align-items: center; gap: .6rem;
+    padding: .6rem 1rem; background: var(--panel2); border-bottom: 1px solid var(--border);
+  }
+  .compare-column-remove {
+    margin-left: auto; background: none; border: 1px solid var(--border); color: var(--muted);
+    width: 26px; height: 26px; cursor: pointer; font-size: .85rem; flex-shrink: 0;
+  }
+  .compare-column-remove:hover { color: var(--red); border-color: var(--red); }
+  .compare-column-body { padding: 1rem; }
+  .compare-column-body .char-hero { margin-bottom: 1rem; }
+  .compare-column-body .section-block { margin-bottom: 1rem; }
+  .compare-loading, .compare-error {
+    padding: 2rem 1rem; text-align: center; font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: var(--muted); letter-spacing: 1px;
+  }
+  .compare-error { color: var(--red); }
+  .compare-view-full {
+    display: inline-block; margin-top: .6rem; font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px;
+    color: var(--cyan); text-decoration: none;
+  }
+  .compare-view-full:hover { text-decoration: underline; }
+
+  @media (max-width: 700px) {
+    .compare-column { flex-basis: 88vw; }
+  }
 </style>
 </head>
 <body>
@@ -193,6 +297,7 @@
     <span class="search-icon">🔍</span>
     <input type="text" id="search" placeholder="Search character name...">
   </div>
+  <button class="compare-toggle-btn" id="compare-toggle-btn">⇄ Compare Mode</button>
   <div class="filters">
     <!-- CLASS -->
     <div class="filter-group" id="filter-class">
@@ -233,6 +338,23 @@
 
 <div class="char-grid" id="char-grid">
   <div class="no-results" id="no-results"><p>// NO CHARACTERS MATCH YOUR FILTERS</p></div>
+</div>
+
+<div class="compare-bar" id="compare-bar">
+  <span class="compare-bar-label">Comparing:</span>
+  <div class="compare-bar-thumbs" id="compare-bar-thumbs"></div>
+  <div class="compare-bar-actions">
+    <button class="compare-btn-clear" id="compare-btn-clear">Clear</button>
+    <button class="compare-btn-go" id="compare-btn-go" disabled>Compare (0) →</button>
+  </div>
+</div>
+
+<div class="compare-overlay" id="compare-overlay">
+  <div class="compare-overlay-header">
+    <span class="compare-overlay-title" id="compare-overlay-title">Comparing Characters</span>
+    <button class="compare-overlay-close" id="compare-overlay-close">✕</button>
+  </div>
+  <div class="compare-columns" id="compare-columns"></div>
 </div>
 
 <footer>
@@ -318,12 +440,14 @@ function buildCard(c) {
   return `
     <a class="char-card"
        href="../characters/${c.id}/"
+       data-id="${c.id}"
        data-name="${c.name.toLowerCase()} ${c.variant.toLowerCase()}"
        data-class="${c.cls}"
        data-types="${c.types.join(',')}"
        data-elements="${c.elements.join(',')}"
        data-stars="${c.stars}">
       <div class="card-stars">${starStr(c.stars)}</div>
+      <div class="compare-checkbox">✓</div>
       <div class="card-photo">${photo}</div>
       <div class="card-info">
         <div class="card-name">${c.name}</div>
@@ -384,6 +508,155 @@ document.getElementById('search').addEventListener('input', e => {
 });
 
 applyFilters();
+
+// ── COMPARE MODE ───────────────────────────────────────────────────────────
+const MAX_COMPARE = 4;
+const charById = Object.fromEntries(characters.map(c => [c.id, c]));
+let compareMode = false;
+let selectedIds = [];
+
+const compareToggleBtn = document.getElementById('compare-toggle-btn');
+const compareBar = document.getElementById('compare-bar');
+const compareBarThumbs = document.getElementById('compare-bar-thumbs');
+const compareBtnClear = document.getElementById('compare-btn-clear');
+const compareBtnGo = document.getElementById('compare-btn-go');
+const compareOverlay = document.getElementById('compare-overlay');
+const compareOverlayTitle = document.getElementById('compare-overlay-title');
+const compareOverlayClose = document.getElementById('compare-overlay-close');
+const compareColumns = document.getElementById('compare-columns');
+
+function updateCompareBar() {
+  const n = selectedIds.length;
+  compareBar.classList.toggle('show', n > 0);
+  compareBarThumbs.innerHTML = selectedIds.map(id => {
+    const ch = charById[id];
+    const thumbImg = ch.img ? `<img src="${IMG}${ch.img}" alt="${ch.name}">` : '';
+    return `<div class="compare-thumb" data-id="${id}">${thumbImg}<span>${ch.name} (${ch.variant})</span><button data-remove="${id}" aria-label="Remove">✕</button></div>`;
+  }).join('');
+  compareBtnGo.textContent = `Compare (${n}) →`;
+  compareBtnGo.disabled = n < 2;
+}
+
+function setCardSelected(id, selected) {
+  const card = grid.querySelector(`.char-card[data-id="${id}"]`);
+  if (card) card.classList.toggle('compare-selected', selected);
+}
+
+function toggleSelect(id) {
+  const idx = selectedIds.indexOf(id);
+  if (idx !== -1) {
+    selectedIds.splice(idx, 1);
+    setCardSelected(id, false);
+  } else {
+    if (selectedIds.length >= MAX_COMPARE) return;
+    selectedIds.push(id);
+    setCardSelected(id, true);
+  }
+  updateCompareBar();
+}
+
+compareToggleBtn.addEventListener('click', () => {
+  compareMode = !compareMode;
+  compareToggleBtn.classList.toggle('active', compareMode);
+  document.body.classList.toggle('compare-mode-active', compareMode);
+  if (!compareMode) {
+    selectedIds.forEach(id => setCardSelected(id, false));
+    selectedIds = [];
+    updateCompareBar();
+  }
+});
+
+grid.addEventListener('click', e => {
+  if (!compareMode) return;
+  const card = e.target.closest('.char-card');
+  if (!card) return;
+  e.preventDefault();
+  toggleSelect(card.dataset.id);
+});
+
+compareBarThumbs.addEventListener('click', e => {
+  const btn = e.target.closest('[data-remove]');
+  if (!btn) return;
+  toggleSelect(btn.dataset.remove);
+});
+
+compareBtnClear.addEventListener('click', () => {
+  selectedIds.forEach(id => setCardSelected(id, false));
+  selectedIds = [];
+  updateCompareBar();
+});
+
+async function fetchCharacterColumnHTML(id) {
+  const relURL = `../characters/${id}/`;
+  const pageURL = new URL(relURL, window.location.href);
+  const res = await fetch(relURL);
+  if (!res.ok) throw new Error('Failed to load character page');
+  const html = await res.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  doc.querySelectorAll('img[src]').forEach(img => {
+    img.setAttribute('src', new URL(img.getAttribute('src'), pageURL).href);
+  });
+  const hero = doc.querySelector('.char-hero');
+  const sections = Array.from(doc.querySelectorAll('.section-block'));
+  let out = '';
+  if (hero) out += hero.outerHTML;
+  sections.forEach(s => { out += s.outerHTML; });
+  return out;
+}
+
+function buildColumnSkeleton(id) {
+  const ch = charById[id];
+  return `<div class="compare-column" data-id="${id}">
+    <div class="compare-column-header">
+      <strong>${ch.name} <span style="color:var(--muted);font-weight:400;">(${ch.variant})</span></strong>
+      <button class="compare-column-remove" data-remove-col="${id}" aria-label="Remove from comparison">✕</button>
+    </div>
+    <div class="compare-column-body" id="compare-col-body-${id}">
+      <div class="compare-loading">// LOADING...</div>
+    </div>
+  </div>`;
+}
+
+async function openCompareOverlay() {
+  if (selectedIds.length < 2) return;
+  compareOverlayTitle.textContent = `Comparing ${selectedIds.length} Characters`;
+  compareColumns.innerHTML = selectedIds.map(buildColumnSkeleton).join('');
+  compareOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  await Promise.all(selectedIds.map(async id => {
+    const bodyEl = document.getElementById(`compare-col-body-${id}`);
+    if (!bodyEl) return;
+    try {
+      const html = await fetchCharacterColumnHTML(id);
+      bodyEl.innerHTML = html + `<a class="compare-view-full" href="../characters/${id}/" target="_blank">View Full Page →</a>`;
+    } catch (err) {
+      bodyEl.innerHTML = `<div class="compare-error">// COULD NOT LOAD THIS CHARACTER<br><a class="compare-view-full" href="../characters/${id}/" target="_blank">Open Page Directly →</a></div>`;
+    }
+  }));
+}
+
+function closeCompareOverlay() {
+  compareOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+compareBtnGo.addEventListener('click', openCompareOverlay);
+compareOverlayClose.addEventListener('click', closeCompareOverlay);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && compareOverlay.classList.contains('show')) closeCompareOverlay();
+});
+
+compareColumns.addEventListener('click', e => {
+  const btn = e.target.closest('[data-remove-col]');
+  if (!btn) return;
+  const id = btn.dataset.removeCol;
+  toggleSelect(id);
+  const col = compareColumns.querySelector(`.compare-column[data-id="${id}"]`);
+  if (col) col.remove();
+  compareOverlayTitle.textContent = `Comparing ${selectedIds.length} Characters`;
+  if (selectedIds.length === 0) closeCompareOverlay();
+});
 </script>
 </body>
 </html>
