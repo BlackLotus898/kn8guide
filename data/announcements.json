@@ -1,6 +1,28 @@
 {
-  "lastUpdated": "2026-07-30",
+  "lastUpdated": "2026-07-31",
   "announcements": [
+    {
+      "id": "2026-07-31-x-maintenance-extension-notice-the-ongoing-maintenan",
+      "date": "2026-07-31",
+      "type": "game",
+      "title": "[ Maintenance Extension Notice ] The ongoing maintenance has been extended due to opera...",
+      "summary": "[ Maintenance Extension Notice ] The ongoing maintenance has been extended due to operational requirements. We will provide another update regarding the completion time as soon as a new schedule is confirmed. We sincerely apologize for the inconvenience caused to everyone waiting",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2083099159389946297#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2083099159389946297#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHOinXqMa8AAVW9i.jpg"
+    },
+    {
+      "id": "2026-07-31-x-the-maintenance-is-now-underway-and-is-scheduled-t",
+      "date": "2026-07-31",
+      "type": "game",
+      "title": "The maintenance is now underway and is scheduled to be completed at around 5:00 PM JST ...",
+      "summary": "The maintenance is now underway and is scheduled to be completed at around 5:00 PM JST (UTC+9). *The game will be unavailable during this time. We appreciate your understanding and cooperation.",
+      "link": "https://nitter.net/kj8_TheGame_EN/status/2083043726713364707#m",
+      "sourceLink": "https://nitter.net/kj8_TheGame_EN/status/2083043726713364707#m",
+      "autoAdded": true,
+      "image": "https://nitter.net/pic/media%2FHOd61u7bQAAWAEI.jpg"
+    },
     {
       "id": "2026-07-30-x-2-days-until-k8game1stanniv-the-1st-anniversary-ki",
       "date": "2026-07-30",
