@@ -250,6 +250,7 @@ const WEAPONS_BY_TYPE = {
   ],
   'Bow': [
     { name:'AW-Kokyab', effect:'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, applies Adept (1 turn(s)) to the equipped unit.\nAdept: 1. Battle buddy\'s ST Attack and Blast Attack DMG dealt +23%. 2. Battle buddy\'s ST Attack and Blast Attack DEF PEN Rate +15%.' },
+    { name:'AW-Cavakerd', effect:'CRIT DMG (%) +33%\nAfter the equipped unit activates a support Combat Skill, the equipped unit\'s Ultimate Gauge +10.' },
     { name:'AW-Scopone', effect:'ATK +28%\nAfter the equipped unit activates Ultimate, advances all allies\' Action Order by 13%.' },
     { name:'Standard Bow', effect:'ATK +23%' },
   ],
@@ -311,6 +312,7 @@ const WEAPONS_BY_TYPE = {
   ],
   'Iron Ball': [
     { name:'SB-7137', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit attacks a Kaiju that has a status ailment, the equipped unit\'s Ultimate Gauge +15.\nAfter the equipped unit activates Ultimate, applies DMG dealt +12% (2 turn(s)) to all other allies.' },
+    { name:'SB-Agni', effect:'Effect Hit Rate (%) +14%\nAfter the equipped unit activates Ultimate, has an 80% chance to apply DMG Taken from DoT +5% (3 turn(s)) to all Kaiju.' },
     { name:'SB-Stegosaurus 38', effect:'ATK +28%\nAfter the equipped unit attacks a Kaiju in Burn state, applies ATK +36% (2 turn(s)) to the equipped unit.' },
     { name:'Standard Iron Ball', effect:'ATK +23%' },
   ],
@@ -320,6 +322,7 @@ const WEAPONS_BY_TYPE = {
   ],
   'Ride-Frame': [
     { name:'RF-Mruwdnil', effect:'HP +34%\nBefore the equipped unit activates Combat Skill, consumes 5% of the equipped unit\'s Max HP and applies CRIT DMG +36% (2 turn(s)) and DMG dealt +15% (2 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 30% or less, after the equipped unit activates Combat Skill or Ultimate, recovers the equipped unit\'s HP equal to 6% of the equipped unit\'s Max HP.' },
+    { name:'RF-Antares', effect:'HP +23%\nWhen the equipped unit\'s HP is 70% or less, the equipped unit\'s CRIT DMG +40%.' },
     { name:'RF-Judith', effect:'HP +28%\nAfter the equipped unit loses HP or recovers HP, applies DMG dealt +32% (2 turn(s)) to the equipped unit.' },
     { name:'Sustained Combat Ride-Frame', effect:'HP +23%' },
   ],
@@ -696,6 +699,17 @@ const CHARACTERS = [
       {id:'A4', name:'Deepening Resolve', effect:"After activating Combat Skill or Follow-Up Skill, applies 1 stack of Resolve to this unit."},
       {id:'A5', name:'Embers of Rage', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Thermal Overdrive', effect:"Resolve max stack count +2. Resolve: In addition, this unit\'s Ultimate DMG Multiplier +4%."},
+    ],
+    },
+  { id:'kn8-sfkd',           name:'Kaiju No. 8',      variant:'Strike from the Kaiju Dimension', stars:5, role:'Attacker',  types:['Blunt','Lightning'], img:'KN8-SFKD.png', subRoles:[], weaponType:null,
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Dimensional Vigor', effect:"While in Phase Transition state: this unit\'s DEF PEN Rate +15%. Combat Skill SP consumption -1 (1 time every 2 turns)."},
+      {id:'A2', name:'Apex Aggression', effect:"After activating Combat Skill or Ultimate, applies DMG dealt +10% (1 turn) to this unit. Max 4 stacks."},
+      {id:'A3', name:'Hyper-Dimensional Roar', effect:"Normal Attack, Ultimate Lv. +2. Normal Attack, Ultimate max Lv. +2."},
+      {id:'A4', name:'Overwhelming Fist', effect:"Combat Skill DMG Multiplier +50%, Ultimate DMG Multiplier +50%."},
+      {id:'A5', name:'Exponential Growth', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Defier of Logic', effect:"At the start of wave, randomly replaces 4 of each Kaiju\'s Fire, Ice, Wind, or Water PLT with Elemental PLT."},
     ],
     },
   { id:'kota-tachibana-fdff',name:'Kota Tachibana',   variant:"First Division's Feral Force",   stars:4, role:'Defender',  types:['Shot','Ice'],     img:'KotaTachibana-FDFF.png', subRoles:[], weaponType:'Assault Rifle',

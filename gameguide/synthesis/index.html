@@ -53,6 +53,7 @@
   .rarity-dot.green  { background: #40d080; }
   .rarity-dot.blue   { background: #4d9fff; }
   .rarity-dot.purple { background: #c8a0ff; }
+  .rarity-dot.gold   { background: var(--gold); }
   .steps { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; }
   .step { display: grid; grid-template-columns: 40px 1fr; gap: 1rem; background: var(--dark); border: 1px solid var(--border); }
   .step-num { background: var(--red); display: flex; align-items: center; justify-content: center; font-family: "Bebas Neue", sans-serif; font-size: 1.3rem; color: #fff; }
@@ -185,6 +186,11 @@
           <td>Craft ★4 and ★5 Uniparts</td>
           <td>Synthesize multiple Blue Unimaterials</td>
         </tr>
+        <tr>
+          <td><span class="rarity-dot gold"></span><strong style="color:var(--gold);">Gold (Tier 4)</strong></td>
+          <td>Craft ★5 Uniparts</td>
+          <td>Synthesize multiple Purple Unimaterials, or exchange Encounter Stones in the Shop</td>
+        </tr>
       </table>
     </div>
   </div>
@@ -235,6 +241,11 @@
           <h4>Charged Crystal</h4>
           <p>Skill enhancement material for <strong>Lightning</strong> attribute characters.</p>
           <p class="obtain"><strong>How to get:</strong> Lightning Training missions, Synthesis, Conversion</p>
+        </div>
+        <div class="material-card">
+          <h4>Dynamic Droplet</h4>
+          <p>Skill enhancement material for <strong>Water</strong> attribute characters.</p>
+          <p class="obtain"><strong>How to get:</strong> Water Training missions, Synthesis, Conversion</p>
         </div>
       </div>
 
