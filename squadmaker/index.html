@@ -681,6 +681,12 @@ const CHARACTERS = [
     },
   { id:'kn8-f98',            name:'Kaiju No. 8',      variant:'Fortitude 9.8',                   stars:5, role:'Attacker',  types:['Blunt'],          img:'KN8-F98.png', subRoles:['Tank'], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
+    selfBuffs:[
+      {source:'Passive — Zeal and Supremacy', desc:"After activating Normal Attack, Combat Skill, or after receiving an attack, applies 1 stack of Fighting Spirit to this unit (max 5). Fighting Spirit: ATK +3.2%, DMG dealt +3.2%, Ultimate DMG Multiplier +6.4% per stack."},
+      {source:'Unyielding Tenacity (Lv. 40)', desc:"This unit's ATK +27%. At the start of battle, DEF +35% (3 turns) to this unit."},
+      {source:'Full-Power Fist (Lv. 60)', desc:"This unit's CRIT Rate +19%. Ultimate DMG dealt +15%."},
+      {source:"Kaiju's Hardened Skin (Lv. 80)", desc:"This unit's SPD +16. After Combat Skill, CRIT Rate +15% (2 turns) to this unit."},
+    ],
         ascension:[
       {id:'A1', name:'Kaiju Awakening', effect:"After activating Normal Attack, this unit\'s Ultimate Gauge +30."},
       {id:'A2', name:'Weight of Fighting Spirit', effect:"After turn arrives, randomly removes 1 of this unit\'s debuffs."},
@@ -692,6 +698,12 @@ const CHARACTERS = [
     },
   { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
+    selfBuffs:[
+      {source:'Passive — Resonant Resolve', desc:"Before activating Ultimate, applies DMG dealt +1.2% and Ultimate DMG dealt +5.5% to this unit (max 5 stacks). After an ally activates Ultimate, gains Resolve stacks (max 6). Resolve: Blunt DMG dealt +4.4% and Ultimate DMG Multiplier +8.8% per stack."},
+      {source:'Overflowing Power (Lv. 40)', desc:"This unit's ATK +32%, SPD +20, and CRIT Rate +24%."},
+      {source:'Lingering Heat (Lv. 60)', desc:"This unit's ATK +46%. After activating Ultimate, CRIT DMG +36% (2 turns) to this unit."},
+      {source:'Beyond Resolve (Lv. 80)', desc:"This unit's CRIT DMG +48%. If ATK is 1,200+, CRIT Rate +3% per 100 ATK over 1,200 (max +27%)."},
+    ],
         ascension:[
       {id:'A1', name:'Unwavering Readiness', effect:"This unit\'s Ultimate CRIT DMG +42%."},
       {id:'A2', name:'Deep-Piercing Heat', effect:"After activating Ultimate, if 3 stacks of Resolve are consumed, applies DEF PEN Rate +18% (2 turns) to this unit. Combat Skill DMG Multiplier +30%."},
@@ -703,6 +715,12 @@ const CHARACTERS = [
     },
   { id:'kn8-sfkd',           name:'Kaiju No. 8',      variant:'Strike from the Kaiju Dimension', stars:5, role:'Attacker',  types:['Blunt','Lightning'], img:'KN8-SFKD.png', subRoles:[], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
+    selfBuffs:[
+      {source:'Passive — Beyond All Limits', desc:"After activating Combat Skill or Ultimate, applies CRIT Rate +4.4% (1 turn) to this unit (max 5 stacks). Builds a Transcendence Gauge (max 15) from wave start and ally actions — at max, enters Phase Transition and transforms all skills into Transcendence Skills, Lightning DMG dealt +30%."},
+      {source:'Energy Phase Transition (Lv. 40)', desc:"Phase Transition: additionally, this unit's SPD +20."},
+      {source:'Dweller of the Rift (Lv. 60)', desc:"After activating Combat Skill, if in Phase Transition state, advances this unit's next Action Order by 20%."},
+      {source:'One and Only (Lv. 80)', desc:"Before activating Ultimate, applies DMG dealt +20% (3 turns) to this unit (max 3 stacks)."},
+    ],
         ascension:[
       {id:'A1', name:'Dimensional Vigor', effect:"While in Phase Transition state: this unit\'s DEF PEN Rate +15%. Combat Skill SP consumption -1 (1 time every 2 turns)."},
       {id:'A2', name:'Apex Aggression', effect:"After activating Combat Skill or Ultimate, applies DMG dealt +10% (1 turn) to this unit. Max 4 stacks."},
@@ -1222,10 +1240,13 @@ function renderAnalysis() {
   const allTypes = [...new Set(filled.flatMap(f => f.char.types))];
 
   // Separate buffs into regular, conditional, buddy
-  const teamBuffs = [], condBuffs = [], buddyBuffs = [], debuffs = [], dotEffects = [];
+  const teamBuffs = [], condBuffs = [], buddyBuffs = [], debuffs = [], dotEffects = [], selfBuffsList = [];
 
   filled.forEach(f => {
     const src = `${f.char.name} (${f.char.variant})`;
+    if (f.char.selfBuffs) {
+      f.char.selfBuffs.forEach(b => selfBuffsList.push({source: `${src} — ${b.source}`, desc: b.desc}));
+    }
     f.char.teamBuffs.forEach(b => {
       if (b.scope === 'conditional') condBuffs.push({source: src, ...b});
       else teamBuffs.push({source: src, ...b});
@@ -1391,6 +1412,19 @@ function renderAnalysis() {
     <div class="coverage-row"><span><span class="coverage-dot ${hasDoTBonus?'yes':'no'}"></span>DoT DMG Boost</span><strong>${hasDoTBonus?'Yes':'None'}</strong></div>
     <div class="coverage-row"><span><span class="coverage-dot ${debuffs.length>0?'yes':'no'}"></span>Enemy Debuffs</span><strong>${debuffs.length>0?'Yes':'None'}</strong></div>
   </div>`;
+
+  // Self buffs — a character's own passive/kit effects that only apply to themselves.
+  // These don't count toward squad-wide Coverage or Buff Totals above (which measure
+  // what a unit brings to its teammates), but they're shown here so solo self-buffing
+  // units (weapon-less Kaiju No. 8 variants, etc.) don't look like an empty blank slot.
+  if (selfBuffsList.length > 0) {
+    html += `<div class="analysis-section">
+      <div class="analysis-section-title">Self Buffs <span style="color:#555;font-size:.55rem;">— not shared with the squad</span></div>
+      <div class="buff-list">
+        ${selfBuffsList.map(b => `<div class="buff-item"><div class="buff-source">${b.source}</div><div class="buff-desc">${b.desc} <span class="buff-scope conditional">SELF</span></div></div>`).join('')}
+      </div>
+    </div>`;
+  }
 
   // Team buffs
   if (teamBuffs.length > 0) {
