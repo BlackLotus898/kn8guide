@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallpapers — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1200px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 620px; }
+  .page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+  .filter-pill { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; padding: .5rem 1rem; background: var(--panel); border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+  .filter-pill:hover { color: var(--cyan); border-color: var(--cyan); }
+  .filter-pill.active { color: var(--dark); background: var(--cyan); border-color: var(--cyan); font-weight: 700; }
+
+  /* GRID */
+  .wp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+  .wp-card { background: var(--panel); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+  .wp-card:hover { border-color: var(--cyan); transform: translateY(-3px); }
+  .wp-photo { width: 100%; aspect-ratio: 16/9; background: var(--dark); overflow: hidden; }
+  .wp-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wp-info { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+  .wp-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 1px; color: #fff; line-height: 1.2; }
+  .wp-chars { font-family: 'Share Tech Mono', monospace; font-size: .65rem; letter-spacing: 1px; color: var(--cyan); text-transform: uppercase; }
+  .wp-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding-top: .6rem; border-top: 1px solid var(--border); }
+  .wp-count { font-family: 'Share Tech Mono', monospace; font-size: .72rem; color: var(--muted); letter-spacing: .5px; white-space: nowrap; }
+  .wp-count strong { color: var(--gold); }
+  .wp-dl-btn { font-family: 'Share Tech Mono', monospace; font-size: .68rem; letter-spacing: 1px; text-transform: uppercase; padding: .5rem .9rem; background: var(--red); color: #fff; text-decoration: none; border: 2px solid var(--red); white-space: nowrap; transition: background .2s, color .2s; }
+  .wp-dl-btn:hover { background: transparent; color: var(--red); }
+
+  .empty-state { text-align: center; padding: 4rem 2rem; font-family: 'Share Tech Mono', monospace; font-size: .85rem; color: var(--muted); letter-spacing: 1px; border: 1px dashed var(--border); }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="breadcrumb">
+  <a href="../../index.html">Home</a><span>›</span>
+  <a href="../">Fan Zone</a><span>›</span>
+  Wallpapers
+</div>
+<div class="page-header">
+  <p class="page-label">// Community</p>
+  <h1 class="page-title">Wallpapers</h1>
+  <p class="page-desc">Every homepage background K8GUIDE has used, free to download. Filter by character below.</p>
+</div>
+<div class="page">
+
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="wp-grid" id="wpGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">// No wallpapers match this filter yet</div>
+
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+
+<script>
+  // ═══════════════════════════════════════════════════════════
+  // WALLPAPER DATA
+  // Add new entries here as Lotus sends more background images.
+  //   id        — unique slug, also the Firebase/localStorage counter key. Never reuse/change once live (resets its count).
+  //   name      — display title. Edit freely any time, does NOT affect the counter.
+  //   character — string, or array of strings for group art (e.g. ['Kafka Hibino','Mina Ashiro']). Drives the filter bar automatically.
+  //   img       — path to the full-size image, relative to this file.
+  // ═══════════════════════════════════════════════════════════
+  const WALLPAPERS = [
+    { id: 'acting-captain-sagan-shinomiya', name: 'Acting Captain Sagan Shinomiya', character: ['Sagan Shinomiya', 'Mina Ashiro'], img: '../../Wallpapers/acting-captain-sagan-shinomiya.jpg' },
+    { id: 'aptitude-test', name: 'Aptitude Test', character: ['Aoi Kaguragi', 'Haruichi Izumo'], img: '../../Wallpapers/aptitude-test.jpg' },
+    { id: 'aspiration-and-honor', name: 'Aspiration and Honor', character: 'Rin Shinonome', img: '../../Wallpapers/aspiration-and-honor.jpg' },
+    { id: 'ax-technique-proficiency', name: 'Ax Technique Proficiency', character: ['Soshiro Hoshina', 'Kikoru Shinomiya'], img: '../../Wallpapers/ax-technique-proficiency.jpg' },
+    { id: 'clozer-suits', name: 'CLOZER Suits', character: 'Haruichi Izumo', img: '../../Wallpapers/clozer-suits.jpg' },
+    { id: 'clozer', name: 'CLOZER', character: ['Suited', 'Soshiro Hoshina'], img: '../../Wallpapers/clozer.jpg' },
+    { id: 'calculated-choice', name: 'Calculated Choice', character: ['Kikoru Shinomiya', 'Sagan Shinomiya'], img: '../../Wallpapers/calculated-choice.jpg' },
+    { id: 'cross-forged-refinement', name: 'Cross-Forged Refinement', character: 'Rin Shinonome', img: '../../Wallpapers/cross-forged-refinement.jpg' },
+    { id: 'dimensional-identified-kaiju-a', name: 'Dimensional Identified Kaiju A', character: ['Mina Ashiro', 'Sagan Shinomiya'], img: '../../Wallpapers/dimensional-identified-kaiju-a.jpg' },
+    { id: 'dimensionally-distorted-destiny', name: 'Dimensionally Distorted Destiny', character: ['Sagan Shinomiya', 'Kikoru Shinomiya'], img: '../../Wallpapers/dimensionally-distorted-destiny.jpg' },
+    { id: 'fortitude-9-8', name: 'Fortitude 9.8', character: 'Kaiju No. 8', img: '../../Wallpapers/fortitude-9-8.jpg' },
+    { id: 'fruits-of-diligence', name: 'Fruits of Diligence', character: 'Aoi Kaguragi', img: '../../Wallpapers/fruits-of-diligence.jpg' },
+    { id: 'future-sight', name: 'Future Sight', character: 'Gen Narumi', img: '../../Wallpapers/future-sight.jpg' },
+    { id: 'grit-and-duty', name: 'Grit and Duty', character: 'Jura Igarashi', img: '../../Wallpapers/grit-and-duty.jpg' },
+    { id: 'guiding-light-of-the-future', name: 'Guiding Light of the Future', character: ['Sagan Shinomiya', 'Kikoru Shinomiya'], img: '../../Wallpapers/guiding-light-of-the-future.jpg' },
+    { id: 'hoshina-style-sword-slay-technique', name: 'Hoshina-Style Sword-Slay Technique', character: 'Soshiro Hoshina', img: '../../Wallpapers/hoshina-style-sword-slay-technique.jpg' },
+    { id: 'japan-s-strongest-combatant', name: 'Japan\'s Strongest Combatant', character: 'Gen Narumi', img: '../../Wallpapers/japan-s-strongest-combatant.jpg' },
+    { id: 'kaiju-a-disaster-final-showdown', name: 'Kaiju A Disaster Final Showdown', character: ['Kaiju No. 8', 'Sagan Shinomiya', 'Reno Ichikawa'], img: '../../Wallpapers/kaiju-a-disaster-final-showdown.jpg' },
+    { id: 'kaiju-dimensional-gate', name: 'Kaiju Dimensional Gate', character: ['Kafka Hibino', 'Kikoru Shinomiya'], img: '../../Wallpapers/kaiju-dimensional-gate.jpg' },
+    { id: 'kaiju-no-1-vs-kaiju-no-1', name: 'Kaiju No. 1 vs. Kaiju No. 1', character: ['Kafka Hibino', 'Gen Narumi', 'Soshiro Hoshina'], img: '../../Wallpapers/kaiju-no-1-vs-kaiju-no-1.jpg' },
+    { id: 'kaiju-no-8-captured', name: 'Kaiju No. 8 Captured', character: ['Kaiju No. 8', 'Isao Shinomiya'], img: '../../Wallpapers/kaiju-no-8-captured.jpg' },
+    { id: 'keystone-of-western-japan', name: 'Keystone of Western Japan', character: 'Soichiro Hoshina', img: '../../Wallpapers/keystone-of-western-japan.jpg' },
+    { id: 'king-of-kaiju-interception-ops', name: 'King of Kaiju Interception Ops', character: ['Kikoru Shinomiya', 'Wang Meixing', 'Reno Ichikawa'], img: '../../Wallpapers/king-of-kaiju-interception-ops.jpg' },
+    { id: 'london-defense-operation', name: 'London Defense Operation', character: ['Chester Lochburn', 'Kikoru Shinomiya', 'Kafka Hibino'], img: '../../Wallpapers/london-defense-operation.jpg' },
+    { id: 'negotiator-of-wit-and-charm', name: 'Negotiator of Wit and Charm', character: ['Wang Meixing', 'Suited'], img: '../../Wallpapers/negotiator-of-wit-and-charm.jpg' },
+    { id: 'new-possibilities', name: 'New Possibilities', character: 'Soshiro Hoshina', img: '../../Wallpapers/new-possibilities.jpg' },
+    { id: 'off-the-scale', name: 'Off the Scale', character: 'Mina Ashiro', img: '../../Wallpapers/off-the-scale.jpg' },
+    { id: 'operation-reclaim-christmas-eve', name: 'Operation Reclaim Christmas Eve', character: ['Kafka Hibino', 'Akari Minase', 'Gen Narumi', 'Kikoru Shinomiya'], img: '../../Wallpapers/operation-reclaim-christmas-eve.jpg' },
+    { id: 'over-limit', name: 'Over Limit', character: 'Sagan Shinomiya', img: '../../Wallpapers/over-limit.jpg' },
+    { id: 'plan-d', name: 'Plan D', character: ['Kikoru Shinomiya', 'Sagan Shinomiya', 'Kaiju No. 8', 'Reno Ichikawa'], img: '../../Wallpapers/plan-d.jpg' },
+    { id: 'raid-on-tachikawa-base', name: 'Raid on Tachikawa Base', character: 'Soshiro Hoshina', img: '../../Wallpapers/raid-on-tachikawa-base.jpg' },
+    { id: 'sagamihara-neutralization-operation-at-daybreak', name: 'Sagamihara Neutralization Operation at Daybreak', character: ['Soshiro Hoshina', 'Kikoru Shinomiya', 'Kafka Hibino'], img: '../../Wallpapers/sagamihara-neutralization-operation-at-daybreak.jpg' },
+    { id: 'scorching-variant', name: 'Scorching Variant', character: 'Kaiju No. 8', img: '../../Wallpapers/scorching-variant.jpg' },
+    { id: 'sky-piercing-bolt', name: 'Sky-Piercing Bolt', character: 'Gen Narumi', img: '../../Wallpapers/sky-piercing-bolt.jpg' },
+    { id: 'strike-from-the-kaiju-dimension-a', name: 'Strike from the Kaiju Dimension (A)', character: 'Kaiju No. 8', img: '../../Wallpapers/strike-from-the-kaiju-dimension-a.jpg' },
+    { id: 'strike-from-the-kaiju-dimension-b', name: 'Strike from the Kaiju Dimension (B)', character: 'Kaiju No. 8', img: '../../Wallpapers/strike-from-the-kaiju-dimension-b.jpg' },
+    { id: 'superb-combination', name: 'Superb Combination', character: ['Mina Ashiro', 'Bakko'], img: '../../Wallpapers/superb-combination.jpg' },
+    { id: 'synchro-aptitude', name: 'Synchro Aptitude', character: ['Akari Minase', 'Zoee Wanderfalke'], img: '../../Wallpapers/synchro-aptitude.jpg' },
+    { id: 'the-all-rounder', name: 'The All-Rounder', character: 'Chester Lochburn', img: '../../Wallpapers/the-all-rounder.jpg' },
+    { id: 'the-compatible-user', name: 'The Compatible User', character: 'Reno Ichikawa', img: '../../Wallpapers/the-compatible-user.jpg' },
+    { id: 'the-inherited-will', name: 'The Inherited Will', character: 'Kikoru Shinomiya', img: '../../Wallpapers/the-inherited-will.jpg' },
+    { id: 'the-man-who-became-a-kaiju', name: 'The Man Who Became a Kaiju', character: ['Kaiju No. 8', 'Reno Ichikawa'], img: '../../Wallpapers/the-man-who-became-a-kaiju.jpg' },
+    { id: 'the-resurgent-commander', name: 'The Resurgent Commander', character: ['Sagan Shinomiya', 'Wang Meixing', 'Suited', 'Chester Lochburn', 'Zoee Wanderfalke'], img: '../../Wallpapers/the-resurgent-commander.jpg' },
+    { id: 'the-seven-dimensional-gates', name: 'The Seven Dimensional Gates', character: ['Soshiro Hoshina', 'Kaiju No. 8', 'Gen Narumi'], img: '../../Wallpapers/the-seven-dimensional-gates.jpg' },
+    { id: 'the-unbreakable-iron-wall', name: 'The Unbreakable Iron Wall', character: 'Isao Shinomiya', img: '../../Wallpapers/the-unbreakable-iron-wall.jpg' },
+    { id: 'the-valkyrie', name: 'The Valkyrie', character: ['Hikari Shinomiya', 'Kikoru Shinomiya', 'Isao Shinomiya'], img: '../../Wallpapers/the-valkyrie.jpg' },
+    { id: 'unbridled-curiosity', name: 'Unbridled Curiosity', character: 'Suited', img: '../../Wallpapers/unbridled-curiosity.jpg' },
+    { id: 'united-front', name: 'United Front', character: 'Soshiro Hoshina', img: '../../Wallpapers/united-front.jpg' },
+    { id: 'unnamed', name: 'Unnamed', character: ['Kaiju No. 8', 'Kikoru Shinomiya'], img: '../../Wallpapers/unnamed.jpg' },
+    { id: 'wanderfalke', name: 'Wanderfalke', character: ['Akari Minase', 'Zoee Wanderfalke'], img: '../../Wallpapers/wanderfalke.jpg' },
+    { id: 'waterside-respite', name: 'Waterside Respite', character: ['Mina Ashiro', 'Kikoru Shinomiya', 'Suited'], img: '../../Wallpapers/waterside-respite.jpg' },
+    { id: 'x-over', name: 'X-OVER', character: ['Gen Narumi', 'Rin Shinonome'], img: '../../Wallpapers/x-over.jpg' },
+  ];
+
+  // ═══════════════════════════════════════════════════════════
+  // DOWNLOAD COUNTER
+  // Uses a Firebase Realtime Database REST endpoint if configured below.
+  // Until Lotus sets one up, counts fall back to this browser's
+  // localStorage (accurate for you, not shared across visitors).
+  //
+  // To go live with real site-wide counts:
+  //   1. console.firebase.google.com → Create a free project
+  //   2. Build > Realtime Database > Create Database (test mode is fine to start)
+  //   3. Set rules to: { "rules": { "wallpaperDownloads": { ".read": true, ".write": true } } }
+  //   4. Copy the database URL (looks like https://PROJECT-default-rtdb.firebaseio.com)
+  //      and paste it below.
+  // ═══════════════════════════════════════════════════════════
+  const FIREBASE_DB_URL = ''; // e.g. 'https://k8guide-wallpapers-default-rtdb.firebaseio.com'
+
+  async function getCount(id) {
+    if (FIREBASE_DB_URL) {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/wallpaperDownloads/${id}.json`);
+        const val = await res.json();
+        return typeof val === 'number' ? val : 0;
+      } catch (e) { /* fall through */ }
+    }
+    return parseInt(localStorage.getItem('k8guide_wp_' + id) || '0', 10);
+  }
+
+  async function incrementCount(id) {
+    if (FIREBASE_DB_URL) {
+      try {
+        const cur = await getCount(id);
+        const next = cur + 1;
+        await fetch(`${FIREBASE_DB_URL}/wallpaperDownloads/${id}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(next)
+        });
+        return next;
+      } catch (e) { /* fall through to local */ }
+    }
+    const key = 'k8guide_wp_' + id;
+    const next = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+    localStorage.setItem(key, next);
+    return next;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // RENDER
+  // ═══════════════════════════════════════════════════════════
+  function charList(wp) {
+    return Array.isArray(wp.character) ? wp.character : [wp.character];
+  }
+
+  function buildFilterBar() {
+    const allChars = new Set();
+    WALLPAPERS.forEach(wp => charList(wp).forEach(c => allChars.add(c)));
+    const bar = document.getElementById('filterBar');
+    const names = ['All', ...Array.from(allChars).sort()];
+    bar.innerHTML = names.map((name, i) =>
+      `<button class="filter-pill${i === 0 ? ' active' : ''}" data-filter="${name === 'All' ? '' : name.replace(/"/g, '&quot;')}">${name}</button>`
+    ).join('');
+    bar.querySelectorAll('.filter-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        bar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGrid(btn.dataset.filter);
+      });
+    });
+  }
+
+  async function renderGrid(filter) {
+    const grid = document.getElementById('wpGrid');
+    const empty = document.getElementById('emptyState');
+    const list = filter ? WALLPAPERS.filter(wp => charList(wp).includes(filter)) : WALLPAPERS;
+
+    if (list.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    grid.innerHTML = list.map(wp => `
+      <div class="wp-card">
+        <div class="wp-photo"><img src="${wp.img}" alt="${wp.name}" loading="lazy"></div>
+        <div class="wp-info">
+          <div class="wp-name">${wp.name}</div>
+          <div class="wp-chars">${charList(wp).join(' · ')}</div>
+          <div class="wp-footer">
+            <div class="wp-count" id="count-${wp.id}"><strong>—</strong> downloads</div>
+            <a class="wp-dl-btn" href="${wp.img}" download data-id="${wp.id}">⬇ Download</a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    list.forEach(async wp => {
+      const n = await getCount(wp.id);
+      const el = document.getElementById(`count-${wp.id}`);
+      if (el) el.innerHTML = `<strong>${n.toLocaleString()}</strong> downloads`;
+    });
+
+    grid.querySelectorAll('.wp-dl-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const n = await incrementCount(id);
+        const el = document.getElementById(`count-${id}`);
+        if (el) el.innerHTML = `<strong>${n.toLocaleString()}</strong> downloads`;
+      });
+    });
+  }
+
+  buildFilterBar();
+  renderGrid('');
+</script>
+</body>
+</html>

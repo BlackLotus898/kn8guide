@@ -156,6 +156,7 @@
     <ul class="dropdown-menu">
       <li><a href="${base}fan-zone/">Fan Zone Home</a></li>
       <li><a href="${base}vote/">Character Poll</a></li>
+      <li><a href="${base}fan-zone/wallpapers/">Wallpapers</a></li>
     </ul>
   </li>
   <a href="${base}socials/">Socials</a>
