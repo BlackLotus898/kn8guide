@@ -315,7 +315,7 @@
 <div class="page-header">
   <p class="page-label">Roster</p>
   <h1 class="page-title">Characters</h1>
-  <p class="page-desc">Browse all officers. Filter by class, attack type, element, or star rarity.</p>
+  <p class="page-desc">Browse all officers. Filter by class, attack type, element, attack range, or star rarity.</p>
 </div>
 
 <div class="controls">
@@ -349,6 +349,18 @@
       <button class="filter-btn" data-filter="element" data-value="wind">Wind</button>
       <button class="filter-btn" data-filter="element" data-value="lightning">Lightning</button>
       <button class="filter-btn" data-filter="element" data-value="water">Water</button>
+    </div>
+    <div class="divider-v"></div>
+    <!-- ATTACK RANGE -->
+    <div class="filter-group" id="filter-range">
+      <button class="filter-btn active" data-filter="range" data-value="all">All</button>
+      <button class="filter-btn" data-filter="range" data-value="single">Single Target</button>
+      <button class="filter-btn" data-filter="range" data-value="blast">Blast</button>
+      <button class="filter-btn" data-filter="range" data-value="aoe">AoE</button>
+      <button class="filter-btn" data-filter="range" data-value="recovery">Recovery</button>
+      <button class="filter-btn" data-filter="range" data-value="support">Support</button>
+      <button class="filter-btn" data-filter="range" data-value="defense">Defense</button>
+      <button class="filter-btn" data-filter="range" data-value="enhance">Enhance</button>
     </div>
     <div class="divider-v"></div>
     <!-- STARS -->
@@ -393,62 +405,62 @@
 const IMG = "../Kn8 Characters/";
 
 const characters = [
-  { id:"akari-minase-fc",   name:"Akari Minase",    variant:"Festive Christmas",              stars:5, cls:"attacker", types:["shot"],         elements:["fire"],      img:"AkariMinase-FC.png" },
-  { id:"akari-minase-hc",   name:"Akari Minase",    variant:"Heart of Compassion",            stars:4, cls:"defender", types:["shot"],         elements:[],            img:"AkariMinase-HC.png" },
-  { id:"akari-minase-sa",   name:"Akari Minase",    variant:"Synchro Aptitude",               stars:5, cls:"defender", types:["shot","slash"], elements:[],            img:"AkariMinase-SA.png" },
-  { id:"aoi-kaguragi-fd",   name:"Aoi Kaguragi",    variant:"Fruits of Diligence",            stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"AoiKaguragi-FD.png" },
-  { id:"aoi-kaguragi-tprs", name:"Aoi Kaguragi",    variant:"The Promising Rising Star",      stars:4, cls:"attacker", types:["shot"],         elements:["wind"],      img:"AoiKaguragi-TPRS.png" },
-  { id:"chester-tar",       name:"Chester Lochburn",  variant:"The All-Rounder",                stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"Chester-TAR.png" },
-  { id:"eiji-hasegawa-rhms",name:"Eiji Hasegawa",   variant:"Right-Hand Man of the Strongest",stars:4, cls:"attacker", types:["blunt","shot"], elements:[],            img:"EijiHasegawa-RHMS.png" },
-  { id:"gen-narumi-fs",     name:"Gen Narumi",       variant:"Future Sight",                   stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-FS.png" },
-  { id:"gen-narumi-jsc",    name:"Gen Narumi",       variant:"Japan's Strongest Combatant",    stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-JSC.png" },
-  { id:"gen-narumi-jss",    name:"Gen Narumi",       variant:"Japan's Strongest Santa",        stars:5, cls:"attacker", types:["slash"],        elements:["ice"],       img:"GenNarumi-JSS.png" },
-  { id:"gen-narumi-spb",    name:"Gen Narumi",       variant:"Sky-Piercing Bolt",               stars:5, cls:"defender", types:["slash"],        elements:["lightning"], img:"GenNarumi-SPB.png" },
-  { id:"hakua-igarashi-sp", name:"Hakua Igarashi",  variant:"Sincerity and Potential",        stars:4, cls:"defender", types:["shot"],         elements:["fire"],      img:"HakuaIgarashi-SP.png" },
-  { id:"haruichi-izumo-cc", name:"Haruichi Izumo",  variant:"Calculated Choice",              stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-CC.png" },
-  { id:"haruichi-izumo-tcce",name:"Haruichi Izumo", variant:"The Clean-Cut Elite",            stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-TCCE.png" },
-  { id:"hikari-shinomiya-tv",name:"Hikari Shinomiya",variant:"The Valkyrie",                  stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"HikariShinomiya-TV.png" },
-  { id:"iharu-furuhashi-lt",name:"Iharu Furuhashi", variant:"Latent Talent",                  stars:4, cls:"supporter",types:["shot"],         elements:["lightning"], img:"IharuFuruhashi-LT.png" },
-  { id:"isao-shinomiya-pf", name:"Isao Shinomiya",  variant:"Prime Fist",                     stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"IsaoShinomiya-PF.png" },
-  { id:"isao-shinomiya-tuiw",name:"Isao Shinomiya", variant:"The Unbreakable Iron Wall",      stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"IsaoShinomiya-TUIW.png" },
-  { id:"jura-igarashi-gd",  name:"Jura Igarashi",   variant:"Grit and Duty",                  stars:5, cls:"supporter",types:["blunt"],        elements:["fire"],      img:"JuraIgarashi-GD.png" },
-  { id:"kafka-hibino-tmwbk",name:"Kafka Hibino",    variant:"The Man Who Became a Kaiju",     stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"KafkaHibino-TMWBK.png" },
-  { id:"kafka-hibino-tmwbr",name:"Kafka Hibino",    variant:"The Man Who Became a Reindeer",  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KafkaHibino-TMWBR.png" },
-  { id:"kn8-f98",           name:"Kaiju No. 8",     variant:"Fortitude 9.8",                  stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KN8-F98.png" },
-  { id:"kn8-sv",            name:"Kaiju No. 8",     variant:"Scorching Variant",               stars:5, cls:"attacker", types:["blunt"],        elements:["fire"],      img:"KN8-SV.png" },
-  { id:"kn8-sfkd",          name:"Kaiju No. 8",     variant:"Strike from the Kaiju Dimension",stars:5, cls:"attacker", types:["blunt"],        elements:["lightning"], img:"KN8-SFKD.png", limited:true },
-  { id:"keiji-itami-cq",    name:"Keiji Itami",     variant:"Calm and Quiet",                  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KeijiItami-CQ.png" },
-  { id:"kikoru-shinomiya-ev",name:"Kikoru Shinomiya",variant:"Evolving Talent",               stars:5, cls:"attacker", types:["slash","blunt"],elements:[],            img:"KikoruShinomiya-EV.png" },
-  { id:"kikoru-shinomiya-fpc",name:"Kikoru Shinomiya",variant:"Full-Power Christmas",         stars:5, cls:"defender", types:["slash"],        elements:[],            img:"KikoruShinomiya-FPC.png" },
-  { id:"kikoru-shinomiya-glf",name:"Kikoru Shinomiya",variant:"Guiding Light of the Future",  stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-GLF.png" },
-  { id:"kikoru-shinomiya-tiw",name:"Kikoru Shinomiya",variant:"The Inherited Will",           stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KikoruShinomiya-TIW.png" },
-  { id:"kikoru-shinomiya-tmbp",name:"Kikoru Shinomiya",variant:"The Mission to Be Perfect",   stars:4, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-TMBP.png" },
-  { id:"kikoru-shinomiya-wr",  name:"Kikoru Shinomiya",variant:"Waterside Respite",            stars:5, cls:"supporter", types:["slash"],         elements:["water"],     img:"KikoruShinomiya-WR.png" },
-  { id:"kota-tachibana-fdff",name:"Kota Tachibana", variant:"First Division's Feral Force",   stars:4, cls:"defender", types:["shot"],         elements:["ice"],       img:"KotaTachibana-FDFF.png" },
-  { id:"mina-ashiro-ds",  name:"Mina Ashiro",     variant:"Dazzling Splash",                 stars:5, cls:"attacker",  types:["shot"],          elements:["water"],     img:"MinaAshiro-DS.png" },
-  { id:"mina-ashiro-agh",   name:"Mina Ashiro",     variant:"Aiming for Greater Heights",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"MinaAshiro-AGH.png" },
-  { id:"mina-ashiro-os",    name:"Mina Ashiro",     variant:"Off the Scale",                  stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-OS.png" },
-  { id:"mina-ashiro-sc",    name:"Mina Ashiro",     variant:"Superb Combination",             stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-SC.png" },
-  { id:"reno-ichikawa-sa",  name:"Reno Ichikawa",   variant:"Signs of Awakening",             stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"RenoIchikawa-SA.png" },
-  { id:"reno-ichikawa-tcu", name:"Reno Ichikawa",   variant:"The Compatible User",            stars:5, cls:"attacker", types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TCU.png" },
-  { id:"reno-ichikawa-trkk",name:"Reno Ichikawa",   variant:"The Reigning King of Kaiju",     stars:5, cls:"supporter",types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TRKK.png" },
-  { id:"rin-shinonome-ah",  name:"Rin Shinonome",   variant:"Aspiration and Honor",           stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"RinShinonome-AH.png" },
-  { id:"rin-shinonome-cfr", name:"Rin Shinonome",   variant:"Cross-Forged Refinement",        stars:5, cls:"attacker", types:["shot"],         elements:["fire"],      img:"RinShinonome-CFR.png" },
-  { id:"ryo-ikaruga-pr",    name:"Ryo Ikaruga",     variant:"Passion and Responsibility",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"RyoIkaruga-PR.png" },
-  { id:"sagan-shinomiya-ddd",name:"Sagan Shinomiya",variant:"Dimensionally Distorted Destiny",stars:5, cls:"defender", types:["blunt"],        elements:["fire"],      img:"SaganShinomiya-DDD.png" },
-  { id:"sagan-shinomiya-ol", name:"Sagan Shinomiya",variant:"Over Limit",                     stars:5, cls:"attacker", types:["slash"],        elements:["fire"],      img:"SaganShinomiya-OL.png" },
-  { id:"sagan-shinomiya-rc", name:"Sagan Shinomiya",variant:"The Resurgent Commander",         stars:5, cls:"supporter",types:["blunt"],        elements:["fire"],      img:"SaganShinomiya-RC.png" },
-  { id:"soichiro-hoshina-kowj",name:"Soichiro Hoshina",variant:"Keystone of Western Japan",   stars:5, cls:"supporter",types:["shot","slash"], elements:[],            img:"SoichiroHoshina-KOWJ.png" },
-  { id:"soshiro-hoshina-atp",name:"Soshiro Hoshina",variant:"Ax Technique Proficiency",       stars:5, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-ATP.png" },
-  { id:"soshiro-hoshina-bs", name:"Soshiro Hoshina",variant:"Blade Specialist",               stars:4, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-BS.png" },
-  { id:"soshiro-hoshina-hssst",name:"Soshiro Hoshina",variant:"Hoshina-Style Sword-Slay Technique",stars:5,cls:"attacker",types:["slash"],    elements:[],            img:"SoshiroHoshina-HSSST.png" },
-  { id:"soshiro-hoshina-np",name:"Soshiro Hoshina", variant:"New Possibilities",              stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"SoshiroHoshina-NP.png" },
-  { id:"soshiro-hoshina-uf",name:"Soshiro Hoshina", variant:"United Front",                   stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"SoshiroHoshina-UF.png" },
-  { id:"suited-ssp", name:"Suited", variant:"Surging Swimsuit Power", stars:5, cls:"defender", types:["blunt"], elements:["water"], img:"Suited-SSP.png", limited:true },
-  { id:"suited-uc",         name:"Suited",           variant:"Unbridled Curiosity",            stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"Suited-UC.png" },
-  { id:"tae-nakanoshima-tkepl",name:"Tae Nakanoshima",variant:"The Keen-Eyed Platoon Leader", stars:4, cls:"attacker", types:["shot"],         elements:["fire"],      img:"TaeNakanoshima-TKEPL.png" },
-  { id:"wang-meixing-nwc",  name:"Wang Meixing",    variant:"Negotiator of Wit and Charm",    stars:5, cls:"supporter",types:["shot"],         elements:["lightning"], img:"WangMeixing-NWC.png" },
-  { id:"zoee-wanderfalke-twu",name:"Zoee Wanderfalke",variant:"The Weapon Unsealed",          stars:5, cls:"attacker", types:["shot","slash"], elements:[],            img:"ZoeeWanderfalke-TWU.png" },
+  { id:"akari-minase-fc",   name:"Akari Minase",    variant:"Festive Christmas",              stars:5, cls:"attacker", types:["shot"],         elements:["fire"],      img:"AkariMinase-FC.png", ranges:["single","blast","aoe"] },
+  { id:"akari-minase-hc",   name:"Akari Minase",    variant:"Heart of Compassion",            stars:4, cls:"defender", types:["shot"],         elements:[],            img:"AkariMinase-HC.png", ranges:["single","recovery"] },
+  { id:"akari-minase-sa",   name:"Akari Minase",    variant:"Synchro Aptitude",               stars:5, cls:"defender", types:["shot","slash"], elements:[],            img:"AkariMinase-SA.png", ranges:["single","aoe","recovery"] },
+  { id:"aoi-kaguragi-fd",   name:"Aoi Kaguragi",    variant:"Fruits of Diligence",            stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"AoiKaguragi-FD.png", ranges:["single","defense"] },
+  { id:"aoi-kaguragi-tprs", name:"Aoi Kaguragi",    variant:"The Promising Rising Star",      stars:4, cls:"attacker", types:["shot"],         elements:["wind"],      img:"AoiKaguragi-TPRS.png", ranges:["single"] },
+  { id:"chester-tar",       name:"Chester Lochburn",  variant:"The All-Rounder",                stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"Chester-TAR.png", ranges:["single","support"] },
+  { id:"eiji-hasegawa-rhms",name:"Eiji Hasegawa",   variant:"Right-Hand Man of the Strongest",stars:4, cls:"attacker", types:["blunt","shot"], elements:[],            img:"EijiHasegawa-RHMS.png", ranges:["single","aoe"] },
+  { id:"gen-narumi-fs",     name:"Gen Narumi",       variant:"Future Sight",                   stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-FS.png", ranges:["single"] },
+  { id:"gen-narumi-jsc",    name:"Gen Narumi",       variant:"Japan's Strongest Combatant",    stars:5, cls:"attacker", types:["slash","shot"], elements:[],            img:"GenNarumi-JSC.png", ranges:["single","blast"] },
+  { id:"gen-narumi-jss",    name:"Gen Narumi",       variant:"Japan's Strongest Santa",        stars:5, cls:"attacker", types:["slash"],        elements:["ice"],       img:"GenNarumi-JSS.png", ranges:["single","blast","enhance"] },
+  { id:"gen-narumi-spb",    name:"Gen Narumi",       variant:"Sky-Piercing Bolt",               stars:5, cls:"defender", types:["slash"],        elements:["lightning"], img:"GenNarumi-SPB.png", ranges:["single","blast","aoe"] },
+  { id:"hakua-igarashi-sp", name:"Hakua Igarashi",  variant:"Sincerity and Potential",        stars:4, cls:"defender", types:["shot"],         elements:["fire"],      img:"HakuaIgarashi-SP.png", ranges:["single","blast","recovery"] },
+  { id:"haruichi-izumo-cc", name:"Haruichi Izumo",  variant:"Calculated Choice",              stars:5, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-CC.png", ranges:["single","aoe","support"] },
+  { id:"haruichi-izumo-tcce",name:"Haruichi Izumo", variant:"The Clean-Cut Elite",            stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"HaruichiIzumo-TCCE.png", ranges:["single","blast","aoe"] },
+  { id:"hikari-shinomiya-tv",name:"Hikari Shinomiya",variant:"The Valkyrie",                  stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"HikariShinomiya-TV.png", ranges:["single"] },
+  { id:"iharu-furuhashi-lt",name:"Iharu Furuhashi", variant:"Latent Talent",                  stars:4, cls:"supporter",types:["shot"],         elements:["lightning"], img:"IharuFuruhashi-LT.png", ranges:["single"] },
+  { id:"isao-shinomiya-pf", name:"Isao Shinomiya",  variant:"Prime Fist",                     stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"IsaoShinomiya-PF.png", ranges:["single","aoe"] },
+  { id:"isao-shinomiya-tuiw",name:"Isao Shinomiya", variant:"The Unbreakable Iron Wall",      stars:5, cls:"defender", types:["blunt"],        elements:[],            img:"IsaoShinomiya-TUIW.png", ranges:["single","defense"] },
+  { id:"jura-igarashi-gd",  name:"Jura Igarashi",   variant:"Grit and Duty",                  stars:5, cls:"supporter",types:["blunt"],        elements:["fire"],      img:"JuraIgarashi-GD.png", ranges:["single","blast"] },
+  { id:"kafka-hibino-tmwbk",name:"Kafka Hibino",    variant:"The Man Who Became a Kaiju",     stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"KafkaHibino-TMWBK.png", ranges:["single","aoe","enhance"] },
+  { id:"kafka-hibino-tmwbr",name:"Kafka Hibino",    variant:"The Man Who Became a Reindeer",  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KafkaHibino-TMWBR.png", ranges:["single","support"] },
+  { id:"kn8-f98",           name:"Kaiju No. 8",     variant:"Fortitude 9.8",                  stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KN8-F98.png", ranges:["single"] },
+  { id:"kn8-sv",            name:"Kaiju No. 8",     variant:"Scorching Variant",               stars:5, cls:"attacker", types:["blunt"],        elements:["fire"],      img:"KN8-SV.png", ranges:["single","blast"] },
+  { id:"kn8-sfkd",          name:"Kaiju No. 8",     variant:"Strike from the Kaiju Dimension",stars:5, cls:"attacker", types:["blunt"],        elements:["lightning"], img:"KN8-SFKD.png", limited:true, ranges:["single"] },
+  { id:"keiji-itami-cq",    name:"Keiji Itami",     variant:"Calm and Quiet",                  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KeijiItami-CQ.png", ranges:["single"] },
+  { id:"kikoru-shinomiya-ev",name:"Kikoru Shinomiya",variant:"Evolving Talent",               stars:5, cls:"attacker", types:["slash","blunt"],elements:[],            img:"KikoruShinomiya-EV.png", ranges:["single","blast","aoe"] },
+  { id:"kikoru-shinomiya-fpc",name:"Kikoru Shinomiya",variant:"Full-Power Christmas",         stars:5, cls:"defender", types:["slash"],        elements:[],            img:"KikoruShinomiya-FPC.png", ranges:["single","recovery"] },
+  { id:"kikoru-shinomiya-glf",name:"Kikoru Shinomiya",variant:"Guiding Light of the Future",  stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-GLF.png", ranges:["single","blast"] },
+  { id:"kikoru-shinomiya-tiw",name:"Kikoru Shinomiya",variant:"The Inherited Will",           stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KikoruShinomiya-TIW.png", ranges:["single","blast"] },
+  { id:"kikoru-shinomiya-tmbp",name:"Kikoru Shinomiya",variant:"The Mission to Be Perfect",   stars:4, cls:"attacker", types:["slash"],        elements:[],            img:"KikoruShinomiya-TMBP.png", ranges:["single"] },
+  { id:"kikoru-shinomiya-wr",  name:"Kikoru Shinomiya",variant:"Waterside Respite",            stars:5, cls:"supporter", types:["slash"],         elements:["water"],     img:"KikoruShinomiya-WR.png", ranges:["single"] },
+  { id:"kota-tachibana-fdff",name:"Kota Tachibana", variant:"First Division's Feral Force",   stars:4, cls:"defender", types:["shot"],         elements:["ice"],       img:"KotaTachibana-FDFF.png", ranges:["single"] },
+  { id:"mina-ashiro-ds",  name:"Mina Ashiro",     variant:"Dazzling Splash",                 stars:5, cls:"attacker",  types:["shot"],          elements:["water"],     img:"MinaAshiro-DS.png", ranges:["single","blast"] },
+  { id:"mina-ashiro-agh",   name:"Mina Ashiro",     variant:"Aiming for Greater Heights",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"MinaAshiro-AGH.png", ranges:["single","support"] },
+  { id:"mina-ashiro-os",    name:"Mina Ashiro",     variant:"Off the Scale",                  stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-OS.png", ranges:["single","enhance"] },
+  { id:"mina-ashiro-sc",    name:"Mina Ashiro",     variant:"Superb Combination",             stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-SC.png", ranges:["single","blast"] },
+  { id:"reno-ichikawa-sa",  name:"Reno Ichikawa",   variant:"Signs of Awakening",             stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"RenoIchikawa-SA.png", ranges:["single","blast"] },
+  { id:"reno-ichikawa-tcu", name:"Reno Ichikawa",   variant:"The Compatible User",            stars:5, cls:"attacker", types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TCU.png", ranges:["single","blast"] },
+  { id:"reno-ichikawa-trkk",name:"Reno Ichikawa",   variant:"The Reigning King of Kaiju",     stars:5, cls:"supporter",types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TRKK.png", ranges:["single","support"] },
+  { id:"rin-shinonome-ah",  name:"Rin Shinonome",   variant:"Aspiration and Honor",           stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"RinShinonome-AH.png", ranges:["single","aoe"] },
+  { id:"rin-shinonome-cfr", name:"Rin Shinonome",   variant:"Cross-Forged Refinement",        stars:5, cls:"attacker", types:["shot"],         elements:["fire"],      img:"RinShinonome-CFR.png", ranges:["single","aoe"] },
+  { id:"ryo-ikaruga-pr",    name:"Ryo Ikaruga",     variant:"Passion and Responsibility",     stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"RyoIkaruga-PR.png", ranges:["single","support"] },
+  { id:"sagan-shinomiya-ddd",name:"Sagan Shinomiya",variant:"Dimensionally Distorted Destiny",stars:5, cls:"defender", types:["blunt"],        elements:["fire"],      img:"SaganShinomiya-DDD.png", ranges:["single","aoe","enhance"] },
+  { id:"sagan-shinomiya-ol", name:"Sagan Shinomiya",variant:"Over Limit",                     stars:5, cls:"attacker", types:["slash"],        elements:["fire"],      img:"SaganShinomiya-OL.png", ranges:["single","aoe"] },
+  { id:"sagan-shinomiya-rc", name:"Sagan Shinomiya",variant:"The Resurgent Commander",         stars:5, cls:"supporter",types:["blunt"],        elements:["fire"],      img:"SaganShinomiya-RC.png", ranges:["single"] },
+  { id:"soichiro-hoshina-kowj",name:"Soichiro Hoshina",variant:"Keystone of Western Japan",   stars:5, cls:"supporter",types:["shot","slash"], elements:[],            img:"SoichiroHoshina-KOWJ.png", ranges:["single","blast"] },
+  { id:"soshiro-hoshina-atp",name:"Soshiro Hoshina",variant:"Ax Technique Proficiency",       stars:5, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-ATP.png", ranges:["single","aoe"] },
+  { id:"soshiro-hoshina-bs", name:"Soshiro Hoshina",variant:"Blade Specialist",               stars:4, cls:"supporter",types:["slash"],        elements:[],            img:"SoshiroHoshina-BS.png", ranges:["single","support"] },
+  { id:"soshiro-hoshina-hssst",name:"Soshiro Hoshina",variant:"Hoshina-Style Sword-Slay Technique",stars:5,cls:"attacker",types:["slash"],    elements:[],            img:"SoshiroHoshina-HSSST.png", ranges:["single","aoe"] },
+  { id:"soshiro-hoshina-np",name:"Soshiro Hoshina", variant:"New Possibilities",              stars:5, cls:"attacker", types:["slash"],        elements:["wind"],      img:"SoshiroHoshina-NP.png", ranges:["single","blast"] },
+  { id:"soshiro-hoshina-uf",name:"Soshiro Hoshina", variant:"United Front",                   stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"SoshiroHoshina-UF.png", ranges:["single","blast"] },
+  { id:"suited-ssp", name:"Suited", variant:"Surging Swimsuit Power", stars:5, cls:"defender", types:["blunt"], elements:["water"], img:"Suited-SSP.png", limited:true, ranges:["single","aoe","recovery"] },
+  { id:"suited-uc",         name:"Suited",           variant:"Unbridled Curiosity",            stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"Suited-UC.png", ranges:["single","blast"] },
+  { id:"tae-nakanoshima-tkepl",name:"Tae Nakanoshima",variant:"The Keen-Eyed Platoon Leader", stars:4, cls:"attacker", types:["shot"],         elements:["fire"],      img:"TaeNakanoshima-TKEPL.png", ranges:["single"] },
+  { id:"wang-meixing-nwc",  name:"Wang Meixing",    variant:"Negotiator of Wit and Charm",    stars:5, cls:"supporter",types:["shot"],         elements:["lightning"], img:"WangMeixing-NWC.png", ranges:["single","aoe"] },
+  { id:"zoee-wanderfalke-twu",name:"Zoee Wanderfalke",variant:"The Weapon Unsealed",          stars:5, cls:"attacker", types:["shot","slash"], elements:[],            img:"ZoeeWanderfalke-TWU.png", ranges:["single","blast"] },
 ];
 
 const starStr = n => "★".repeat(n) + "☆".repeat(5 - n);
@@ -473,6 +485,7 @@ function buildCard(c) {
        data-class="${c.cls}"
        data-types="${c.types.join(',')}"
        data-elements="${c.elements.join(',')}"
+       data-ranges="${(c.ranges || []).join(',')}"
        data-stars="${c.stars}">
       <div class="card-stars">${starStr(c.stars)}</div>
       <div class="compare-checkbox">✓</div>
@@ -493,7 +506,7 @@ const grid = document.getElementById('char-grid');
 const noResults = document.getElementById('no-results');
 characters.forEach(c => grid.insertAdjacentHTML('beforeend', buildCard(c)));
 
-let activeFilters = { class: 'all', type: 'all', element: 'all', stars: 'all' };
+let activeFilters = { class: 'all', type: 'all', element: 'all', range: 'all', stars: 'all' };
 let searchQuery = '';
 
 function applyFilters() {
@@ -504,15 +517,17 @@ function applyFilters() {
     const cls      = card.dataset.class;
     const types    = card.dataset.types.split(',').filter(Boolean);
     const elements = card.dataset.elements.split(',').filter(Boolean);
+    const ranges   = card.dataset.ranges.split(',').filter(Boolean);
     const stars    = card.dataset.stars;
 
     const matchSearch  = searchQuery === '' || name.includes(searchQuery);
     const matchClass   = activeFilters.class   === 'all' || cls === activeFilters.class;
     const matchType    = activeFilters.type    === 'all' || types.includes(activeFilters.type);
     const matchElement = activeFilters.element === 'all' || elements.includes(activeFilters.element);
+    const matchRange   = activeFilters.range   === 'all' || ranges.includes(activeFilters.range);
     const matchStars   = activeFilters.stars   === 'all' || stars === activeFilters.stars;
 
-    const show = matchSearch && matchClass && matchType && matchElement && matchStars;
+    const show = matchSearch && matchClass && matchType && matchElement && matchRange && matchStars;
     card.style.display = show ? 'flex' : 'none';
     if (show) visible++;
   });
