@@ -6,6 +6,15 @@ Format: most recent entry at the top. Each entry lists the date and a plain-lang
 
 ---
 
+## 2026-08-16
+
+**Site Update posted to Announcements feed** — "New Characters & Roster Filters"
+- Kaiju No. 8 (Strike from the Kaiju Dimension) and Reno Ichikawa (The Reigning King of Kaiju) full character pages
+- Wallpapers gallery launched under Fan Zone (downloadable, filterable by character, with lightbox + download counter)
+- Attack Range filter added to the Character Roster (Single Target, Blast, AoE, Recovery, Support, Defense, Enhance)
+
+(Note: banner changes, Game Guide currency/shop corrections, and QA accuracy passes done in the same period were left out of this public post — not announcement-worthy on their own.)
+
 ## 2026-06-19
 
 **Unlocked Potential page corrections**
