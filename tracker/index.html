@@ -20,9 +20,9 @@
     display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border);
     margin-bottom: 2rem;
   }
-  .stat-cell { flex: 1; background: var(--panel); padding: 1rem; text-align: center; }
-  .stat-cell .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--cyan); letter-spacing: 2px; display: block; }
-  .stat-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .stat-cell { flex: 1; background: var(--panel); padding: 1rem; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 4.4rem; }
+  .stat-cell .val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--cyan); letter-spacing: 2px; display: block; line-height: 1.1; }
+  .stat-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: .2rem; }
 
   /* PROGRESS BAR */
   .progress-wrap { margin-bottom: 2rem; }
@@ -90,17 +90,17 @@
 
   /* WEAPON BADGE */
   .weapon-badge {
-    position: absolute; bottom: .3rem; left: .3rem; z-index: 2;
-    width: 20px; height: 20px; border-radius: 4px;
-    background: rgba(8,11,16,.85); border: 1px solid var(--border);
+    position: absolute; top: .3rem; left: .3rem; z-index: 2;
+    width: 22px; height: 22px; border-radius: 4px;
+    background: rgba(8,11,16,.9); border: 1.5px solid var(--muted);
     display: flex; align-items: center; justify-content: center;
-    font-size: .68rem; cursor: pointer; transition: all .15s;
-    filter: grayscale(1) opacity(.55);
+    font-size: .78rem; cursor: pointer; transition: all .15s;
+    box-shadow: 0 0 4px rgba(0,0,0,.6);
   }
-  .weapon-badge:hover { border-color: var(--gold); filter: grayscale(1) opacity(.85); }
+  .weapon-badge:hover { border-color: var(--gold); transform: scale(1.08); }
   .weapon-badge.has-weapon {
     background: var(--gold); border-color: var(--gold);
-    filter: none; opacity: 1;
+    box-shadow: 0 0 6px rgba(232,176,32,.7);
   }
   .weapon-badge.has-weapon:hover { background: #c89000; }
 
