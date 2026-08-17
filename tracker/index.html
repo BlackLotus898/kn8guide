@@ -88,6 +88,22 @@
     opacity: 0; transition: opacity .2s;
   }
 
+  /* WEAPON BADGE */
+  .weapon-badge {
+    position: absolute; bottom: .3rem; left: .3rem; z-index: 2;
+    width: 20px; height: 20px; border-radius: 4px;
+    background: rgba(8,11,16,.85); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .68rem; cursor: pointer; transition: all .15s;
+    filter: grayscale(1) opacity(.55);
+  }
+  .weapon-badge:hover { border-color: var(--gold); filter: grayscale(1) opacity(.85); }
+  .weapon-badge.has-weapon {
+    background: var(--gold); border-color: var(--gold);
+    filter: none; opacity: 1;
+  }
+  .weapon-badge.has-weapon:hover { background: #c89000; }
+
   .card-info { padding: .4rem .5rem .5rem; }
   .card-name { font-family: 'Bebas Neue', sans-serif; font-size: .8rem; letter-spacing: 1px; color: #fff; line-height: 1.1; }
   .card-variant { font-family: 'Share Tech Mono', monospace; font-size: .5rem; letter-spacing: .5px; color: var(--muted); line-height: 1.2; margin-top: .1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -122,7 +138,7 @@
 <div class="page-header">
   <p class="page-label">Collection</p>
   <h1 class="page-title">Character Tracker</h1>
-  <p class="page-desc">Click a character to mark them as owned. Click the ascension nodes (A1–A6) to track ascension progress. All data is saved automatically.</p>
+  <p class="page-desc">Click a character to mark them as owned. Click the ascension nodes (A1–A6) to track ascension progress. Click the weapon badge to mark whether you also have their optimal weapon. All data is saved automatically.</p>
 </div>
 
 <div class="page">
@@ -133,6 +149,7 @@
     <div class="stat-cell"><span class="val" id="pct-count">0%</span><span class="lbl">Complete</span></div>
     <div class="stat-cell"><span class="val" id="missing-count">0</span><span class="lbl">Missing</span></div>
     <div class="stat-cell"><span class="val small" id="fully-asc-count">0</span><span class="lbl">Fully Ascended</span></div>
+    <div class="stat-cell"><span class="val small" id="ready-squad-count">0</span><span class="lbl">Ready (Char + Weapon)</span></div>
   </div>
 
   <div class="progress-wrap">
@@ -144,6 +161,8 @@
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="owned">Owned</button>
     <button class="filter-btn" data-filter="missing">Missing</button>
+    <button class="filter-btn" data-filter="has-weapon">Has Weapon</button>
+    <button class="filter-btn" data-filter="missing-weapon">Missing Weapon</button>
     <button class="filter-btn" data-filter="5">★★★★★</button>
     <button class="filter-btn" data-filter="4">★★★★</button>
     <button class="export-btn" id="export-btn">Export Data</button>
@@ -178,65 +197,71 @@ let ascension = {};
 try { ascension = JSON.parse(localStorage.getItem(ASC_KEY)) || {}; } catch(e) { ascension = {}; }
 function saveAscension() { try { localStorage.setItem(ASC_KEY, JSON.stringify(ascension)); } catch(e) {} }
 
+// Weapon-owned storage key
+const WEAPON_KEY = 'kn8tracker_weapons_v1';
+let weaponOwned = new Set();
+try { weaponOwned = new Set(JSON.parse(localStorage.getItem(WEAPON_KEY)) || []); } catch(e) { weaponOwned = new Set(); }
+function saveWeapons() { try { localStorage.setItem(WEAPON_KEY, JSON.stringify([...weaponOwned])); } catch(e) {} }
+
 const characters = [
   // ★5
-  { id:'akari-minase-fc',   name:'Akari Minase',    variant:'Festive Christmas',               stars:5, img:'AkariMinase-FC.png' },
-  { id:'akari-minase-sa',   name:'Akari Minase',    variant:'Synchro Aptitude',                stars:5, img:'AkariMinase-SA.png' },
-  { id:'aoi-kaguragi-fd',   name:'Aoi Kaguragi',    variant:'Fruits of Diligence',             stars:5, img:'AoiKaguragi-FD.png' },
-  { id:'chester-tar',       name:'Chester Lochburn', variant:'The All-Rounder',                 stars:5, img:'Chester-TAR.png' },
-  { id:'gen-narumi-fs',     name:'Gen Narumi',       variant:'Future Sight',                    stars:5, img:'GenNarumi-FS.png' },
-  { id:'gen-narumi-jsc',    name:'Gen Narumi',       variant:"Japan's Strongest Combatant",     stars:5, img:'GenNarumi-JSC.png' },
-  { id:'gen-narumi-jss',    name:'Gen Narumi',       variant:"Japan's Strongest Santa",         stars:5, img:'GenNarumi-JSS.png' },
-  { id:'gen-narumi-spb',    name:'Gen Narumi',       variant:'Sky-Piercing Bolt',                stars:5, img:'GenNarumi-SPB.png' },
-  { id:'haruichi-izumo-cc', name:'Haruichi Izumo',  variant:'Calculated Choice',               stars:5, img:'HaruichiIzumo-CC.png' },
-  { id:'hikari-shinomiya-tv',name:'Hikari Shinomiya',variant:'The Valkyrie',                   stars:5, img:'HikariShinomiya-TV.png' },
-  { id:'isao-shinomiya-pf', name:'Isao Shinomiya',  variant:'Prime Fist',                      stars:5, img:'IsaoShinomiya-PF.png' },
-  { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya', variant:'The Unbreakable Iron Wall',       stars:5, img:'IsaoShinomiya-TUIW.png' },
-  { id:'jura-igarashi-gd',  name:'Jura Igarashi',   variant:'Grit and Duty',                   stars:5, img:'JuraIgarashi-GD.png' },
-  { id:'kn8-f98',           name:'Kaiju No. 8',     variant:'Fortitude 9.8',                   stars:5, img:'KN8-F98.png' },
-  { id:'kn8-sv',            name:'Kaiju No. 8',     variant:'Scorching Variant',               stars:5, img:'KN8-SV.png' },
-  { id:'kn8-sfkd',          name:'Kaiju No. 8',     variant:'Strike from the Kaiju Dimension', stars:5, img:'KN8-SFKD.png' },
-  { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya',variant:'Evolving Talent',                stars:5, img:'KikoruShinomiya-EV.png' },
-  { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',          stars:5, img:'KikoruShinomiya-FPC.png' },
-  { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',  stars:5, img:'KikoruShinomiya-GLF.png' },
-  { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',            stars:5, img:'KikoruShinomiya-TIW.png' },
-  { id:'kikoru-shinomiya-wr',  name:'Kikoru Shinomiya',variant:'Waterside Respite',             stars:5, img:'KikoruShinomiya-WR.png' },
-  { id:'mina-ashiro-ds',   name:'Mina Ashiro',    variant:'Dazzling Splash',                 stars:5, img:'MinaAshiro-DS.png' },
-  { id:'mina-ashiro-os',    name:'Mina Ashiro',     variant:'Off the Scale',                   stars:5, img:'MinaAshiro-OS.png' },
-  { id:'mina-ashiro-sc',    name:'Mina Ashiro',     variant:'Superb Combination',              stars:5, img:'MinaAshiro-SC.png' },
-  { id:'reno-ichikawa-tcu', name:'Reno Ichikawa',   variant:'The Compatible User',             stars:5, img:'RenoIchikawa-TCU.png' },
-  { id:'reno-ichikawa-trkk',name:'Reno Ichikawa',   variant:'The Reigning King of Kaiju',      stars:5, img:'RenoIchikawa-TRKK.png' },
-  { id:'rin-shinonome-ah',  name:'Rin Shinonome',   variant:'Aspiration and Honor',            stars:5, img:'RinShinonome-AH.png' },
-  { id:'rin-shinonome-cfr', name:'Rin Shinonome',   variant:'Cross-Forged Refinement',         stars:5, img:'RinShinonome-CFR.png' },
-  { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',variant:'Dimensionally Distorted Destiny', stars:5, img:'SaganShinomiya-DDD.png' },
-  { id:'sagan-shinomiya-ol',name:'Sagan Shinomiya', variant:'Over Limit',                      stars:5, img:'SaganShinomiya-OL.png' },
-  { id:'sagan-shinomiya-rc',name:'Sagan Shinomiya', variant:'The Resurgent Commander',          stars:5, img:'SaganShinomiya-RC.png' },
-  { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',   stars:5, img:'SoichiroHoshina-KOWJ.png' },
-  { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',variant:'Ax Technique Proficiency',       stars:5, img:'SoshiroHoshina-ATP.png' },
-  { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina',variant:'Hoshina-Style Sword-Slay',     stars:5, img:'SoshiroHoshina-HSSST.png' },
-  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',variant:'New Possibilities',              stars:5, img:'SoshiroHoshina-NP.png' },
-  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',variant:'United Front',                   stars:5, img:'SoshiroHoshina-UF.png' },
-  { id:'suited-ssp', name:'Suited', variant:'Surging Swimsuit Power', stars:5, img:'Suited-SSP.png' },
-  { id:'suited-uc',         name:'Suited',           variant:'Unbridled Curiosity',             stars:5, img:'Suited-UC.png' },
-  { id:'wang-meixing-nwc',  name:'Wang Meixing',    variant:'Negotiator of Wit and Charm',     stars:5, img:'WangMeixing-NWC.png' },
-  { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke',variant:'The Weapon Unsealed',          stars:5, img:'ZoeeWanderfalke-TWU.png' },
+  { id:'akari-minase-fc',   name:'Akari Minase',    variant:'Festive Christmas',               stars:5, img:'AkariMinase-FC.png', bestWeapon:'AR-Xmas 25' },
+  { id:'akari-minase-sa',   name:'Akari Minase',    variant:'Synchro Aptitude',                stars:5, img:'AkariMinase-SA.png', bestWeapon:'AR-Hgrumis' },
+  { id:'aoi-kaguragi-fd',   name:'Aoi Kaguragi',    variant:'Fruits of Diligence',             stars:5, img:'AoiKaguragi-FD.png', bestWeapon:'HM-Nohpyt' },
+  { id:'chester-tar',       name:'Chester Lochburn', variant:'The All-Rounder',                 stars:5, img:'Chester-TAR.png', bestWeapon:'AR-Anollococ' },
+  { id:'gen-narumi-fs',     name:'Gen Narumi',       variant:'Future Sight',                    stars:5, img:'GenNarumi-FS.png', bestWeapon:'GS-Oyamatsumi' },
+  { id:'gen-narumi-jsc',    name:'Gen Narumi',       variant:"Japan's Strongest Combatant",     stars:5, img:'GenNarumi-JSC.png', bestWeapon:'GS-3305' },
+  { id:'gen-narumi-jss',    name:'Gen Narumi',       variant:"Japan's Strongest Santa",         stars:5, img:'GenNarumi-JSS.png', bestWeapon:'GS-Xmas 25' },
+  { id:'gen-narumi-spb',    name:'Gen Narumi',       variant:'Sky-Piercing Bolt',                stars:5, img:'GenNarumi-SPB.png', bestWeapon:'GS-Aremihc' },
+  { id:'haruichi-izumo-cc', name:'Haruichi Izumo',  variant:'Calculated Choice',               stars:5, img:'HaruichiIzumo-CC.png', bestWeapon:'AW-Kokyab' },
+  { id:'hikari-shinomiya-tv',name:'Hikari Shinomiya',variant:'The Valkyrie',                   stars:5, img:'HikariShinomiya-TV.png', bestWeapon:'Lc-0039' },
+  { id:'isao-shinomiya-pf', name:'Isao Shinomiya',  variant:'Prime Fist',                      stars:5, img:'IsaoShinomiya-PF.png', bestWeapon:'Fs-Baldr' },
+  { id:'isao-shinomiya-tuiw',name:'Isao Shinomiya', variant:'The Unbreakable Iron Wall',       stars:5, img:'IsaoShinomiya-TUIW.png', bestWeapon:'Fs-1002' },
+  { id:'jura-igarashi-gd',  name:'Jura Igarashi',   variant:'Grit and Duty',                   stars:5, img:'JuraIgarashi-GD.png', bestWeapon:'SB-7137' },
+  { id:'kn8-f98',           name:'Kaiju No. 8',     variant:'Fortitude 9.8',                   stars:5, img:'KN8-F98.png', bestWeapon:null },
+  { id:'kn8-sv',            name:'Kaiju No. 8',     variant:'Scorching Variant',               stars:5, img:'KN8-SV.png', bestWeapon:null },
+  { id:'kn8-sfkd',          name:'Kaiju No. 8',     variant:'Strike from the Kaiju Dimension', stars:5, img:'KN8-SFKD.png', bestWeapon:null },
+  { id:'kikoru-shinomiya-ev',name:'Kikoru Shinomiya',variant:'Evolving Talent',                stars:5, img:'KikoruShinomiya-EV.png', bestWeapon:'S-12066' },
+  { id:'kikoru-shinomiya-fpc',name:'Kikoru Shinomiya',variant:'Full-Power Christmas',          stars:5, img:'KikoruShinomiya-FPC.png', bestWeapon:'Ax-Xmas 25' },
+  { id:'kikoru-shinomiya-glf',name:'Kikoru Shinomiya',variant:'Guiding Light of the Future',  stars:5, img:'KikoruShinomiya-GLF.png', bestWeapon:'Ax-0112' },
+  { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',            stars:5, img:'KikoruShinomiya-TIW.png', bestWeapon:'Fs-Magni' },
+  { id:'kikoru-shinomiya-wr',  name:'Kikoru Shinomiya',variant:'Waterside Respite',             stars:5, img:'KikoruShinomiya-WR.png', bestWeapon:'Ax-Allycs' },
+  { id:'mina-ashiro-ds',   name:'Mina Ashiro',    variant:'Dazzling Splash',                 stars:5, img:'MinaAshiro-DS.png', bestWeapon:'AR-Nahtaivel' },
+  { id:'mina-ashiro-os',    name:'Mina Ashiro',     variant:'Off the Scale',                   stars:5, img:'MinaAshiro-OS.png', bestWeapon:'T-25101985' },
+  { id:'mina-ashiro-sc',    name:'Mina Ashiro',     variant:'Superb Combination',              stars:5, img:'MinaAshiro-SC.png', bestWeapon:'T-Dionysus' },
+  { id:'reno-ichikawa-tcu', name:'Reno Ichikawa',   variant:'The Compatible User',             stars:5, img:'RenoIchikawa-TCU.png', bestWeapon:'AR-Boreas' },
+  { id:'reno-ichikawa-trkk',name:'Reno Ichikawa',   variant:'The Reigning King of Kaiju',      stars:5, img:'RenoIchikawa-TRKK.png', bestWeapon:'AR-Okzorom' },
+  { id:'rin-shinonome-ah',  name:'Rin Shinonome',   variant:'Aspiration and Honor',            stars:5, img:'RinShinonome-AH.png', bestWeapon:'GG-5012' },
+  { id:'rin-shinonome-cfr', name:'Rin Shinonome',   variant:'Cross-Forged Refinement',         stars:5, img:'RinShinonome-CFR.png', bestWeapon:'GG-Rinfaf' },
+  { id:'sagan-shinomiya-ddd',name:'Sagan Shinomiya',variant:'Dimensionally Distorted Destiny', stars:5, img:'SaganShinomiya-DDD.png', bestWeapon:'SH-luggnil' },
+  { id:'sagan-shinomiya-ol',name:'Sagan Shinomiya', variant:'Over Limit',                      stars:5, img:'SaganShinomiya-OL.png', bestWeapon:'Lc-Anorollal' },
+  { id:'sagan-shinomiya-rc',name:'Sagan Shinomiya', variant:'The Resurgent Commander',          stars:5, img:'SaganShinomiya-RC.png', bestWeapon:'SH-Nahallud' },
+  { id:'soichiro-hoshina-kowj',name:'Soichiro Hoshina',variant:'Keystone of Western Japan',   stars:5, img:'SoichiroHoshina-KOWJ.png', bestWeapon:'AR-6710' },
+  { id:'soshiro-hoshina-atp',name:'Soshiro Hoshina',variant:'Ax Technique Proficiency',       stars:5, img:'SoshiroHoshina-ATP.png', bestWeapon:'Ax-0087' },
+  { id:'soshiro-hoshina-hssst',name:'Soshiro Hoshina',variant:'Hoshina-Style Sword-Slay',     stars:5, img:'SoshiroHoshina-HSSST.png', bestWeapon:'SW-2033' },
+  { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',variant:'New Possibilities',              stars:5, img:'SoshiroHoshina-NP.png', bestWeapon:'SW-Ihcatiamak' },
+  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',variant:'United Front',                   stars:5, img:'SoshiroHoshina-UF.png', bestWeapon:'SW-Susanoo' },
+  { id:'suited-ssp', name:'Suited', variant:'Surging Swimsuit Power', stars:5, img:'Suited-SSP.png', bestWeapon:'HM-Ogopogo' },
+  { id:'suited-uc',         name:'Suited',           variant:'Unbridled Curiosity',             stars:5, img:'Suited-UC.png', bestWeapon:'HM-Eporhtnacyl' },
+  { id:'wang-meixing-nwc',  name:'Wang Meixing',    variant:'Negotiator of Wit and Charm',     stars:5, img:'WangMeixing-NWC.png', bestWeapon:'AR-Gnijiluh' },
+  { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke',variant:'The Weapon Unsealed',          stars:5, img:'ZoeeWanderfalke-TWU.png', bestWeapon:'RF-Mruwdnil' },
   // ★4
-  { id:'akari-minase-hc',   name:'Akari Minase',    variant:'Heart of Compassion',             stars:4, img:'AkariMinase-HC.png' },
-  { id:'aoi-kaguragi-tprs', name:'Aoi Kaguragi',    variant:'The Promising Rising Star',       stars:4, img:'AoiKaguragi-TPRS.png' },
-  { id:'eiji-hasegawa-rhms',name:'Eiji Hasegawa',   variant:'Right-Hand Man of the Strongest', stars:4, img:'EijiHasegawa-RHMS.png' },
-  { id:'hakua-igarashi-sp', name:'Hakua Igarashi',  variant:'Sincerity and Potential',         stars:4, img:'HakuaIgarashi-SP.png' },
-  { id:'haruichi-izumo-tcce',name:'Haruichi Izumo', variant:'The Clean-Cut Elite',             stars:4, img:'HaruichiIzumo-TCCE.png' },
-  { id:'iharu-furuhashi-lt',name:'Iharu Furuhashi', variant:'Latent Talent',                   stars:4, img:'IharuFuruhashi-LT.png' },
-  { id:'kafka-hibino-tmwbk',name:'Kafka Hibino',    variant:'The Man Who Became a Kaiju',      stars:4, img:'KafkaHibino-TMWBK.png' },
-  { id:'kafka-hibino-tmwbr',name:'Kafka Hibino',    variant:'The Man Who Became a Reindeer',   stars:4, img:'KafkaHibino-TMWBR.png' },
-  { id:'keiji-itami-cq',    name:'Keiji Itami',     variant:'Calm and Quiet',                  stars:4, img:'KeijiItami-CQ.png' },
-  { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',    stars:4, img:'KikoruShinomiya-TMBP.png' },
-  { id:'kota-tachibana-fdff',name:'Kota Tachibana', variant:"First Division's Feral Force",    stars:4, img:'KotaTachibana-FDFF.png' },
-  { id:'mina-ashiro-agh',   name:'Mina Ashiro',     variant:'Aiming for Greater Heights',      stars:4, img:'MinaAshiro-AGH.png' },
-  { id:'reno-ichikawa-sa',  name:'Reno Ichikawa',   variant:'Signs of Awakening',              stars:4, img:'RenoIchikawa-SA.png' },
-  { id:'ryo-ikaruga-pr',    name:'Ryo Ikaruga',     variant:'Passion and Responsibility',      stars:4, img:'RyoIkaruga-PR.png' },
-  { id:'soshiro-hoshina-bs',name:'Soshiro Hoshina', variant:'Blade Specialist',                stars:4, img:'SoshiroHoshina-BS.png' },
-  { id:'tae-nakanoshima-tkepl',name:'Tae Nakanoshima',variant:'The Keen-Eyed Platoon Leader',  stars:4, img:'TaeNakanoshima-TKEPL.png' },
+  { id:'akari-minase-hc',   name:'Akari Minase',    variant:'Heart of Compassion',             stars:4, img:'AkariMinase-HC.png', bestWeapon:'AR-Crius' },
+  { id:'aoi-kaguragi-tprs', name:'Aoi Kaguragi',    variant:'The Promising Rising Star',       stars:4, img:'AoiKaguragi-TPRS.png', bestWeapon:'AR-Hyperion' },
+  { id:'eiji-hasegawa-rhms',name:'Eiji Hasegawa',   variant:'Right-Hand Man of the Strongest', stars:4, img:'EijiHasegawa-RHMS.png', bestWeapon:'PS-Dobermann 52' },
+  { id:'hakua-igarashi-sp', name:'Hakua Igarashi',  variant:'Sincerity and Potential',         stars:4, img:'HakuaIgarashi-SP.png', bestWeapon:'AR-Allosaurus 77' },
+  { id:'haruichi-izumo-tcce',name:'Haruichi Izumo', variant:'The Clean-Cut Elite',             stars:4, img:'HaruichiIzumo-TCCE.png', bestWeapon:'AR-Hyperion' },
+  { id:'iharu-furuhashi-lt',name:'Iharu Furuhashi', variant:'Latent Talent',                   stars:4, img:'IharuFuruhashi-LT.png', bestWeapon:'AR-Hyperion' },
+  { id:'kafka-hibino-tmwbk',name:'Kafka Hibino',    variant:'The Man Who Became a Kaiju',      stars:4, img:'KafkaHibino-TMWBK.png', bestWeapon:'HG-Beetle 15' },
+  { id:'kafka-hibino-tmwbr',name:'Kafka Hibino',    variant:'The Man Who Became a Reindeer',   stars:4, img:'KafkaHibino-TMWBR.png', bestWeapon:'HG-Xmas25' },
+  { id:'keiji-itami-cq',    name:'Keiji Itami',     variant:'Calm and Quiet',                  stars:4, img:'KeijiItami-CQ.png', bestWeapon:'AR-Hyperion' },
+  { id:'kikoru-shinomiya-tmbp',name:'Kikoru Shinomiya',variant:'The Mission to Be Perfect',    stars:4, img:'KikoruShinomiya-TMBP.png', bestWeapon:'Ax-Dellingr' },
+  { id:'kota-tachibana-fdff',name:'Kota Tachibana', variant:"First Division's Feral Force",    stars:4, img:'KotaTachibana-FDFF.png', bestWeapon:'AR-Squid 62' },
+  { id:'mina-ashiro-agh',   name:'Mina Ashiro',     variant:'Aiming for Greater Heights',      stars:4, img:'MinaAshiro-AGH.png', bestWeapon:'AR-Hyperion' },
+  { id:'reno-ichikawa-sa',  name:'Reno Ichikawa',   variant:'Signs of Awakening',              stars:4, img:'RenoIchikawa-SA.png', bestWeapon:'AR-Hyperion' },
+  { id:'ryo-ikaruga-pr',    name:'Ryo Ikaruga',     variant:'Passion and Responsibility',      stars:4, img:'RyoIkaruga-PR.png', bestWeapon:'AR-Hyperion' },
+  { id:'soshiro-hoshina-bs',name:'Soshiro Hoshina', variant:'Blade Specialist',                stars:4, img:'SoshiroHoshina-BS.png', bestWeapon:'SW-Fox 48' },
+  { id:'tae-nakanoshima-tkepl',name:'Tae Nakanoshima',variant:'The Keen-Eyed Platoon Leader',  stars:4, img:'TaeNakanoshima-TKEPL.png', bestWeapon:'AR-Hyperion' },
 ];
 
 // Load saved data
@@ -254,11 +279,13 @@ function updateStats() {
   const ownedCount = owned.size;
   const pct = total ? Math.round(ownedCount / total * 100) : 0;
   const fullyAscended = Object.values(ascension).filter(v => v === 6).length;
+  const readySquad = characters.filter(c => owned.has(c.id) && weaponOwned.has(c.id)).length;
   document.getElementById('owned-count').textContent = ownedCount;
   document.getElementById('total-count').textContent = total;
   document.getElementById('pct-count').textContent = pct + '%';
   document.getElementById('missing-count').textContent = total - ownedCount;
   document.getElementById('fully-asc-count').textContent = fullyAscended;
+  document.getElementById('ready-squad-count').textContent = readySquad;
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-label-right').textContent = `${ownedCount} / ${total}`;
 }
@@ -269,9 +296,13 @@ function applyFilter() {
     const stars = card.dataset.stars;
     const isOwned = owned.has(id);
 
+    const hasWeapon = weaponOwned.has(id);
+
     let show = true;
     if (currentFilter === 'owned') show = isOwned;
     else if (currentFilter === 'missing') show = !isOwned;
+    else if (currentFilter === 'has-weapon') show = hasWeapon;
+    else if (currentFilter === 'missing-weapon') show = !hasWeapon;
     else if (currentFilter === '5') show = stars === '5';
     else if (currentFilter === '4') show = stars === '4';
 
@@ -317,8 +348,14 @@ function buildTracker() {
         `<div class="asc-node ${ascLevel >= n ? 'unlocked' : ''}" data-char="${c.id}" data-node="${n}"></div>`
       ).join('');
 
+      const hasWeaponData = !!c.bestWeapon;
+      const weaponBadgeHTML = hasWeaponData
+        ? `<div class="weapon-badge ${weaponOwned.has(c.id) ? 'has-weapon' : ''}" title="${c.bestWeapon}${weaponOwned.has(c.id) ? ' — owned' : ' — click if you have this'}">⚔️</div>`
+        : '';
+
       card.innerHTML = `
         <div class="card-overlay">✓</div>
+        ${weaponBadgeHTML}
         <div class="card-photo">${photoHTML}</div>
         <div class="card-info">
           <div class="card-name">${c.name}</div>
@@ -378,6 +415,26 @@ function buildTracker() {
         });
       });
 
+      // Click on weapon badge = toggle weapon-owned (independent of character-owned)
+      const weaponBadge = card.querySelector('.weapon-badge');
+      if (weaponBadge) {
+        weaponBadge.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (weaponOwned.has(c.id)) {
+            weaponOwned.delete(c.id);
+            weaponBadge.classList.remove('has-weapon');
+            weaponBadge.title = `${c.bestWeapon} — click if you have this`;
+          } else {
+            weaponOwned.add(c.id);
+            weaponBadge.classList.add('has-weapon');
+            weaponBadge.title = `${c.bestWeapon} — owned`;
+          }
+          saveWeapons();
+          updateStats();
+          if (currentFilter === 'has-weapon' || currentFilter === 'missing-weapon') applyFilter();
+        });
+      }
+
       grid.appendChild(card);
     });
 
@@ -401,8 +458,10 @@ document.getElementById('reset-btn').addEventListener('click', () => {
   if (confirm('Reset all progress? This cannot be undone.')) {
     owned.clear();
     ascension = {};
+    weaponOwned.clear();
     save();
     saveAscension();
+    saveWeapons();
     buildTracker();
     updateStats();
   }
@@ -412,10 +471,11 @@ document.getElementById('reset-btn').addEventListener('click', () => {
 document.getElementById('export-btn').addEventListener('click', () => {
   const payload = {
     source: 'K8GUIDE Character Tracker',
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     owned: [...owned],
     ascension: ascension,
+    weaponOwned: [...weaponOwned],
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -463,18 +523,26 @@ importFileInput.addEventListener('change', (e) => {
         skippedAscension++;
       }
     }
+    // weaponOwned is optional — older backups (v1) won't have it
+    const rawWeaponOwned = Array.isArray(data.weaponOwned) ? data.weaponOwned : [];
+    const importedWeaponOwned = rawWeaponOwned.filter(id => validIds.has(id));
+    const skippedWeaponOwned = rawWeaponOwned.length - importedWeaponOwned.length;
+
     const currentOwnedCount = owned.size;
     const currentAscCount = Object.keys(ascension).length;
-    let warning = `Import ${importedOwned.length} owned character(s) and ${Object.keys(importedAscension).length} ascension record(s)?\n\nThis will REPLACE your current data (${currentOwnedCount} owned, ${currentAscCount} ascension records) — this cannot be undone.`;
-    if (skippedOwned > 0 || skippedAscension > 0) {
-      warning += `\n\nNote: ${skippedOwned} owned entr${skippedOwned===1?'y':'ies'} and ${skippedAscension} ascension entr${skippedAscension===1?'y':'ies'} in the file didn't match any known character and will be skipped (the site may have been updated since this backup was made).`;
+    const currentWeaponCount = weaponOwned.size;
+    let warning = `Import ${importedOwned.length} owned character(s), ${Object.keys(importedAscension).length} ascension record(s), and ${importedWeaponOwned.length} weapon-owned record(s)?\n\nThis will REPLACE your current data (${currentOwnedCount} owned, ${currentAscCount} ascension records, ${currentWeaponCount} weapon records) — this cannot be undone.`;
+    if (skippedOwned > 0 || skippedAscension > 0 || skippedWeaponOwned > 0) {
+      warning += `\n\nNote: ${skippedOwned} owned entr${skippedOwned===1?'y':'ies'}, ${skippedAscension} ascension entr${skippedAscension===1?'y':'ies'}, and ${skippedWeaponOwned} weapon entr${skippedWeaponOwned===1?'y':'ies'} in the file didn't match any known character and will be skipped (the site may have been updated since this backup was made).`;
     }
     if (!confirm(warning)) return;
 
     owned = new Set(importedOwned);
     ascension = importedAscension;
+    weaponOwned = new Set(importedWeaponOwned);
     save();
     saveAscension();
+    saveWeapons();
     buildTracker();
     updateStats();
     alert('Import complete.');
@@ -583,6 +651,7 @@ async function exportTrackerImage() {
     list.forEach(c => {
       const isOwned = owned.has(c.id);
       const ascLevel = ascension[c.id] || 0;
+      const hasWeapon = c.bestWeapon && weaponOwned.has(c.id);
       const img = imageCache[c.id];
 
       ctx.save();
@@ -599,6 +668,20 @@ async function exportTrackerImage() {
       ctx.lineWidth = isOwned ? 2 : 1;
       ctx.strokeRect(cx, cy, CHIP_W, CHIP_W);
       ctx.restore();
+
+      // Weapon badge (only for owned characters who also have their optimal weapon)
+      if (hasWeapon) {
+        const wBadgeSize = 18;
+        ctx.fillStyle = '#e8b020';
+        ctx.fillRect(cx, cy, wBadgeSize, wBadgeSize);
+        ctx.fillStyle = '#08090c';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('⚔', cx + wBadgeSize/2, cy + wBadgeSize/2 + 1);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+      }
 
       // Ascension badge (only for owned characters with progress)
       if (isOwned && ascLevel > 0) {
