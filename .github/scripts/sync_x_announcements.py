@@ -21,6 +21,23 @@ problem with the rest of the site. The job will fail silently (the
 workflow run will show a non-zero exit and skip the commit step) rather
 than corrupt announcements.json with bad data.
 
+== BRIDGE LIST MAINTENANCE (last refreshed 2026-08-29) ==
+The previous list (rss.xcancel.com, xcancel.com, nitter.poast.org,
+nitter.privacyredirect.com, nitter.tiekoetter.com, nitter.net) had gone
+fully dark — every instance either timed out or returned an empty
+response when checked directly. The list below was refreshed against
+the community-maintained instance table at
+https://github.com/zedeus/nitter/wiki/Instances (check there first next
+time this needs updating — it's the best source of current status).
+Note that instances can look "up" from a browser but still return
+nothing to a plain scripted request if they've added bot-detection
+(Cloudflare challenges, etc.) — that's indistinguishable from a fully
+dead instance from this script's point of view, and is a likely
+explanation if several bridges in a row keep failing even though the
+wiki lists them as healthy. If this entire list dies again, that
+GitHub wiki page and https://status.d420.de (instance uptime tracker)
+are the fastest way to find replacements.
+
 == HOW IT WORKS ==
 1. Try a list of known Nitter-style RSS bridge instances for the account.
 2. Parse the RSS feed for the most recent posts.
@@ -49,11 +66,15 @@ ANNOUNCEMENTS_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "a
 # Add or remove instances here as needed; the script tries each in order
 # and uses the first one that returns a valid feed.
 BRIDGE_INSTANCES = [
-    "https://rss.xcancel.com/{user}/rss",
     "https://xcancel.com/{user}/rss",
     "https://nitter.poast.org/{user}/rss",
     "https://nitter.privacyredirect.com/{user}/rss",
     "https://nitter.tiekoetter.com/{user}/rss",
+    "https://lightbrd.com/{user}/rss",
+    "https://nitter.space/{user}/rss",
+    "https://nuku.trabun.org/{user}/rss",
+    "https://nitter.catsarch.com/{user}/rss",
+    "https://nitter.kareem.one/{user}/rss",
     "https://nitter.net/{user}/rss",
 ]
 
