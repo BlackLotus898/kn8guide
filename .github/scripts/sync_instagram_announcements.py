@@ -37,9 +37,25 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import feedparser
 import requests
 
 IG_USERNAME = "kaijuno8_thegame_en"
+
+# == RSS.app FALLBACK (added 2026-08-29) ==
+# If the primary method below (Instagram's unofficial private API) fails —
+# which is likely from GitHub Actions' shared cloud IPs — this script will
+# try an RSS.app-generated feed instead. RSS.app's own servers do the
+# actual scraping, so this sidesteps the datacenter-IP blocking that kills
+# the primary method.
+#
+# TO ENABLE: sign up for a free account at https://rss.app, use their
+# Instagram RSS Generator (https://rss.app/rss-feed/create-instagram-rss-feed)
+# on https://www.instagram.com/kaijuno8_thegame_en/, copy the feed URL it
+# gives you, and paste it in below. Free plan = 1 feed, refreshes every
+# 24h, shows up to 5 posts — plenty for this use case. Leave blank to skip
+# this fallback (primary method only).
+RSS_APP_FEED_URL = ""  # e.g. "https://rss.app/feeds/xxxxxxxxxxxx.xml"
 
 CATEGORY_KEYWORDS = {
     "gacha": ["pickup gacha", "gacha", "pickup character", "pickup banner"],
@@ -116,6 +132,83 @@ def fetch_recent_posts():
     return posts
 
 
+def extract_ig_shortcode(link):
+    """Pull the Instagram shortcode out of a post URL for a stable id,
+    e.g. '.../p/ABC123/' or '.../reel/ABC123/' -> 'ABC123'."""
+    match = re.search(r'/(?:p|reel)/([A-Za-z0-9_-]+)', link or "")
+    return match.group(1) if match else None
+
+
+def clean_html_text(raw_html):
+    """Strip HTML tags down to plain text."""
+    text = re.sub(r"<[^>]+>", " ", raw_html or "")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def extract_rss_image(entry):
+    """Try common RSS media fields, falling back to an <img> tag embedded
+    in the entry's summary HTML."""
+    media_content = entry.get("media_content")
+    if media_content:
+        url = media_content[0].get("url")
+        if url:
+            return url
+    media_thumbnail = entry.get("media_thumbnail")
+    if media_thumbnail:
+        url = media_thumbnail[0].get("url")
+        if url:
+            return url
+    summary_html = entry.get("summary", "")
+    match = re.search(r'<img[^>]+src="([^"]+)"', summary_html)
+    if match:
+        return match.group(1)
+    return None
+
+
+def fetch_via_rss_app():
+    """Fallback source: pull posts from an RSS.app-generated feed instead
+    of hitting Instagram's unofficial API directly. Only used if the
+    primary method fails and RSS_APP_FEED_URL is set above. Returns the
+    same shape as fetch_recent_posts(), or None if unavailable."""
+    if not RSS_APP_FEED_URL:
+        print("RSS.app fallback not configured (RSS_APP_FEED_URL is blank) — skipping.")
+        return None
+
+    try:
+        resp = requests.get(RSS_APP_FEED_URL, timeout=REQUEST_TIMEOUT)
+        resp.raise_for_status()
+    except requests.RequestException as e:
+        print(f"RSS.app fallback request failed: {e}")
+        return None
+
+    parsed = feedparser.parse(resp.text)
+    if not parsed.entries:
+        print("RSS.app fallback returned no entries.")
+        return None
+
+    posts = []
+    for entry in parsed.entries:
+        link = entry.get("link", "")
+        if not link:
+            continue
+        published = entry.get("published_parsed") or entry.get("updated_parsed")
+        timestamp = datetime(*published[:6], tzinfo=timezone.utc).timestamp() if published \
+            else datetime.now(timezone.utc).timestamp()
+        caption = entry.get("title", "") or clean_html_text(entry.get("summary", ""))
+        shortcode = extract_ig_shortcode(link) or link.rstrip("/").rsplit("/", 1)[-1]
+        posts.append({
+            "caption": caption.strip(),
+            "shortcode": shortcode,
+            "link": link,
+            "timestamp": timestamp,
+            "image": extract_rss_image(entry),
+        })
+
+    print(f"RSS.app fallback succeeded — got {len(posts)} entries.")
+    return posts
+
+
 def load_announcements():
     if not ANNOUNCEMENTS_PATH.exists():
         return {"lastUpdated": "", "announcements": []}
@@ -138,6 +231,9 @@ def slugify_id(date_str, text):
 
 def main():
     posts = fetch_recent_posts()
+    if posts is None:
+        print("Primary Instagram API method failed — trying RSS.app fallback...")
+        posts = fetch_via_rss_app()
     if posts is None:
         print("No usable Instagram data this run — exiting without changes.")
         sys.exit(0)
