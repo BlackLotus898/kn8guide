@@ -55,7 +55,7 @@ IG_USERNAME = "kaijuno8_thegame_en"
 # gives you, and paste it in below. Free plan = 1 feed, refreshes every
 # 24h, shows up to 5 posts — plenty for this use case. Leave blank to skip
 # this fallback (primary method only).
-RSS_APP_FEED_URL = ""  # e.g. "https://rss.app/feeds/xxxxxxxxxxxx.xml"
+RSS_APP_FEED_URL = "https://rss.app/feeds/DGe5jLWKiIaSsxoE.xml"
 
 CATEGORY_KEYWORDS = {
     "gacha": ["pickup gacha", "gacha", "pickup character", "pickup banner"],
