@@ -336,6 +336,9 @@ const WEAPONS_BY_TYPE = {
     { name:'SH-Euchre', effect:'DEF +28%\nAfter the equipped unit activates Ultimate, applies Effect RES +21% (2 turn(s)) to the equipped unit.' },
     { name:'Heavy Duty Shield', effect:'DEF +23%' },
   ],
+  'Shotgun': [
+    { name:'SG-Ahskay', effect:'—' },
+  ],
   'Spear': [
     { name:'Lc-Anorollal', effect:'Fire DMG Dealt (%) +20%\nThe equipped unit\'s Normal Attack and Ultimate DMG dealt +15%.\nAfter the equipped unit loses HP, applies CRIT Rate +18% (3 turn(s)) to the equipped unit.' },
     { name:'Lc-Brunhild', effect:'CRIT Rate (%) +16%\nAfter the equipped unit activates Combat Skill, applies ATK +6% (2 turn(s)) to the equipped unit. Max 3 stack(s).' },
@@ -531,6 +534,17 @@ const CHARACTERS = [
       {id:'A4', name:'Finishing Blow', effect:"After attacking a Kaiju that already has a debuff, deals Shot Additional DMG equal to 20% of this unit\'s ATK."},
       {id:'A5', name:'Clean-Cut Powerhouse', effect:"Combat Skill, Passive Skill, Follow-Up Skill Lv. +2. Combat Skill, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Solid Combat Style', effect:"For each debuff already applied to a Kaiju, this unit\'s DMG dealt to that Kaiju +5%. Max +25%."},
+    ],
+    },
+  { id:'iharu-furuhashi-fft', name:'Iharu Furuhashi', variant:'Flash-Fierce Talent',              stars:5, role:'Attacker',  types:['Shot','Lightning'],img:'IharuFuruhashi-FFT.png', subRoles:[], weaponType:'Shotgun',
+    teamBuffs:[], buddyBuffs:[], debuffs:[],
+        ascension:[
+      {id:'A1', name:'Over the Edge', effect:"Before activating Overflow Attack, applies DMG dealt +24% (2 turns) to this unit. This unit's Additional DMG DEF PEN Rate +18%."},
+      {id:'A2', name:'Flash Focus', effect:"After activating Ultimate, applies 2 stacks of Menace to this unit. Turn duration of Selfless Flow +1."},
+      {id:'A3', name:'Rivalry of Pride', effect:"Normal Attack, Passive Skill Lv. +2. Normal Attack, Passive Skill max Lv. +2."},
+      {id:'A4', name:'Bring It On', effect:"After activating Overflow Attack, randomly destroys 1 of the target's Elemental PLT."},
+      {id:'A5', name:'Decisive Drive', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Unstoppable Hustle', effect:"After activating Combat Skill, Ultimate, or Overflow Attack, randomly deals Lightning Additional DMG equal to 6% of this unit's ATK to the target 4 additional times. Blitz Turn's fixed SPD becomes 100."},
     ],
     },
   { id:'iharu-furuhashi-lt', name:'Iharu Furuhashi',  variant:'Latent Talent',                   stars:4, role:'Supporter', types:['Shot','Lightning'],img:'IharuFuruhashi-LT.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',

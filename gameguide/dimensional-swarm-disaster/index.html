@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dimensional Swarm Disaster — K8 GUIDE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../char-styles.css">
+<style>
+  .page-header { padding: 3.5rem 2rem 0; max-width: 1100px; margin: 0 auto; }
+  .page-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--red); margin-bottom: .6rem; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 3px; color: #fff; line-height: 1; }
+  .page-desc { margin-top: .6rem; color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+  .section-nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; }
+  .section-nav a { padding: .4rem 1rem; font-family: 'Share Tech Mono', monospace; font-size: .7rem; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--border); background: var(--panel); color: var(--muted); text-decoration: none; transition: all .2s; }
+  .section-nav a:hover, .section-nav a.active { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.05); }
+  .guide-section { border: 1px solid var(--border); background: var(--panel); margin-bottom: 1.5rem; overflow: hidden; }
+  .guide-section-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem; background: var(--dark); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .guide-section-header:hover { background: rgba(0,212,255,.03); }
+  .guide-section-icon { font-size: 1.3rem; }
+  .guide-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #fff; flex: 1; }
+  .guide-section-tag { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; }
+  .guide-toggle { font-family: 'Share Tech Mono', monospace; font-size: .8rem; color: var(--muted); transition: transform .3s; }
+  .guide-section.open .guide-toggle { transform: rotate(180deg); }
+  .guide-section-body { display: none; padding: 1.6rem; }
+  .guide-section.open .guide-section-body { display: block; }
+  .guide-text { font-size: 1rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  .guide-text strong { color: var(--text); }
+  .guide-subheading { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--cyan); margin: 1.4rem 0 .6rem; }
+  .guide-subheading:first-child { margin-top: 0; }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+  .guide-list li { position: relative; padding-left: 1.4rem; font-size: .97rem; color: var(--muted); line-height: 1.5; }
+  .guide-list li::before { content: "›"; position: absolute; left: 0; color: var(--red); font-size: 1rem; }
+  .guide-list li strong { color: var(--text); }
+  .highlight-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .highlight-box strong { color: var(--gold); }
+  .warning-box { background: var(--dark); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 1rem 1.2rem; margin: 1rem 0; font-size: .95rem; color: var(--muted); line-height: 1.6; }
+  .warning-box strong { color: var(--red); }
+  .info-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin: 1rem 0; }
+  .info-cell { background: var(--dark); border: 1px solid var(--border); padding: .8rem 1rem; }
+  .info-cell .lbl { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 2px; color: var(--red); text-transform: uppercase; display: block; margin-bottom: .3rem; }
+  .info-cell .val { font-size: .97rem; font-weight: 600; color: var(--text); }
+</style>
+</head>
+<body>
+<nav id="main-nav"></nav>
+<script src="../../nav.js"></script>
+<div class="page-header">
+  <p class="page-label">// Game Guide</p>
+  <h1 class="page-title">Dimensional Swarm Disaster</h1>
+  <p class="page-desc">Seasonal high-difficulty battle event — gather Support Effects, unlock Threat Levels, and trade with other players.</p>
+</div>
+<div class="page">
+  <div class="section-nav">
+    <a href="../gacha/">Gacha & Pulling</a>
+    <a href="../story/">Story Modes</a>
+    <a href="../events/">Events</a>
+    <a href="../dimensional-swarm-disaster/" class="active">Dimensional Swarm Disaster</a>
+    <a href="../exploit-medals/">Exploit Medals</a>
+    <a href="../currencies/">Currencies</a>
+    <a href="../synthesis/">Material Synthesis</a>
+    <a href="../spec-ops/">Spec-Ops Rank</a>
+    <a href="../progression/">Character Progression</a>
+    <a href="../unlocked-potential/">Unlocked Potential</a>
+    <a href="../achievements/">Unknown Achievements</a>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🌀</span>
+      <span class="guide-section-title">Overview</span>
+      <span class="guide-section-tag">// Season 1</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">Dimensional Swarm Disaster is a high-difficulty, seasonal battle event where you gather <strong>Support Effects</strong> to power up your squad as you progress through the content. Equip desirable effects to gain an advantage in battle and earn rewards upon clearing missions.</p>
+      <div class="info-row">
+        <div class="info-cell"><span class="lbl">Availability</span><span class="val">Aug 31 – Sep 30, 2026</span></div>
+        <div class="info-cell"><span class="lbl">Eligibility</span><span class="val">Spec-Ops Rank 4+</span></div>
+        <div class="info-cell"><span class="lbl">Season</span><span class="val">Season 1</span></div>
+      </div>
+      <div class="warning-box">
+        <strong>⚠ Seasonal reset:</strong> Dimensional Swarm Disaster is a seasonal event. Except for Dimensional Medals earned from mission rewards, all items (Support Effects, Mod Items, Tokens, and quest progress) are removed when the event ends and cannot be carried into the next season.
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🗺️</span>
+      <span class="guide-section-title">Patrol & Area Unlock Quests</span>
+      <span class="guide-section-tag">// Battle Content</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-subheading">Patrol Quests</p>
+      <ul class="guide-list">
+        <li>Random combinations of Kaiju and Kaiju buffs. Clearing them drops Support Effects and Support Effect Mod Items.</li>
+        <li>Threat Levels affect difficulty — higher Threat Levels mean stronger Kaiju but better item drops. Use the <strong>Edit Lv</strong> button to change the Threat Level if a quest is too hard.</li>
+        <li>Threat Levels rise as you clear Area Unlock quests, up to a maximum of Threat Level 10.</li>
+        <li>You can skip up to <strong>10 Patrol Quests per day</strong> once you've cleared a quest of that Threat Level.</li>
+        <li>After challenging 3 Patrol Quests on the map, you can rescan currently displayed quests.</li>
+        <li>You cannot re-challenge a Patrol Quest you've already attempted — challenge at least 3 to rescan.</li>
+      </ul>
+      <p class="guide-subheading">Area Unlock Quests</p>
+      <ul class="guide-list">
+        <li>Fixed combinations of Kaiju and Kaiju buffs, with 9 Threat Levels total.</li>
+        <li>Clearing higher Threat Levels unlocks new Threat Levels for Patrol Quests.</li>
+        <li>Random Support Effects and Mod Items drop only on first clear.</li>
+        <li>Powerful Kaiju appear here — fully prepare with useful Support Effects from Patrol Quests before challenging.</li>
+      </ul>
+      <p class="guide-subheading">Challenge Mode</p>
+      <ul class="guide-list">
+        <li>Take on Kaiju with massive HP and compete for a top ranking based on total damage dealt.</li>
+        <li>Unlocks after clearing Area Unlock: Threat Level 3.</li>
+        <li>Check your score and rank from Challenge Mode &gt; Ranking. The Top 100 list updates every 5 minutes.</li>
+        <li>Ranking rewards are distributed via Mail after the tallying period following the event's conclusion — mail (and attached items) is deleted 90 days after receipt, so claim promptly.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SUPPORT EFFECTS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🧩</span>
+      <span class="guide-section-title">Support Effects</span>
+      <span class="guide-section-tag">// Squad Power-Up</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <ul class="guide-list">
+        <li>Support Effects consist of <strong>1 Main Effect and 4 Sub Effects</strong>. Equip them before challenging a quest on the Setup screen.</li>
+        <li>There are three types: <strong>Attack, Defense, and Special</strong>. You can equip up to one of each type at a time.</li>
+        <li>Support Effects come in <strong>★3 / ★4 / ★5</strong> rarity — higher rarity means stronger Main Effect values.</li>
+        <li>Sub Effects are randomly assigned when you obtain a Support Effect. They're numbered 1-4, with different effect pools for 1-2 versus 3-4. Higher rarity increases the odds of better Sub Effect rolls.</li>
+        <li><strong>Support Effect Mod Items</strong> let you redraw Sub Effects 1-4 (which slots depend on the Mod Item type). Unlocked after clearing Area Unlock: Threat Level 1.</li>
+      </ul>
+      <div class="highlight-box">
+        <strong>Tip:</strong> Owned Support Effects and Mod Items are discarded when the season ends — don't hold onto excess, Quick Sell them for Tokens instead.
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADING -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🔄</span>
+      <span class="guide-section-title">Trading</span>
+      <span class="guide-section-tag">// Player Market</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <p class="guide-text">As you progress through the event, a trading function unlocks, letting you buy and sell Support Effects/Mod Items with other players using <strong>Tokens</strong>.</p>
+      <ul class="guide-list">
+        <li><strong>Tokens</strong> are earned via Quick Sell (Support Effects/Items screen &gt; Owned tab) — the amount depends on the type and rarity sold. Mod Items cannot be Quick Sold.</li>
+        <li><strong>Listing</strong> unlocks after clearing Area Unlock: Threat Level 3. Set your own price for owned Support Effects/Mod Items; you earn Tokens when another player buys.</li>
+        <li><strong>Purchasing</strong> also unlocks after Area Unlock: Threat Level 3. Buy items at the seller's listed price (Mod Items can be bought in bulk at a chosen unit price).</li>
+        <li>There's a limit to how many items you can have listed at once — withdraw a listing to free up space.</li>
+      </ul>
+      <div class="warning-box">
+        <strong>⚠ Note:</strong> Tokens are discarded when the season ends and cannot carry over. Max holding is 999,999,999 — anything earned past that is lost.
+      </div>
+    </div>
+  </div>
+
+  <!-- REWARDS -->
+  <div class="guide-section open">
+    <div class="guide-section-header" onclick="toggleSection(this)">
+      <span class="guide-section-icon">🎁</span>
+      <span class="guide-section-title">Rewards</span>
+      <span class="guide-section-tag">// Medals & Ranking</span>
+      <span class="guide-toggle">▼</span>
+    </div>
+    <div class="guide-section-body">
+      <ul class="guide-list">
+        <li>Complete missions to earn <strong>Dimensional Medals</strong>, which exchange for various items in the Shop. Medals are the one item type that carries over to future seasons.</li>
+        <li>Shop items not labeled with a "Days left:" tag stay exchangeable using Medals earned in the next season too.</li>
+        <li>Challenge Mode rewards are rank-based, distributed via Mail after the post-event tallying period — claim within 90 days.</li>
+      </ul>
+      <div class="warning-box">
+        <strong>⚠ Important:</strong> Once the claim period ends, unclaimed mission rewards will not be sent to Mail. Claim everything before the event closes on Sep 30.
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <p>K8GUIDE — Fan-made strategy reference for Kaiju No. 8 The Game</p>
+  <p style="margin-top:.5rem;">Created by Lotus &nbsp;·&nbsp; <a href="https://discord.com/users/black_lotus88" target="_blank">Discord</a></p>
+  <p style="margin-top:.5rem;">© Naoya Matsumoto / SHUEISHA &nbsp;·&nbsp; Game by Akatsuki Games Inc. &nbsp;·&nbsp; This site is not affiliated with the official game.</p>
+</footer>
+<script>
+function toggleSection(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
