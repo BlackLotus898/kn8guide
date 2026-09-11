@@ -1,4 +1,7 @@
-   {
+{
+  "lastUpdated": "2026-09-11",
+  "announcements": [
+    {
       "id": "2026-09-10-official-1003690-limited-wang-meixing-pickup-gacha-rerun-now-availa",
       "date": "2026-09-10",
       "type": "game",
@@ -103,9 +106,7 @@
       "sourceLink": "https://info.kj8-thegame.com/news/1003610?language=en",
       "source": "official",
       "autoAdded": true
-    },{
-  "lastUpdated": "2026-09-05",
-  "announcements": [
+        },
     {
       "id": "2026-09-05-ig-kaijuno8thegame-unlock-potential-new-eligible-char",
       "date": "2026-09-05",
