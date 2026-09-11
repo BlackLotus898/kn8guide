@@ -1,22 +1,17 @@
 name: Sync Social Announcements
 
-# Checks the official Kaiju No. 8 The Game Instagram account for new posts
-# and appends them to data/announcements.json as "game" type entries.
+# Checks the official KAIJU NO. 8 THE GAME news page (info.kj8-thegame.com)
+# for new posts and appends them to data/announcements.json as "game" type
+# entries.
 #
-# IMPORTANT — this step is experimental/fragile:
-# Instagram offers no free, official way to read a public account's posts.
-# This workflow relies on an unofficial internal API endpoint that can
-# break or get blocked at any time with no warning (datacenter IPs like
-# GitHub Actions runners are prime targets for this). The script has a
-# built-in fallback to an RSS.app-generated feed if that primary method
-# fails — see RSS_APP_FEED_URL in sync_instagram_announcements.py for
-# setup. If this step starts failing in the Actions tab, check the
-# comments at the top of that script for details on why and what to
-# check first.
-#
-# (X/Nitter-based sync was removed 2026-08-29 — the Nitter bridge network
-# it depended on had died. See site-update-log for context if reviving it
-# is ever worth revisiting.)
+# (Instagram/RSS.app-based sync retired 2026-09-11 -- both RSS.app and
+# FeedSpot gate Instagram-to-RSS conversion behind a paid subscription,
+# which isn't viable for this project. X/Nitter-based sync was removed
+# 2026-08-29 -- the Nitter bridge network it depended on had died.
+# This workflow now scrapes the game's own official news page directly
+# instead of going through any social platform. See the top of
+# sync_official_announcements.py for details and a note on what to check
+# if this ever starts failing.)
 
 on:
   schedule:
@@ -39,16 +34,16 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests feedparser
+        run: pip install requests beautifulsoup4
 
-      - name: Run Instagram sync script
-        run: python .github/scripts/sync_instagram_announcements.py
+      - name: Run official site sync script
+        run: python .github/scripts/sync_official_announcements.py
         continue-on-error: true
 
       - name: Commit changes if any
         run: |
           git config user.name "kn8guide-bot"
           git config user.email "actions@github.com"
-          git add data/announcements.json
-          git diff --staged --quiet || git commit -m "Auto-update: new social announcements"
+          git add data/announcements.json data/.official_seen_ids.json
+          git diff --staged --quiet || git commit -m "Auto-update: new official site announcements"
           git push
