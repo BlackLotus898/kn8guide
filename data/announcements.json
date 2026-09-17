@@ -1,6 +1,19 @@
 {
-  "lastUpdated": "2026-09-15",
+  "lastUpdated": "2026-09-17",
   "announcements": [
+    {
+      "id": "2026-09-17-official-1003810-data-update-event-preview",
+      "date": "2026-09-17",
+      "type": "game",
+      "title": "Data Update & Event Preview",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. A data update is scheduled for the following time: 2026-09-19T03:00:00Z This data update includes the following content: Event Overview ■ New Gachas Scheduled to start: 2026-09-19T03:00:00Z For more details, please check our official X ",
+      "link": "https://info.kj8-thegame.com/news/1003810?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1003810?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1003810/bccfc5d435778789a6d694a6aef6cf8d.jpg?Expires=1789728341&Signature=afOZJcyZXKvuFGqk3NEYLwf~2nBlUKsmjCjvJijRchNzasTjShpCg9-EUuxHu7oWvFJ8MZCAZy-MrGoLeoYkwc6l69PcXODHSHp38gIm-cnBCxAH268Itr1oagjlnrRFzvySsuKpk9uIxHLvJgbr6nhBK2Lx0giup0YQY0FkNNsUVZ7DYikYeBAhz0kWaN~w4wGjBzJB5lUKhOh5qCC3uzQyfonyHJN5FiivOoYAJl7kqsdPVCi00DnuRk36qNSv~hqK8r5qdE8ZNeBgmKgeuiahTyfoUjoVrRmFRVkEImJ4azLX1bn8VMM8cl9NkjFPsw-XDcTLiFb-HjaX-A1s6g__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "update"
+    },
     {
       "id": "2026-09-15-official-1003800-paid-only-5-guaranteed-gacha-blunt-shot-slash-now-",
       "date": "2026-09-15",
