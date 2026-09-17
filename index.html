@@ -608,14 +608,18 @@ function renderNewsGrid(items) {
     return id;
   }
 
-  function displayCount(count) {
+  function displayCount(data) {
     const el = document.getElementById('visitor-count');
     if (el) {
       el.style.fontFamily = "'Share Tech Mono', monospace";
       el.style.fontSize = '.68rem';
       el.style.letterSpacing = '1px';
       el.style.color = 'var(--muted)';
-      el.textContent = count.toLocaleString() + ' unique visitor' + (count !== 1 ? 's' : '');
+      const unique = typeof data.uniqueCount === 'number' ? data.uniqueCount : data.count;
+      const total = typeof data.totalVisits === 'number' ? data.totalVisits : null;
+      let text = unique.toLocaleString() + ' unique visitor' + (unique !== 1 ? 's' : '');
+      if (total !== null) text = total.toLocaleString() + ' total visits &nbsp;·&nbsp; ' + text;
+      el.innerHTML = text;
     }
   }
 
@@ -624,7 +628,7 @@ function renderNewsGrid(items) {
       const deviceId = getDeviceId();
       const res = await fetch(SCRIPT_URL + '?action=trackVisitor&deviceId=' + encodeURIComponent(deviceId));
       const data = await res.json();
-      if (typeof data.count === 'number') displayCount(data.count);
+      if (typeof data.count === 'number' || typeof data.totalVisits === 'number') displayCount(data);
     } catch(e) {}
   }
 
