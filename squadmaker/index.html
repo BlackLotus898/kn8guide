@@ -81,6 +81,11 @@
   .slot-ascension { margin-top: .5rem; padding-top: .4rem; border-top: 1px solid var(--border); }
   .slot-ascension-label { font-family: 'Share Tech Mono', monospace; font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: #555; display: block; margin-bottom: .3rem; }
   .slot-ascension-toggles { display: flex; flex-wrap: wrap; gap: .25rem; }
+  .slot-up-label { font-family: 'Share Tech Mono', monospace; font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: #555; display: block; margin-bottom: .3rem; margin-top: .5rem; }
+  .slot-up-toggles { display: flex; flex-wrap: wrap; gap: .25rem; }
+  .up-toggle-btn { font-family: 'Share Tech Mono', monospace; font-size: .6rem; letter-spacing: 1px; padding: .2rem .45rem; border: 1px solid var(--border); background: var(--dark); color: var(--muted); cursor: pointer; transition: all .15s; }
+  .up-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .up-toggle-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(240,180,0,.12); }
   .a-toggle-btn { font-family: 'Share Tech Mono', monospace; font-size: .58rem; letter-spacing: .5px; padding: .15rem .4rem; border: 1px solid var(--border); color: #555; cursor: pointer; user-select: none; transition: all .15s; }
   .a-toggle-btn:hover { border-color: #888; color: #aaa; }
   .a-toggle-btn.active { border-color: var(--red); color: var(--red); background: rgba(232,0,26,.1); }
@@ -453,8 +458,15 @@ const CHARACTERS = [
       {id:'A5', name:'Cultivated Power', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
       {id:'A6', name:'Tenacious Ace in the Hole', effect:"After activating Ultimate, advances this unit\'s next Action Order by 50%."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Squadron-Style Gunsword Technique Number One: Eruption Slash+', effect:"Deals Slash and Shot DMG equal to 187% of this unit's ATK to a single Kaiju. Deals Slash and Shot DMG equal to 94% of this unit's ATK to adjacent Kaiju."},
+      {id:'UP2', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP3', name:'Way of the Strongest+', effect:"Before activating Combat Skill: When this unit's Ultimate Gauge is less than 50%, applies SPD +21% (1 turn) to this unit. When 50% or more, applies DMG dealt +21% (1 turn) to this unit. Each time this unit destroys a PLT, applies SPD +4.2% (1 turn) and Slash DMG dealt +6.3% (1 turn) to this unit. Max 3 stacks."},
+      {id:'UP4', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP5', name:'Squadron-Style Gunsword Technique Number Two: Slash Salvo+', effect:"Deals Slash and Shot DMG equal to 231% of this unit's ATK to a single Kaiju. Deals Slash and Shot DMG equal to 116% of this unit's ATK to adjacent Kaiju. After attacking, randomly destroys 1 of the target's Physical PLT."},
+    ],
     },
-  { id:'gen-narumi-jsc',     name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-JSC.png', subRoles:['PLT Breaker', 'Buffer'], weaponType:'Gunsword',
+  { id:'gen-narumi-jsc',    name:'Gen Narumi',        variant:"Japan's Strongest Combatant",     stars:5, role:'Attacker',  types:['Slash','Shot'],   img:'GenNarumi-JSC.png', subRoles:['PLT Breaker', 'Buffer'], weaponType:'Gunsword',
     teamBuffs:[ {scope:'all', desc:'Increases ATK of all allies when using Combat Skill'} ],
     buddyBuffs:[], debuffs:[ {desc:'PLT reduction on multiple targets'} ],
         ascension:[
@@ -465,8 +477,15 @@ const CHARACTERS = [
       {id:'A5', name:'Strength Comes First', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'The Essence of His Genius', effect:"After activating Combat Skill, applies Combat Skill DMG Multiplier +5% to this unit. Max 3 stacks."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Passive Skill Enhancement: Created Opportunity', effect:"Effect Enhanced — After an ally attacks a Kaiju in Seen Through state, applies DMG dealt +55% (2 turns) to the attacker. (When max enhanced) New Effect Added — At the start of battle, applies \"Increase Ultimate Gauge When Turn Starts\" (1 turn) to this unit. New Effect Added — This unit's Combat Skill and Ultimate ATK +50.6%, CRIT DMG +70.4%. (When max enhanced)"},
+      {id:'UP2', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP3', name:'Combat Skill Enhancement: Booming Slash', effect:"Effect Enhanced — Deals Slash and Shot DMG equal to 297% of this unit's ATK to a single Kaiju. (When max enhanced) New Effect Added — When destroying a PLT, recovers 1 SP."},
+      {id:'UP4', name:'Stat Enhancement: DEF', effect:"+100"},
+      {id:'UP5', name:'Ultimate Enhancement: Squadron-Style Gunsword Technique Number Six: Seven-Branched Sword', effect:"Effect Enhanced — Deals Slash and Shot DMG equal to 594% of this unit's ATK to a single Kaiju. New Effect Added — After allies attack a Kaiju in Seen Through state 5 times, removes Seen Through and randomly destroys 5 of the Kaiju's PLT."},
+    ],
     },
-  { id:'hikari-shinomiya-tv', name:'Hikari Shinomiya', variant:'The Valkyrie',                    stars:5, role:'Attacker',  types:['Wind','Slash'],   img:'HikariShinomiya-TV.png', subRoles:['PLT Breaker'], weaponType:'Spear',
+  { id:'hikari-shinomiya-tv',name:'Hikari Shinomiya', variant:'The Valkyrie',                    stars:5, role:'Attacker',  types:['Wind','Slash'],   img:'HikariShinomiya-TV.png', subRoles:['PLT Breaker'], weaponType:'Spear',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Swift Spearwork', effect:"This unit\'s DEF PEN Rate +16%."},
@@ -517,7 +536,7 @@ const CHARACTERS = [
     ],
     },
   { id:'haruichi-izumo-cc',  name:'Haruichi Izumo',   variant:'Calculated Choice',               stars:5, role:'Supporter', types:['Shot'],    img:'HaruichiIzumo-CC.png', subRoles:['Buffer'], weaponType:'Bow',
-    teamBuffs:[],
+    teamBuffs:[], 
     buddyBuffs:[ {desc:'Battle Buddy\'s All-Attribute DMG dealt +19.2%'}, {desc:'After Combat Skill: ATK +26.4% (2 turns) to Battle Buddy'}, {desc:'After Combat Skill: ST Attack and Blast Attack DMG +30% (1 turn) to Battle Buddy'} ], debuffs:[],
     ascension:[
       {id:'A1', name:'Flawless Arrangements', effect:"True Potential: In addition, target\'s CRIT Rate +20% and DMG dealt +20%."},
@@ -584,8 +603,15 @@ const CHARACTERS = [
       {id:'A5', name:'Role to Fulfill', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Unified Offense and Defense', effect:"While having a Shield, this unit\'s Normal Attack and Ultimate DMG Multiplier +80%."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Indomitable Stronghold+', effect:"While having a Shield, this unit's chance of being targeted by Kaiju greatly increases. Each time an ally that has a Shield receives an attack, applies DEF +2.8% (3 turns) to this unit. Max 5 stacks. For each ally having a Shield, DMG dealt +3.2% for all allies."},
+      {id:'UP2', name:'Stat Enhancement: Effect RES (%)', effect:"+10%"},
+      {id:'UP3', name:'Solid Stance+', effect:"Applies a Shield (3 turns) equal to 13% of this unit's DEF +66 to all allies. Applies DMG Taken Reduction +10.8% (2 turns) to all allies."},
+      {id:'UP4', name:'Stat Enhancement: DEF', effect:"+100"},
+      {id:'UP5', name:'Indomitable Stronghold++', effect:"This unit's Shield Application Multiplier +55%. While having a Shield, this unit's chance of being targeted by Kaiju greatly increases. Each time an ally that has a Shield receives an attack, applies DEF +2.8% (3 turns) to this unit. Max 5 stacks. For each ally having a Shield, DMG dealt +3.2% for all allies."},
+    ],
     },
-  { id:'jura-igarashi-gd', dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Iron Ball',
+  { id:'jura-igarashi-gd',dotEffects:[ {type:'burn',desc:'Burn'},{type:'afterburn',desc:'Afterburn'} ],   name:'Jura Igarashi',    variant:'Grit and Duty',                   stars:5, role:'Supporter', types:['Blunt','Fire'],   img:'JuraIgarashi-GD.png', subRoles:['Buffer', 'Debuffer'], weaponType:'Iron Ball',
     teamBuffs:[ {scope:'all', desc:'Before attacking: Hot-Blooded (2 turns) to all allies — boosts DMG dealt, ATK, and SPD'}, {scope:'all', desc:'After Normal Attack: Effect Hit Rate +12.1% (2 turns) to all allies'}, {scope:'conditional', desc:'When Effect Hit Rate ≥70%: all allies\' DoT DMG Multiplier +20%', isDot:true}, {scope:'conditional', desc:'When ally attacks Kaiju with debuff/ailment: ATK +30%'} ],
     buddyBuffs:[], debuffs:[ {desc:'Burn and Afterburn — DoT effects; attacking Afterburned Kaiju gives all allies DEF PEN Rate +18%'} ],
         ascension:[
@@ -664,6 +690,13 @@ const CHARACTERS = [
       {id:'A5', name:'Light of Hope', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'On the Rise', effect:"After activating Ultimate, this unit\'s Tip-Top Shape will not be consumed."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Passive Skill Unlock: Rising Morale', effect:"New Effect Added — Tip-Top Shape: This unit's ATK +19.8% and CRIT DMG +39.6%. (When max enhanced)"},
+      {id:'UP2', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP3', name:'Ultimate Unlock: Squadron-Style Ax Technique Number One: Falling Thunder', effect:"New Effect Added — Before attacking, when Tip-Top Shape is at 3 stack(s): 1. Has a 100% base chance to apply DEF -17% (2 turn(s)) to a single Kaiju. 2. SP +1. (When max enhanced)"},
+      {id:'UP4', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP5', name:'Combat Skill Unlock: Rotary Slash', effect:"New Effect Added — Before attacking, for each stack of Tip-Top Shape, this unit's Ultimate Gauge +20. (When max enhanced)"},
+    ],
     },
   { id:'kikoru-shinomiya-tiw',name:'Kikoru Shinomiya',variant:'The Inherited Will',             stars:5, role:'Attacker',  types:['Blunt'],          img:'KikoruShinomiya-TIW.png', subRoles:['Debuffer'], weaponType:'Gauntlet',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
@@ -725,8 +758,15 @@ const CHARACTERS = [
       {id:'A5', name:'Daikaiju\'s True Power', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Overflowing Fighting Spirit', effect:"At the start of battle, applies 1 stack of Fighting Spirit to this unit. Fighting Spirit max stack count +2."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Combat Skill Unlock: Unyielding Fists', effect:"New Effect Added — After attacking, applies Effect RES +32.4% (1 turn) to this unit. (When max enhanced)"},
+      {id:'UP2', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP3', name:'Ultimate Unlock: Ultimate Punch', effect:"New Effect Added — After attacking, applies DMG Taken Reduction +21.4% (2 turns) to this unit. (When max enhanced)"},
+      {id:'UP4', name:'Stat Enhancement: DEF', effect:"+100"},
+      {id:'UP5', name:'Passive Skill Update: Zeal and Supremacy', effect:"Effect Update — This unit can now equip Uniparts. (Still cannot equip weapons.)"},
+    ],
     },
-  { id:'kn8-sv',             name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[], weaponType:null,
+  { id:'kn8-sv',            name:'Kaiju No. 8',      variant:'Scorching Variant',               stars:5, role:'Attacker',  types:['Blunt','Fire'],   img:'KN8-SV.png', subRoles:[], weaponType:null,
     teamBuffs:[], buddyBuffs:[], debuffs:[],
     selfBuffs:[
       {source:'Passive — Resonant Resolve', desc:"Before activating Ultimate, applies DMG dealt +1.2% and Ultimate DMG dealt +5.5% to this unit (max 5 stacks). After an ally activates Ultimate, gains Resolve stacks (max 6). Resolve: Blunt DMG dealt +4.4% and Ultimate DMG Multiplier +8.8% per stack."},
@@ -802,6 +842,13 @@ const CHARACTERS = [
       {id:'A5', name:'Hidden Tenderness', effect:"Normal Attack, Passive Skill, Follow-Up Skill Lv. +2. Normal Attack, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Unparalleled Output', effect:"When Focus is at its max stacks, applies CRIT DMG +40% (1 turn) to this unit."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Supergiant-Class Kaiju Killer+', effect:"When attacking a Giant-class Kaiju, this unit's DMG dealt +31.2% and CRIT Rate +100%. After activating Normal Attack or Combat Skill, applies 1 stack of Focus. Max 3 stacks. When Focus is at max stacks, applies CRIT Rate +100% (1 turn) to this unit. After applying buff based on Focus effect, consumes all Focus stacks."},
+      {id:'UP2', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP3', name:'Reload Complete+', effect:"Applies DMG dealt +58.4% (2 turns) and Normal Attack DMG Multiplier +59.4% (2 turns) to this unit."},
+      {id:'UP4', name:'Stat Enhancement: SPD', effect:"+10"},
+      {id:'UP5', name:'Supergiant-Class Kaiju Killer++', effect:"When attacking a Giant-class Kaiju, this unit's DMG dealt +31.2% and CRIT Rate +100%. After activating Normal Attack or Combat Skill, applies 1 stack of Focus. Max 3 stacks. When Focus is at max stacks, applies CRIT Rate +100% (2 turns) and CRIT DMG +105% (2 turns) to this unit. After applying buff based on Focus effect, consumes all Focus stacks."},
+    ],
     },
   { id:'mina-ashiro-sc',     name:'Mina Ashiro',      variant:'Superb Combination',              stars:5, role:'Attacker', types:['Shot'],           img:'MinaAshiro-SC.png', subRoles:['Buffer'], weaponType:'Cannon',
     teamBuffs:[ {scope:'all', desc:'Boosts allies\' Ultimate DMG and charges Ultimate Gauges'} ],
@@ -814,8 +861,15 @@ const CHARACTERS = [
       {id:'A5', name:'Back-to-Back Trust', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill Max Lv. +2."},
       {id:'A6', name:'Perfected Snipe', effect:"Turn duration of CRIT Rate buff applied by Bakko +1. When this unit\'s HP is 70% or more, this unit\'s CRIT DMG +50%."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Passive Skill Update: Seamless Synergy', effect:"New Effect Added — Extra Attack DMG Multiplier +83%. (When max enhanced)"},
+      {id:'UP2', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP3', name:'Combat Skill Update: High-Power Cannon', effect:"New Effect Added — No longer consumes SP. New Effect Added — After attacking, applies Extra Attack CRIT DMG +33% (1 turn) to all allies. (When max enhanced)"},
+      {id:'UP4', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP5', name:'Passive Skill Update: Seamless Synergy', effect:"Effect Update — Combat Skill is now also considered to have activated Extra Attack."},
+    ],
     },
-  { id:'reno-ichikawa-sa',   name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
+  { id:'reno-ichikawa-sa',  name:'Reno Ichikawa',    variant:'Signs of Awakening',              stars:4, role:'Attacker',  types:['Shot'],           img:'RenoIchikawa-SA.png', subRoles:['Debuffer'], weaponType:'Assault Rifle',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Calm Demeanor', effect:"When remaining HP is 50% or less, this unit\'s DEF +20%."},
@@ -836,8 +890,15 @@ const CHARACTERS = [
       {id:'A5', name:'Compatible with the Strongest Weapon', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Awakened Compatible User', effect:"Ice Additional DMG Multiplier caused by Ice Crystal +60%."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Combat Skill Unlock: Ice Break', effect:"New Effect Added — Does not consume SP."},
+      {id:'UP2', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP3', name:'Passive Skill Unlock: Composed Thinking', effect:"New Effect Added — This unit's Additional DMG Multiplier +11%. (When max enhanced)"},
+      {id:'UP4', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP5', name:'Ultimate Unlock: Extreme Cold Manifestation', effect:"New Effect Added — After attacking, applies DMG dealt from Additional DMG +48% (3 turns) and CRIT DMG from Additional DMG +80% (3 turns) to all allies. (When max enhanced)"},
+    ],
     },
-  { id:'reno-ichikawa-trkk', name:'Reno Ichikawa',    variant:'The Reigning King of Kaiju',      stars:5, role:'Supporter', types:['Shot','Ice'],    img:'RenoIchikawa-TRKK.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
+  { id:'reno-ichikawa-trkk',name:'Reno Ichikawa',    variant:'The Reigning King of Kaiju',      stars:5, role:'Supporter', types:['Shot','Ice'],    img:'RenoIchikawa-TRKK.png', subRoles:['Buffer'], weaponType:'Assault Rifle',
     teamBuffs:[ {scope:'single', desc:'Combat Skill: applies Attunement to a single ally'}, {scope:'single', desc:'Ultimate: DMG dealt buff to this unit and the ally in Attunement state'}, {scope:'single', desc:'Passive: After Enhanced Normal Attack, Combat Skill DMG dealt buff to the ally in Attunement state'} ], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Unmelting Ice', effect:"Turn duration of Combat Skill DMG dealt buff applied by Passive Skill +1. The Combat Skill DMG dealt buff applied by Passive Skill will stack up to 3 stacks."},
@@ -857,6 +918,13 @@ const CHARACTERS = [
       {id:'A4', name:'Further Exertion', effect:"Max stack count of DMG dealt buff applied by Passive Skill +2."},
       {id:'A5', name:'Hidden Feelings', effect:"Normal Attack, Combat Skill, Ultimate Lv. +2. Normal Attack, Combat Skill, Ultimate max Lv. +2."},
       {id:'A6', name:'My Honor', effect:"After activating Combat Skill, applies CRIT DMG +20% (1 turn) to this unit. This unit\'s Ultimate Gauge +20."},
+    ],
+    unlockedPotential:[
+      {id:'UP1', name:'Passive Skill Enhancement: Battle-Hardened Experience', effect:"New Effect Added — If there are 4 or more Kaiju on the field, this unit's Shot DMG dealt +66%. (When max enhanced)"},
+      {id:'UP2', name:'Stat Enhancement: DEF', effect:"+100"},
+      {id:'UP3', name:'Combat Skill Enhancement: Thorough Sweep Fire', effect:"Effect Enhanced — Deals Shot DMG equal to 135% of this unit's ATK to all Kaiju. (When max enhanced) New Effect Added — After attacking, each time this unit defeats a Kaiju, advances this unit's next Action Order by 10%."},
+      {id:'UP4', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP5', name:'Passive Skill Enhancement: Battle-Hardened Experience', effect:"New Effect Added — If there are 4 or more Kaiju on the field, after activating Combat Skill, randomly destroys 1 of the target's Elemental PLT."},
     ],
     },
   { id:'rin-shinonome-cfr',  name:'Rin Shinonome',    variant:'Cross-Forged Refinement',         stars:5, role:'Attacker',  types:['Shot','Fire'],    img:'RinShinonome-CFR.png', subRoles:['Additional DMG'], weaponType:'Gatling Gun',
@@ -963,6 +1031,13 @@ const CHARACTERS = [
       {id:'A5', name:'Dedication to the Blade', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Unwavering Edge', effect:"While in Fierce state, this unit\'s DEF PEN Rate +25%."},
     ],
+    unlockedPotential:[
+      {id:'UP1', name:'Make It Quick+', effect:"After defeating a Kaiju, applies ATK +11% (2 turns) to this unit. After activating Combat Skill, applies Fierce to this unit. Fierce: This unit's CRIT Rate +40% and CRIT DMG +50%. After activating Normal Attack, Fierce will be removed."},
+      {id:'UP2', name:'Stat Enhancement: ATK', effect:"+100"},
+      {id:'UP3', name:'Double Attack+', effect:"Deals Slash DMG equal to 125% of this unit's ATK to all Kaiju."},
+      {id:'UP4', name:'Stat Enhancement: HP', effect:"+200"},
+      {id:'UP5', name:'Make It Quick++', effect:"After defeating a Kaiju, applies ATK +11% (2 turns) to this unit. After activating Combat Skill, applies Fierce to this unit. Fierce: This unit's CRIT Rate +40% and CRIT DMG +50%. After activating Normal Attack, Fierce will NOT be removed."},
+    ],
     },
   { id:'soshiro-hoshina-np', name:'Soshiro Hoshina',  variant:'New Possibilities',               stars:5, role:'Attacker', types:['Slash','Wind'],   img:'SoshiroHoshina-NP.png', subRoles:[], weaponType:'Twin Swords',
     teamBuffs:[], buddyBuffs:[], debuffs:[ {desc:'After attacking, 100% base chance to apply Windbite (2 turns) — Wind DoT to the target'} ],
@@ -1066,10 +1141,11 @@ function saveSquads() {
 }
 
 // ── STATE ────────────────────────────────────────────────────────────────────
-let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null], ascendedNodes:[[],[],[],[]], weapons:[null,null,null,null] }];
+let squads = loadSquads() || [{ name:'Main Squad', slots:[null,null,null,null], ascendedNodes:[[],[],[],[]], upNodes:[[],[],[],[]], weapons:[null,null,null,null] }];
 // Backfill fields for squads saved before these features existed
 squads.forEach(s => {
   if (!s.ascendedNodes) s.ascendedNodes = [[],[],[],[]];
+  if (!s.upNodes) s.upNodes = [[],[],[],[]];
   if (!s.weapons) s.weapons = [null,null,null,null];
 });
 let activeSquad = 0;
@@ -1082,6 +1158,13 @@ function slotChar(i) { return getChar(currentSlots()[i]); }
 function slotAscended(i) { return squads[activeSquad].ascendedNodes[i] || []; }
 function toggleAscension(slotIdx, nodeId) {
   const arr = squads[activeSquad].ascendedNodes[slotIdx];
+  const pos = arr.indexOf(nodeId);
+  if (pos === -1) arr.push(nodeId); else arr.splice(pos, 1);
+  saveSquads(); renderSlots(); renderAnalysis();
+}
+function slotUP(i) { return squads[activeSquad].upNodes[i] || []; }
+function toggleUP(slotIdx, nodeId) {
+  const arr = squads[activeSquad].upNodes[slotIdx];
   const pos = arr.indexOf(nodeId);
   if (pos === -1) arr.push(nodeId); else arr.splice(pos, 1);
   saveSquads(); renderSlots(); renderAnalysis();
@@ -1170,6 +1253,12 @@ function renderSlot(idx) {
             ${char.ascension.map(node => `<span class="a-toggle-btn${slotAscended(idx).includes(node.id)?' active':''}" data-slot="${idx}" data-node="${node.id}" title="${node.name}: ${node.effect.replace(/"/g,'&quot;')}">${node.id}</span>`).join('')}
           </div>
         </div>` : ''}
+        ${char.unlockedPotential ? `<div class="slot-up">
+          <span class="slot-up-label">Unlocked Potential</span>
+          <div class="slot-up-toggles">
+            ${char.unlockedPotential.map(node => `<span class="up-toggle-btn${slotUP(idx).includes(node.id)?' active':''}" data-slot="${idx}" data-node="${node.id}" title="${node.name}: ${node.effect.replace(/"/g,'&quot;')}">${node.id}</span>`).join('')}
+          </div>
+        </div>` : ''}
       </div>`;
     slot.querySelector('.slot-remove').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1182,6 +1271,12 @@ function renderSlot(idx) {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleAscension(+btn.dataset.slot, btn.dataset.node);
+      });
+    });
+    slot.querySelectorAll('.up-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleUP(+btn.dataset.slot, btn.dataset.node);
       });
     });
     const weaponSelect = slot.querySelector('.slot-weapon-select');
@@ -1329,6 +1424,21 @@ function renderAnalysis() {
           condBuffs.push({source: `${src} — ${node.id}`, desc: node.effect, isAscension:true});
         } else {
           teamBuffs.push({source: `${src} — ${node.id}`, scope:'all', desc: node.effect, isAscension:true});
+        }
+      });
+    }
+
+    // Active Unlocked Potential nodes — same aggregation pattern as ascension,
+    // so toggling a UP node actually changes stat totals / coverage / warnings below
+    if (f.char.unlockedPotential) {
+      const activeUP = slotUP(f.slotIdx);
+      f.char.unlockedPotential.filter(n => activeUP.includes(n.id)).forEach(node => {
+        const effectLower = node.effect.toLowerCase();
+        const scope = effectLower.includes('all allies') ? 'all' : 'conditional';
+        if (scope === 'conditional') {
+          condBuffs.push({source: `${src} — ${node.id}`, desc: node.effect, isUP:true});
+        } else {
+          teamBuffs.push({source: `${src} — ${node.id}`, scope:'all', desc: node.effect, isUP:true});
         }
       });
     }
@@ -1557,7 +1667,7 @@ document.getElementById('squad-name-input').addEventListener('input', (e) => {
 
 // ── NEW / DELETE SQUAD ────────────────────────────────────────────────────────
 document.getElementById('new-squad-btn').addEventListener('click', () => {
-  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null], ascendedNodes:[[],[],[],[]], weapons:[null,null,null,null] });
+  squads.push({ name: 'Squad ' + (squads.length + 1), slots: [null,null,null,null], ascendedNodes:[[],[],[],[]], upNodes:[[],[],[],[]], weapons:[null,null,null,null] });
   activeSquad = squads.length - 1;
   activeSlot = null;
   saveSquads();
