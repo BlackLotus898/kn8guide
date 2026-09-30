@@ -1,6 +1,17 @@
 {
-  "lastUpdated": "2026-09-28",
+  "lastUpdated": "2026-09-30",
   "announcements": [
+    {
+      "id": "2026-09-30-official-1003930-regarding-currently-confirmed-issues",
+      "date": "2026-09-30",
+      "type": "game",
+      "title": "Regarding Currently Confirmed Issues",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. We would like to inform you of the issues we have currently confirmed. We sincerely apologize for any inconvenience. These issues are scheduled to be fixed in a future version update. We will make another announcement or update this one",
+      "link": "https://info.kj8-thegame.com/news/1003930?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1003930?language=en",
+      "source": "official",
+      "autoAdded": true
+    },
     {
       "id": "2026-09-28-official-1003910-version-2-2-0-maintenance-notice",
       "date": "2026-09-28",
