@@ -355,7 +355,8 @@ const WEAPONS_BY_TYPE = {
     { name:'Standard Spear', effect:'ATK +23%' },
   ],
   'Twin Swords': [
-    { name:'SW-Ihcatiamak', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Combat Skill, applies 1 stack(s) of Deftness (1 turn(s)) to the equipped unit. Max 2 stack(s).\nBefore the equipped unit activates Ultimate, if Deftness is at 2 stack(s), applies DMG dealt +16% (2 turn(s)) to the equipped unit.\nDeftness: The equipped unit\'s Ultimate Gauge Charge Rate +8% and Wind DMG dealt +9%.' },
+    { name:'SW-Ihsgnaij', effect:'HP +37%\nAfter the equipped unit loses HP, the equipped unit\'s Ultimate Gauge +16.\nAfter the equipped unit activates Normal Attack, applies DMG dealt +11% (2 turn(s)) to all allies.' },
+    { name:'SW-Ihcatiamak',effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit activates Combat Skill, applies 1 stack(s) of Deftness (1 turn(s)) to the equipped unit. Max 2 stack(s).\nBefore the equipped unit activates Ultimate, if Deftness is at 2 stack(s), applies DMG dealt +16% (2 turn(s)) to the equipped unit.\nDeftness: The equipped unit\'s Ultimate Gauge Charge Rate +8% and Wind DMG dealt +9%.' },
     { name:'SW-Susanoo', effect:'CRIT DMG (%) +48%\nAfter the equipped unit activates Combat Skill, if there are 2 or fewer Kaiju on the field, applies SPD +18% (2 turn(s)) to the equipped units.\nBefore the equipped unit activates Ultimate, applies Combat Skill and Ultimate DMG dealt +15% (3 turn(s)) to the equipped unit.' },
     { name:'SW-Ameno Torifune', effect:'CRIT DMG (%) +33%\nAfter the equipped unit attacks a Core Exposed Kaiju, applies DMG dealt +10% (3 turn(s)) to the equipped unit.' },
     { name:'SW-Takeminakata', effect:'Slash DMG Dealt +17%\nBefore the equipped unit activates Ultimate, applies ATK +21% (3 turn(s)) to the equipped unit.\nWhen the equipped unit\'s remaining HP is 80% or more, the equipped unit\'s DMG dealt +12%.' },
@@ -1049,7 +1050,27 @@ const CHARACTERS = [
       {id:'A5', name:'A New Horizon', effect:"Combat Skill, Ultimate, Follow-Up Skill Lv. +2. Combat Skill, Ultimate, Follow-Up Skill max Lv. +2."},
       {id:'A6', name:'Realm of Masterful Art', effect:"After activating Combat Skill, applies 1 stack of Opening to the target. After attacking, applies Wind DMG dealt +7% to this unit. Max 5 stacks."},
     ], },
-  { id:'soshiro-hoshina-uf', name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png', subRoles:[], weaponType:'Twin Swords',
+  { id:'soshiro-hoshina-tsj',name:'Soshiro Hoshina',  variant:'Twin Swords Jiangshi',            stars:5, role:'Defender',  types:['Slash','Ice'],    img:'SoshiroHoshina-TSJ.png', subRoles:['Healer', 'Tank'], weaponType:'Twin Swords',
+    teamBuffs:[
+      {scope:'all', desc:"Combat Skill: Applies Guard to all other allies. Guard: DMG Taken Reduction +12.8%."},
+      {scope:'all', desc:"At the start of battle (Lv. 60+): Applies Guard that is the same as Combat Skill's to all other allies."},
+      {scope:'all', desc:"Ultimate: Recovers all allies' HP by 557, plus 52 more per stack of Finesse (up to 10), then consumes 10 stacks of Finesse and removes Guard from all other allies."},
+      {scope:'conditional', desc:"Each time an ally consumes 1 SP (Lv. 80+): DMG dealt +2% to all allies. Max 10 stacks."},
+    ],
+    buddyBuffs:[], debuffs:[],
+    selfBuffs:[
+      {source:'Passive — Perilous Stance', desc:"When an ally in Guard state is attacked, this unit takes 22% of the DMG received by the target in their place. Each time this unit loses a total of 300 HP, applies 1 stack of Finesse (max 10). Finesse: Ultimate DMG Multiplier +10%. At 10+ stacks of Finesse, recovers 10% of Max HP after turn arrives. When DMG would reduce this unit's HP to 0: withstands with 1 HP instead of being incapacitated (1x/battle), then recovers HP equal to 100% of Max HP (1x/battle)."},
+      {source:'Foundational Mastery (Lv. 40)', desc:"This unit's Normal Attack DMG Multiplier +80%."},
+    ],
+    ascension:[
+      {id:'A1', name:'Indestructibility', effect:"After activating Ultimate: 1. Advances this unit\'s next Action Order by 100%. 2. SP +1."},
+      {id:'A2', name:'On Thin Ice', effect:"Effect amount of DMG Taken Reduction from Guard state +10%. After activating Normal Attack or Ultimate, randomly destroys 1 of the target\'s Elemental PLT."},
+      {id:'A3', name:'Rising Apparition', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Jiangshi\'s Obsession', effect:"Amount of DMG this unit takes in place of an ally in Guard state when attacked +15%. After activating Ultimate, has a 200% base chance to apply DEF -30% (3 turns) to the target."},
+      {id:'A5', name:'Pinnacle of Mastery', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'Resurrection Gambit', effect:"Finesse max stack count +5. All allies\' All-Attribute DMG dealt +24%."},
+    ], },
+  { id:'soshiro-hoshina-uf',name:'Soshiro Hoshina',  variant:'United Front',                    stars:5, role:'Attacker',  types:['Slash'],          img:'SoshiroHoshina-UF.png', subRoles:[], weaponType:'Twin Swords',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
       {id:'A1', name:'Polished Technique', effect:"Before activating Combat Skill, applies CRIT Rate +25% (1 turn) to this unit."},
