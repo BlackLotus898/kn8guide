@@ -1,6 +1,19 @@
 {
-  "lastUpdated": "2026-10-07",
+  "lastUpdated": "2026-10-08",
   "announcements": [
+    {
+      "id": "2026-10-08-official-1004020-data-update-event-preview",
+      "date": "2026-10-08",
+      "type": "game",
+      "title": "Data Update & Event Preview",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. A data update is scheduled for the following time: 2026-10-10T03:00:00Z This data update includes the following content: Event Overview ■ New Gacha Scheduled to start: 2026-10-10T03:00:00Z For more details, please check our official X (",
+      "link": "https://info.kj8-thegame.com/news/1004020?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004020?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004020/bccfc5d435778789a6d694a6aef6cf8d.jpg?Expires=1791517956&Signature=M4~v4YmMRhxd8Kf8S8ArYHn5A41Ka7esDQ4yP4eRnjg8lzf2ox478MyOUInE21XCd-T8XsPRD5WDsoEOjYBR3s2HpQ6UxV79EmKNIHZbZKR4AngxyHIo8DT6vLZOoemnO3Cm2FM5xVmyyiPTPO2J2EWKxo7j2awbjYTQi~oqNQZIm05HOf7tGgraIfJCpUUBAdCZG7dbKOW0tPkGcC~JXbSDA3OZj6cL2ly5BNgXLqPDmrFR8ZX4rYOCfKz60PRpXfvKPIrI009bFVmXJXhG5Ie31H9nLd73jugrxsjMYaMWCzDSNf2JbeIivXO-z9rRyqvvXwjQ--cAsf8M6jga8w__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "update"
+    },
     {
       "id": "2026-10-07-official-1004018-updated-issue-regarding-dimensional-swarm-disaster",
       "date": "2026-10-07",
