@@ -321,6 +321,7 @@ const WEAPONS_BY_TYPE = {
   'Iron Ball': [
     { name:'SB-7137', effect:'Effect Hit Rate (%) +20%\nAfter the equipped unit attacks a Kaiju that has a status ailment, the equipped unit\'s Ultimate Gauge +15.\nAfter the equipped unit activates Ultimate, applies DMG dealt +12% (2 turn(s)) to all other allies.' },
     { name:'SB-Agni', effect:'Effect Hit Rate (%) +14%\nAfter the equipped unit activates Ultimate, has an 80% chance to apply DMG Taken from DoT +5% (3 turn(s)) to all Kaiju.' },
+    { name:'SB-Nretnalokcaj', effect:'HP +37%\nAfter an ally deals Additional DMG, applies Ultimate Gauge Charge Rate +4% to the equipped unit. Max 5 stack(s).\nAfter the equipped unit activates a support skill, applies Lethality (3 turn(s)) to the equipped unit.\nAfter the equipped unit\'s turn arrives, turn duration of Lethality -1.\nLethality: All allies\' CRIT DMG +26%.' },
     { name:'SB-Stegosaurus 38', effect:'ATK +28%\nAfter the equipped unit attacks a Kaiju in Burn state, applies ATK +36% (2 turn(s)) to the equipped unit.' },
     { name:'Standard Iron Ball', effect:'ATK +23%' },
   ],
@@ -1140,6 +1141,28 @@ const CHARACTERS = [
       {id:'A6', name:'Exceeding Expectations', effect:"After activating Ultimate, has a 100% base chance to apply DEF -20% (3 turns) to the target. This unit\'s DoT DMG Multiplier +50%."},
     ],
     },
+  { id:'wang-meixing-ps', name:'Wang Meixing',      variant:'Pumpkin Star',                    stars:5, role:'Supporter', types:['Blunt','Wind'],   img:'WangMeixing-PS.png', subRoles:['Buffer','Additional DMG'], weaponType:'Iron Ball',
+    teamBuffs:[
+      {scope:'all', desc:"Combat Skill: Eloquence (3 turns) — all allies' DMG dealt +16%."},
+      {scope:'all', desc:"Ultimate: Applies Tailwind (3 turns) to all allies — All-Attribute DMG dealt +7.3% (+10.5% more if Max HP is 4,000+); after attacking, randomly deals Wind Additional DMG equal to 13.7% of the attacker's Max HP up to 3 times."},
+      {scope:'all', desc:"At the start of battle (Lv. 80+): Applies Tailwind (3 turns) that is the same as Ultimate's to all allies."},
+      {scope:'conditional', desc:"[Total Max HP of surviving allies 18,000+]: All allies' CRIT Rate +7.8%."},
+      {scope:'conditional', desc:"[Total Max HP of surviving allies 26,000+]: All allies' Wind DMG dealt from Additional DMG +22% and CRIT DMG +33%."},
+    ],
+    buddyBuffs:[], debuffs:[ {desc:"While in Eloquence state, all Kaiju's DMG Taken Increase +7.8%."} ],
+    selfBuffs:[
+      {source:'Passive — Silver Tongue', desc:"[Total Max HP of surviving allies 10,000+]: This unit's CRIT Rate +13.3%."},
+      {source:'Trick and Treat (Lv. 40)', desc:"After activating Ultimate, applies DMG dealt +30% to this unit. Max 3 stacks."},
+      {source:'Clever Maneuvering (Lv. 60)', desc:"After activating Normal Attack, this unit's Ultimate Gauge +20."},
+    ],
+    ascension:[
+      {id:'A1', name:'Eerie Gale', effect:"Turn duration of Tailwind +1. Activation count of Wind Additional DMG dealt by Tailwind +2."},
+      {id:'A2', name:'Guiding Light', effect:"If the total Max HP of all surviving allies is 10,000 or more, this unit's CRIT DMG from Additional DMG additionally +36%. If 18,000 or more, all allies' CRIT DMG additionally +36%."},
+      {id:'A3', name:'Prime Pumpkin', effect:"Normal Attack, Combat Skill Lv. +2. Normal Attack, Combat Skill max Lv. +2."},
+      {id:'A4', name:'Masterful Negotiation', effect:"Tailwind: In addition, target's Max HP Boost +10%. Required amount of total Max HP of all surviving allies for Passive Skill -10,000."},
+      {id:'A5', name:'Strategic Vision', effect:"Ultimate, Passive Skill, Follow-Up Skill Lv. +2. Ultimate, Passive Skill, Follow-Up Skill max Lv. +2."},
+      {id:'A6', name:'High Autumn Winds', effect:"Wind Additional DMG Multiplier dealt by Tailwind +15%. After activating Ultimate, all other allies' Ultimate Gauge +30."},
+    ], },
   { id:'zoee-wanderfalke-twu',name:'Zoee Wanderfalke', variant:'The Weapon Unsealed',             stars:5, role:'Attacker',  types:['Shot','Slash'],   img:'ZoeeWanderfalke-TWU.png', subRoles:[], weaponType:'Ride-Frame',
     teamBuffs:[], buddyBuffs:[], debuffs:[],
         ascension:[
