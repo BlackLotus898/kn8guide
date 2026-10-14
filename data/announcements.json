@@ -1,6 +1,17 @@
 {
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-10-14",
   "announcements": [
+    {
+      "id": "2026-10-14-official-1004041-issue-regarding-unintended-skill-behavior-for-poly",
+      "date": "2026-10-14",
+      "type": "game",
+      "title": "Issue Regarding Unintended Skill Behavior for Polyonax Honju",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. We have confirmed an issue where the effects of Polyonax Honju's skills \"Iron-Fist Punch [Max Caution]\" and \"All-Out Smash\" are exhibiting unintended behavior. *We have confirmed this issue occurs in all quests and events where Polyonax",
+      "link": "https://info.kj8-thegame.com/news/1004041?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004041?language=en",
+      "source": "official",
+      "autoAdded": true
+    },
     {
       "id": "2026-10-11-official-1004080-training-kaijumite-2x-rewards-campaign-now-availab",
       "date": "2026-10-11",
