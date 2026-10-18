@@ -1,6 +1,19 @@
 {
-  "lastUpdated": "2026-10-16",
+  "lastUpdated": "2026-10-18",
   "announcements": [
+    {
+      "id": "2026-10-18-official-1004100-data-update-event-preview",
+      "date": "2026-10-18",
+      "type": "game",
+      "title": "Data Update & Event Preview",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. A data update is scheduled for the following time: 2026-10-20T03:00:00Z This data update includes the following content: Event Overview ■ New Gacha Scheduled to start: 2026-10-20T03:00:00Z For more details, please check our official X (",
+      "link": "https://info.kj8-thegame.com/news/1004100?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004100?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004100/bccfc5d435778789a6d694a6aef6cf8d.jpg?Expires=1792404642&Signature=BdtrA5~srzEHzQ18MZ-ZmPUah9EATGv~kuBF4~8ReLLtobGhbeeLVvCqJIV3iGx6UJC0TRFqpE0-5gX1OUogImiz20qn0I0wcFJbtfg9dTHyav0~QnAyiAUFO0poYJsWn5inS2XI1fBFrWB1asLwXdCoDfIW0se3ByifMM9CqilhcCJIkeyFOi3HWhQijQ3jzxH5EyspNJgI6QmiG~JtEgSvzec~ggw9sTOOl~FuFqUPBMCXiUjzFqtlV~T9Nd5yOyZXDxU2Jv9XvC899g1tGGSlzGdumqp2hQ1ovv7SREQqmb5hB2VZ8JJRuguc5nbs6i6WVqS3ICPWOKBFX9kWJA__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "update"
+    },
     {
       "id": "2026-10-16-official-1004060-mop-up-operation-now-available",
       "date": "2026-10-16",
