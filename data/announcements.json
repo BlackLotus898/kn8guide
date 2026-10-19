@@ -1,6 +1,68 @@
 {
-  "lastUpdated": "2026-10-10",
+  "lastUpdated": "2026-10-18",
   "announcements": [
+    {
+      "id": "2026-10-18-official-1004100-data-update-event-preview",
+      "date": "2026-10-18",
+      "type": "game",
+      "title": "Data Update & Event Preview",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. A data update is scheduled for the following time: 2026-10-20T03:00:00Z This data update includes the following content: Event Overview ■ New Gacha Scheduled to start: 2026-10-20T03:00:00Z For more details, please check our official X (",
+      "link": "https://info.kj8-thegame.com/news/1004100?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004100?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004100/bccfc5d435778789a6d694a6aef6cf8d.jpg?Expires=1792404642&Signature=BdtrA5~srzEHzQ18MZ-ZmPUah9EATGv~kuBF4~8ReLLtobGhbeeLVvCqJIV3iGx6UJC0TRFqpE0-5gX1OUogImiz20qn0I0wcFJbtfg9dTHyav0~QnAyiAUFO0poYJsWn5inS2XI1fBFrWB1asLwXdCoDfIW0se3ByifMM9CqilhcCJIkeyFOi3HWhQijQ3jzxH5EyspNJgI6QmiG~JtEgSvzec~ggw9sTOOl~FuFqUPBMCXiUjzFqtlV~T9Nd5yOyZXDxU2Jv9XvC899g1tGGSlzGdumqp2hQ1ovv7SREQqmb5hB2VZ8JJRuguc5nbs6i6WVqS3ICPWOKBFX9kWJA__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "update"
+    },
+    {
+      "id": "2026-10-16-official-1004060-mop-up-operation-now-available",
+      "date": "2026-10-16",
+      "type": "game",
+      "title": "Mop-Up Operation Now Available!",
+      "summary": "Overview Following the defeat of Polyonax Honju, a massive swarm of Kaiju has appeared. Commencing the Mop-Up Operation. Earn awesome rewards by defeating the Yoju as they put up a desperate final resistance! Availability Period Until 2026-10-23T02:59:59Z . *If all Kaiju are defe",
+      "link": "https://info.kj8-thegame.com/news/1004060?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004060?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "category": "event"
+    },
+    {
+      "id": "2026-10-15-official-1004090-large-conquest-spirit-shattering-gale-now-availabl",
+      "date": "2026-10-15",
+      "type": "game",
+      "title": "Large Conquest: Spirit-Shattering Gale Now Available!",
+      "summary": "Overview Large Conquest: Spirit-Shattering Gale has come online as of 2026-10-15T03:00:00Z . Large Conquest is a battle event where you fight against continuously appearing Kaiju. Utilize stage effects, challenge the Kaiju, and clear quests to earn rewards and titles! The quick c",
+      "link": "https://info.kj8-thegame.com/news/1004090?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004090?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004090/3e3d102bdfe2479014d5f6df6d284648.jpg?Expires=1792147126&Signature=PlNdfFOviBNbTtyRSHSBl~aJmdl1dBOFg-exnpEwW6Qs2StlS2~7ViI6D8xFF7LaZpR~A7O-PgeA1YCfIt3R2XxD6u9bXRj-kjRF2xW1lIoWXum-jZyI7i-PcMwIPzHR2AxhvOBJOthX2z7iRQDHmn4Irf6KxYeP1ze-9Ywmidt5sDfuLwwDUVRlrSZ1Yse-E-7MqXPvw5AYGnTUP7kclK-HPsh7GHsF79-VslAVU0DO7eqlfWOAxV2c-7gzMLmFqRXD4YKDc6m8uwBBGV0RjVbBeK8LSXEmcE3xuWdos0QIhYVHLl1IcucQDFOpIpFdpeSBy4YkkrC7EJ9wlU8V7Q__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "event"
+    },
+    {
+      "id": "2026-10-14-official-1004041-issue-regarding-unintended-skill-behavior-for-poly",
+      "date": "2026-10-14",
+      "type": "game",
+      "title": "Issue Regarding Unintended Skill Behavior for Polyonax Honju",
+      "summary": "Thank you for playing KAIJU NO. 8 THE GAME. We have confirmed an issue where the effects of Polyonax Honju's skills \"Iron-Fist Punch [Max Caution]\" and \"All-Out Smash\" are exhibiting unintended behavior. *We have confirmed this issue occurs in all quests and events where Polyonax",
+      "link": "https://info.kj8-thegame.com/news/1004041?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004041?language=en",
+      "source": "official",
+      "autoAdded": true
+    },
+    {
+      "id": "2026-10-11-official-1004080-training-kaijumite-2x-rewards-campaign-now-availab",
+      "date": "2026-10-11",
+      "type": "game",
+      "title": "Training: Kaijumite—2x Rewards Campaign Now Available!",
+      "summary": "Overview The 2x Rewards Campaign for Training: Kaijumite has come online as of 2026-10-11T19:00:00Z . Complete the designated Training and enhance your weapons more ! Availability Period 2026-10-11T19:00:00Z - 2026-10-22T18:59:59Z Event Description During the campaign, receive 2x",
+      "link": "https://info.kj8-thegame.com/news/1004080?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004080?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004080/13f8ec85955f086840d0e147db921441.jpg?Expires=1791839961&Signature=gGugR9CWMX6vlVPtxXkfuZ82lq4bS~XfTUBDA5IogpHdz-VO6ANimyAyYBpAyu2-TlI60nLvA~GI20GEVlOubKDPK6LCKLB1ynaKLokRa5sX93sGk9tfm0o2AHy0ouqMlKrTWYi80nOrVZA7NhmrQMb43TTEFDmLcQIifMwdCeBTQcd03d9KqIBR0TD7pjx2oj9zQ0Bi9BiAXxqa0ocysI85JeaRLQnqaUhkzuCcO2xB0X6x7AHvhHvMl0jczYMIehtYI2J79ydeVO4a5MD5Z1hNtVlRwKVI76-6JP3iGCTrr-a3eNvzCWrOePGchnFyNqrF2BlHujrckifhkvW8gQ__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "event"
+    },
     {
       "id": "2026-10-10-official-1004070-wang-meixing-pickup-gacha-now-available",
       "date": "2026-10-10",
