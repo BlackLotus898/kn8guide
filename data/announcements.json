@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-20",
+  "lastUpdated": "2026-10-21",
   "announcements": [
     {
       "id": "2026-10-20-official-1004130-limited-gen-narumi-pickup-gacha-now-available",
@@ -47,6 +47,17 @@
       "summary": "Thank you for playing KAIJU NO. 8 THE GAME. We have confirmed the following issue affecting the ongoing Special Event [Halloween Heroes] Part 2: Ongoing Issue ・For the mission \"Obtain a total of X☆ in Special Event Challenges,\" the number of ☆ obtained by clearing Challenges prio",
       "link": "https://info.kj8-thegame.com/news/1004115?language=en",
       "sourceLink": "https://info.kj8-thegame.com/news/1004115?language=en",
+      "source": "official",
+      "autoAdded": true
+    },
+    {
+      "id": "2026-10-20-official-1004111-updated-issue-regarding-event-gacha-banner-image-d",
+      "date": "2026-10-20",
+      "type": "game",
+      "title": "[Updated] Issue Regarding Event Gacha Banner Image Display in Special Event",
+      "summary": "Updated 2026-10-20T22:00:00Z A fix for this issue was implemented during the recent maintenance. For details regarding compensation for this issue, please check the following announcement: ・[Updated] Emergency Maintenance Notice We sincerely apologize for any inconvenience. Thank",
+      "link": "https://info.kj8-thegame.com/news/1004111?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004111?language=en",
       "source": "official",
       "autoAdded": true
     },
