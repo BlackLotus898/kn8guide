@@ -1,6 +1,19 @@
 {
-  "lastUpdated": "2026-10-23",
+  "lastUpdated": "2026-10-26",
   "announcements": [
+    {
+      "id": "2026-10-26-official-1004160-defense-frontline-now-available",
+      "date": "2026-10-26",
+      "type": "game",
+      "title": "Defense Frontline Now Available!",
+      "summary": "Overview Defense Frontline has come online as of 2026-10-26T19:00:00Z . Defense Frontline is a battle event where you challenge a daily rotation of powerful enemies. Form an effective squad for each Kaiju and complete quests to earn rewards! *For Season 2, the event duration and ",
+      "link": "https://info.kj8-thegame.com/news/1004160?language=en",
+      "sourceLink": "https://info.kj8-thegame.com/news/1004160?language=en",
+      "source": "official",
+      "autoAdded": true,
+      "image": "https://asset.kj8-thegame.com/info/production/content/1004160/110928625fcd4ffc88ad41e30f2de42e.jpg?Expires=1793138939&Signature=dN5w3uItUkXgq6P~l-N7GR6Ba25WE5PrTvbV8nl-4pFRdvt2ifnvUBgamnih60I3RZDLgTVZ9qlOk-nNKqJh02vGMrZzNbJfqehwLs1tRML819UNaELHWu~j7HlhUMMXPJGnDwuZ05CFIwUU-2cf-UnrbXgYNEbxepOOcKwQLng5FrSRrG65i-iZ2IxFftwqYKCVhHlHWSaxKW1S-Fq6LfFRBDWNxDmCilnU5aDc0IhpoDtImBcUf74YZJPP1iwXqqHNjqrX6dZ-ES2Ydm1sh-MVp45HObFBMNMTdY4kpa8XVpEv8U-zE9DK360yqMq7luOOuiNQLacLIE5aF8oaZA__&Key-Pair-Id=K22LOBLWI3HWJQ",
+      "category": "event"
+    },
     {
       "id": "2026-10-23-official-1004150-score-battle-1-now-available",
       "date": "2026-10-23",
