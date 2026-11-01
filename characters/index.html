@@ -369,6 +369,12 @@
       <button class="filter-btn" data-filter="stars" data-value="5">★★★★★</button>
       <button class="filter-btn" data-filter="stars" data-value="4">★★★★</button>
     </div>
+    <div class="divider-v"></div>
+    <!-- TRANSCENDENCE -->
+    <div class="filter-group" id="filter-transcendence">
+      <button class="filter-btn active" data-filter="transcendence" data-value="all">All</button>
+      <button class="filter-btn" data-filter="transcendence" data-value="yes">Transcendence</button>
+    </div>
   </div>
 </div>
 
@@ -430,7 +436,7 @@ const characters = [
   { id:"kafka-hibino-tmwbr",name:"Kafka Hibino",    variant:"The Man Who Became a Reindeer",  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KafkaHibino-TMWBR.png", ranges:["single","support"] },
   { id:"kn8-f98",           name:"Kaiju No. 8",     variant:"Fortitude 9.8",                  stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"KN8-F98.png", ranges:["single"] },
   { id:"kn8-sv",            name:"Kaiju No. 8",     variant:"Scorching Variant",               stars:5, cls:"attacker", types:["blunt"],        elements:["fire"],      img:"KN8-SV.png", ranges:["single","blast"] },
-  { id:"kn8-sfkd",          name:"Kaiju No. 8",     variant:"Strike from the Kaiju Dimension",stars:5, cls:"attacker", types:["blunt"],        elements:["lightning"], img:"KN8-SFKD.png", limited:true, ranges:["single"] },
+  { id:"kn8-sfkd",          name:"Kaiju No. 8",     variant:"Strike from the Kaiju Dimension",stars:5, cls:"attacker", types:["blunt"],        elements:["lightning"], img:"KN8-SFKD.png", limited:true, ranges:["single"] , transcendence:true },
   { id:"keiji-itami-cq",    name:"Keiji Itami",     variant:"Calm and Quiet",                  stars:4, cls:"supporter",types:["shot"],         elements:[],            img:"KeijiItami-CQ.png", ranges:["single"] },
   { id:"kikoru-shinomiya-ev",name:"Kikoru Shinomiya",variant:"Evolving Talent",               stars:5, cls:"attacker", types:["slash","blunt"],elements:[],            img:"KikoruShinomiya-EV.png", ranges:["single","blast","aoe"] },
   { id:"kikoru-shinomiya-fpc",name:"Kikoru Shinomiya",variant:"Full-Power Christmas",         stars:5, cls:"defender", types:["slash"],        elements:[],            img:"KikoruShinomiya-FPC.png", ranges:["single","recovery"] },
@@ -445,7 +451,7 @@ const characters = [
   { id:"mina-ashiro-os",    name:"Mina Ashiro",     variant:"Off the Scale",                  stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-OS.png", ranges:["single","enhance"] },
   { id:"mina-ashiro-sc",    name:"Mina Ashiro",     variant:"Superb Combination",             stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"MinaAshiro-SC.png", ranges:["single","blast"] },
   { id:"reno-ichikawa-sa",  name:"Reno Ichikawa",   variant:"Signs of Awakening",             stars:4, cls:"attacker", types:["shot"],         elements:[],            img:"RenoIchikawa-SA.png", ranges:["single","blast"] },
-  { id:"reno-ichikawa-tcfk8",name:"Reno Ichikawa",   variant:"The Cerulean Frost Kaiju No. 8", stars:5, cls:"attacker", types:["slash"],        elements:["ice"],       img:"RenoIchikawa-TCFK8.png", ranges:["single","aoe","enhance"] },
+  { id:"reno-ichikawa-tcfk8",name:"Reno Ichikawa",   variant:"The Cerulean Frost Kaiju No. 8", stars:5, cls:"attacker", types:["slash"],        elements:["ice"],       img:"RenoIchikawa-TCFK8.png", ranges:["single","aoe","enhance"] , transcendence:true },
   { id:"reno-ichikawa-tcu", name:"Reno Ichikawa",   variant:"The Compatible User",            stars:5, cls:"attacker", types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TCU.png", ranges:["single","blast"] },
   { id:"reno-ichikawa-trkk",name:"Reno Ichikawa",   variant:"The Reigning King of Kaiju",     stars:5, cls:"supporter",types:["shot"],         elements:["ice"],       img:"RenoIchikawa-TRKK.png", ranges:["single","support"] },
   { id:"rin-shinonome-ah",  name:"Rin Shinonome",   variant:"Aspiration and Honor",           stars:5, cls:"attacker", types:["shot"],         elements:[],            img:"RinShinonome-AH.png", ranges:["single","aoe"] },
@@ -463,7 +469,7 @@ const characters = [
   { id:"soshiro-hoshina-uf",name:"Soshiro Hoshina", variant:"United Front",                   stars:5, cls:"attacker", types:["slash"],        elements:[],            img:"SoshiroHoshina-UF.png", ranges:["single","blast"] },
   { id:"suited-ssp", name:"Suited", variant:"Surging Swimsuit Power", stars:5, cls:"defender", types:["blunt"], elements:["water"], img:"Suited-SSP.png", limited:true, ranges:["single","aoe","recovery"] },
   { id:"suited-uc",         name:"Suited",           variant:"Unbridled Curiosity",            stars:5, cls:"attacker", types:["blunt"],        elements:[],            img:"Suited-UC.png", ranges:["single","blast"] },
-  { id:"suited-up",         name:"Suited",           variant:"Unorthodox Pursuit",             stars:5, cls:"supporter",types:["blunt"],        elements:["lightning"], img:"Suited-UP.png", limited:true, ranges:["single","aoe","support"] },
+  { id:"suited-up",         name:"Suited",           variant:"Unorthodox Pursuit",             stars:5, cls:"supporter",types:["blunt"],        elements:["lightning"], img:"Suited-UP.png", limited:true, ranges:["single","aoe","support"] , transcendence:true },
   { id:"tae-nakanoshima-tkepl",name:"Tae Nakanoshima",variant:"The Keen-Eyed Platoon Leader", stars:4, cls:"attacker", types:["shot"],         elements:["fire"],      img:"TaeNakanoshima-TKEPL.png", ranges:["single"] },
   { id:"wang-meixing-nwc",  name:"Wang Meixing",    variant:"Negotiator of Wit and Charm",    stars:5, cls:"supporter",types:["shot"],         elements:["lightning"], img:"WangMeixing-NWC.png", ranges:["single","aoe"] },
   { id:"wang-meixing-ps",   name:"Wang Meixing",    variant:"Pumpkin Star",                    stars:5, cls:"supporter",types:["blunt"],        elements:["wind"], img:"WangMeixing-PS.png", ranges:["single","enhance","support"] },
@@ -493,7 +499,8 @@ function buildCard(c) {
        data-types="${c.types.join(',')}"
        data-elements="${c.elements.join(',')}"
        data-ranges="${(c.ranges || []).join(',')}"
-       data-stars="${c.stars}">
+       data-stars="${c.stars}"
+       data-transcendence="${c.transcendence ? 'yes' : 'no'}">
       <div class="card-stars">${starStr(c.stars)}</div>
       <div class="compare-checkbox">✓</div>
       <div class="card-photo">${photo}</div>
@@ -513,7 +520,7 @@ const grid = document.getElementById('char-grid');
 const noResults = document.getElementById('no-results');
 characters.forEach(c => grid.insertAdjacentHTML('beforeend', buildCard(c)));
 
-let activeFilters = { class: 'all', type: 'all', element: 'all', range: 'all', stars: 'all' };
+let activeFilters = { class: 'all', type: 'all', element: 'all', range: 'all', stars: 'all', transcendence: 'all' };
 let searchQuery = '';
 
 function applyFilters() {
@@ -526,6 +533,7 @@ function applyFilters() {
     const elements = card.dataset.elements.split(',').filter(Boolean);
     const ranges   = card.dataset.ranges.split(',').filter(Boolean);
     const stars    = card.dataset.stars;
+    const transc   = card.dataset.transcendence;
 
     const matchSearch  = searchQuery === '' || name.includes(searchQuery);
     const matchClass   = activeFilters.class   === 'all' || cls === activeFilters.class;
@@ -533,8 +541,9 @@ function applyFilters() {
     const matchElement = activeFilters.element === 'all' || elements.includes(activeFilters.element);
     const matchRange   = activeFilters.range   === 'all' || ranges.includes(activeFilters.range);
     const matchStars   = activeFilters.stars   === 'all' || stars === activeFilters.stars;
+    const matchTransc  = activeFilters.transcendence === 'all' || transc === activeFilters.transcendence;
 
-    const show = matchSearch && matchClass && matchType && matchElement && matchRange && matchStars;
+    const show = matchSearch && matchClass && matchType && matchElement && matchRange && matchStars && matchTransc;
     card.style.display = show ? 'flex' : 'none';
     if (show) visible++;
   });
